@@ -43,4 +43,26 @@ public class EventsController : ApiController
 
         return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
     }
+
+    [HttpPut]
+    [Route("{id:int}")]
+    public async Task<ActionResult<Event>> Update(
+        int id,
+        [FromBody] EventResource resource)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var entity = await service.GetById(id);
+        if (entity == null)
+        {
+            return NotFound();
+        }
+        
+        await service.UpdateEvent(entity, resource);
+
+        return Ok(entity);
+    }
 }

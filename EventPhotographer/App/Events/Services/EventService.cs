@@ -30,4 +30,14 @@ public class EventService
 
         return entity;
     }
+
+    public async Task<Event> UpdateEvent(Event entity, EventResource resource)
+    {
+        entity.UpdateFromResource(resource);
+
+        db.Events.Update(entity);
+        await db.SaveChangesAsync();
+
+        return entity;
+    }
 }

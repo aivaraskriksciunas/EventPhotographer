@@ -8,4 +8,6 @@ namespace EventPhotographer.App.Events.Mappers;
 public static partial class EventMapper
 {
     public static partial Event ToEntity(this EventResource resource);
+
+    public static partial void UpdateFromResource([MappingTarget]this Event entity, EventResource resource);
 }

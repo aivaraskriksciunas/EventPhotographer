@@ -55,6 +55,33 @@ public class EventsTests : BaseIntegrationTest
     }
 
     [Fact]
+    public async Task Should_UpdateEvent()
+    {
+        // Arrange 
+        var entity = new EventPhotographer.App.Events.Entities.Event
+        {
+            Name = "Test event",
+            CreatedAt = DateTime.UtcNow,
+        };
+        await Db.Events.AddAsync(entity);
+        await Db.SaveChangesAsync();
+
+        // Act
+        var updateRequest = new
+        {
+            Name = "Updated event"
+        };
+        var response = await Client.PutAsJsonAsync($"/api/Events/{entity.Id}", updateRequest);
+
+        // Assert
+        await Db.Entry(entity).ReloadAsync();
+        var updatedEvent = await Db.Events.FindAsync(entity.Id);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(updatedEvent);
+        Assert.Equal("Updated event", updatedEvent.Name);
+    }
+
+    [Fact]
     public async Task Should_Return404()
     {
         var response = await Client.GetAsync($"/api/Events/1");
