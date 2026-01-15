@@ -2,7 +2,6 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import './scss/index.scss';
-import App from './App.jsx';
 import { router } from './router.jsx';
 
 // Uncomment to import bootstrap js components
@@ -10,8 +9,6 @@ import { router } from './router.jsx';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router}>
-            <App />
-        </RouterProvider>
+        <RouterProvider router={router} />
     </StrictMode>,
 );

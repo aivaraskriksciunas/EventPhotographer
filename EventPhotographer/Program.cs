@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 // Setup application modules
 builder.Services.AddAppModules();
+builder.Services.ConfigureApplicationCors();
 
 var app = builder.Build();
 
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
     app.ApplyMigrations();
+
+    app.UseDevelopmentCorsPolicy();
 }
 
 // Production
