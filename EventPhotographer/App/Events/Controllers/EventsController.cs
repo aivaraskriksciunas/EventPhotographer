@@ -16,8 +16,8 @@ public class EventsController : ApiController
     }
 
     [HttpGet]
-    [Route("{id:int}")]
-    public async Task<ActionResult<Event>> Get(int id)
+    [Route("{id:guid}")]
+    public async Task<ActionResult<Event>> Get(Guid id)
     {
         var entity = await service.GetById(id);
         
@@ -45,9 +45,9 @@ public class EventsController : ApiController
     }
 
     [HttpPut]
-    [Route("{id:int}")]
+    [Route("{id:guid}")]
     public async Task<ActionResult<Event>> Update(
-        int id,
+        Guid id,
         [FromBody] EventResource resource)
     {
         if (!ModelState.IsValid)
