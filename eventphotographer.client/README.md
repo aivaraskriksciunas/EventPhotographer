@@ -3,6 +3,7 @@
 This client is based on React + Vite.
 
 Commands:
+
 - `npm run dev` - runs dev server
 - `npm run build` - builds for production
 - `npm run lint` - runs eslint with prettier

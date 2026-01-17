@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventPhotographer.App.Events.Resources;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -11,12 +12,14 @@ public class EventsTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task Should_CreateEvent()
+    public async Task CreateEvent_WithValidData()
     {
         // Arrange 
-        var request = new
+        var request = new EventDto
         {
-            Name = "Test event"
+            Name = "Test event",
+            StartDate = DateTime.Now,
+            EventDuration = EventDuration.OneDay.ToString(),
         };
 
         // Act
@@ -27,8 +30,33 @@ public class EventsTests : BaseIntegrationTest
         Assert.Equal(1, await Db.Events.CountAsync());
     }
 
+    public static IEnumerable<object[]> GetInvalidCreateEventData()
+    {
+        var list = new List<object[]>();
+
+        list.Add(new object[] { new { Name = "", StartDate = DateTime.UtcNow, EventDuration = EventDuration.OneDay } });
+        list.Add(new object[] { new { Name = "a", StartDate = DateTime.UtcNow, EventDuration = EventDuration.OneDay } });
+        list.Add(new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow, EventDuration = "Hello" } });
+        list.Add(new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow.AddDays(-1), EventDuration = EventDuration.OneDay } });
+        list.Add(new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow } });
+
+        return list;
+    }
+
+    [Theory]
+    [MemberData(nameof(GetInvalidCreateEventData))]
+    public async Task CreateEvent_WithInvalidData(object request)
+    {
+        // Act
+        var response = await Client.PostAsJsonAsync("/api/Events", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(0, await Db.Events.CountAsync());
+    }
+
     [Fact]
-    public async Task Should_GetEvent()
+    public async Task GetEvent_ExistingEvent()
     {
         // Arrange 
         var entity = new EventPhotographer.App.Events.Entities.Event
@@ -55,7 +83,7 @@ public class EventsTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task Should_UpdateEvent()
+    public async Task UpdateEvent_WithValidData()
     {
         // Arrange 
         var entity = new EventPhotographer.App.Events.Entities.Event
@@ -69,7 +97,8 @@ public class EventsTests : BaseIntegrationTest
         // Act
         var updateRequest = new
         {
-            Name = "Updated event"
+            Name = "Updated event",
+            EventDuration = EventDuration.OneDay.ToString(),
         };
         var response = await Client.PutAsJsonAsync($"/api/Events/{entity.Id}", updateRequest);
 
@@ -82,7 +111,7 @@ public class EventsTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task Should_Return404()
+    public async Task GetEvent_InexistantEvent()
     {
         var response = await Client.GetAsync($"/api/Events/1");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

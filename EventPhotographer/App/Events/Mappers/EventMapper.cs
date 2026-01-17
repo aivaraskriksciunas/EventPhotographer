@@ -7,7 +7,17 @@ namespace EventPhotographer.App.Events.Mappers;
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Source)]
 public static partial class EventMapper
 {
-    public static partial Event ToEntity(this EventResource resource);
+    [MapProperty(nameof(EventDto.StartDate), nameof(Event.StartDate), Use = nameof(MapStartDate))]
+    [MapperIgnoreSource(nameof(EventDto.EventDuration))]
+    public static partial Event ToEntity(this EventDto resource);
 
-    public static partial void UpdateFromResource([MappingTarget]this Event entity, EventResource resource);
+    [MapProperty(nameof(EventDto.StartDate), nameof(Event.StartDate), Use = nameof(MapStartDate))]
+    [MapperIgnoreSource(nameof(EventDto.EventDuration))]
+    public static partial void UpdateFromDto([MappingTarget]this Event entity, EventDto resource);
+
+    [UserMapping(Default = false)]
+    private static DateTime MapStartDate(DateTime? startDate)
+    {
+        return startDate ?? DateTime.UtcNow;
+    }
 }

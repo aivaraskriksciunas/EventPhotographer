@@ -1,7 +1,9 @@
 ﻿using EventPhotographer.App.Events.Entities;
 using EventPhotographer.App.Events.Resources;
 using EventPhotographer.App.Events.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventPhotographer.App.Events.Controllers;
@@ -9,10 +11,14 @@ namespace EventPhotographer.App.Events.Controllers;
 public class EventsController : ApiController
 {
     private readonly EventService service;
+    private readonly IValidator<EventDto> validator;
 
-    public EventsController(EventService service)
+    public EventsController(
+        EventService service,
+        IValidator<EventDto> validator)
     {
         this.service = service;
+        this.validator = validator;
     }
 
     [HttpGet]
@@ -32,11 +38,12 @@ public class EventsController : ApiController
     [HttpPost]
     [Route("")]
     public async Task<ActionResult<Event>> Create(
-        [FromBody]EventResource resource)
+        [FromBody]EventDto resource)
     {
-        if (!ModelState.IsValid)
+        var result = await validator.ValidateAsync(resource);
+        if (!result.IsValid)
         {
-            return BadRequest(ModelState);
+            return BadRequest(result.ToDictionary());
         }
 
         var entity = await service.CreateEvent(resource);
@@ -48,11 +55,12 @@ public class EventsController : ApiController
     [Route("{id:guid}")]
     public async Task<ActionResult<Event>> Update(
         Guid id,
-        [FromBody] EventResource resource)
+        [FromBody] EventDto resource)
     {
-        if (!ModelState.IsValid)
+        var result = await validator.ValidateAsync(resource);
+        if (!result.IsValid)
         {
-            return BadRequest(ModelState);
+            return BadRequest(result.ToDictionary());
         }
 
         var entity = await service.GetById(id);
@@ -64,5 +72,12 @@ public class EventsController : ApiController
         await service.UpdateEvent(entity, resource);
 
         return Ok(entity);
+    }
+
+    [HttpGet]
+    [Route("Durations")]
+    public IActionResult GetEventDurations()
+    {
+        return Ok(Enum.GetNames<EventDuration>());
     }
 }
