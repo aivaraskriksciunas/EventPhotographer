@@ -1,5 +1,7 @@
 ﻿using EventPhotographer.Core;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -55,6 +57,21 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
             {
                 options.UseNpgsql(_dbConnection);
             });
+
+            services.Configure<AuthenticationOptions>(options =>
+            {
+                options.DefaultScheme = TestAuthenticationHandler.SCHEME;
+                options.DefaultAuthenticateScheme = TestAuthenticationHandler.SCHEME;
+                options.DefaultChallengeScheme = TestAuthenticationHandler.SCHEME;
+            });
+
+            services.RemoveAll<AuthenticationService>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = TestAuthenticationHandler.SCHEME;
+            })
+                .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(
+                    TestAuthenticationHandler.SCHEME, options => { });
         });
 
         builder.UseEnvironment("Development");
