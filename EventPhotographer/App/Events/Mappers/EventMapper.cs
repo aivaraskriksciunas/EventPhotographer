@@ -15,6 +15,12 @@ public static partial class EventMapper
     [MapperIgnoreSource(nameof(EventDto.EventDuration))]
     public static partial void UpdateFromDto([MappingTarget]this Event entity, EventDto resource);
 
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    public static partial EventResponseDto CreateResponseDto(Event entity);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    public static partial AnonymousEventCreatedResponseDto CreateAnonymousEventCreatedResponseDto(Event entity);
+
     [UserMapping(Default = false)]
     private static DateTime MapStartDate(DateTime? startDate)
     {

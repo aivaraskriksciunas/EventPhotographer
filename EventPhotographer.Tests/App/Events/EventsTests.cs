@@ -32,13 +32,14 @@ public class EventsTests : BaseIntegrationTest
 
     public static IEnumerable<object[]> GetInvalidCreateEventData()
     {
-        var list = new List<object[]>();
-
-        list.Add(new object[] { new { Name = "", StartDate = DateTime.UtcNow, EventDuration = EventDuration.OneDay } });
-        list.Add(new object[] { new { Name = "a", StartDate = DateTime.UtcNow, EventDuration = EventDuration.OneDay } });
-        list.Add(new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow, EventDuration = "Hello" } });
-        list.Add(new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow.AddDays(-1), EventDuration = EventDuration.OneDay } });
-        list.Add(new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow } });
+        var list = new List<object[]>
+        {
+            new object[] { new { Name = "", StartDate = DateTime.UtcNow, EventDuration = EventDuration.OneDay } },
+            new object[] { new { Name = "a", StartDate = DateTime.UtcNow, EventDuration = EventDuration.OneDay } },
+            new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow, EventDuration = "Hello" } },
+            new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow.AddDays(-1), EventDuration = EventDuration.OneDay } },
+            new object[] { new { Name = "correct name", StartDate = DateTime.UtcNow } }
+        };
 
         return list;
     }

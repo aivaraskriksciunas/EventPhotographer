@@ -1,9 +1,8 @@
 ﻿using EventPhotographer.App.Events.Entities;
+using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Resources;
 using EventPhotographer.App.Events.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventPhotographer.App.Events.Controllers;
@@ -32,7 +31,7 @@ public class EventsController : ApiController
             return NotFound();
         }
 
-        return Ok(entity);
+        return Ok(EventMapper.CreateResponseDto(entity));
     }
 
     [HttpPost]
@@ -48,7 +47,11 @@ public class EventsController : ApiController
 
         var entity = await service.CreateEvent(resource);
 
-        return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
+        return CreatedAtAction(
+            nameof(Get), 
+            new { id = entity.Id }, 
+            entity
+        );
     }
 
     [HttpPut]
