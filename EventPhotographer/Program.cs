@@ -1,8 +1,6 @@
-using EventPhotographer.App;
 using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Core;
 using EventPhotographer.Core.Startup;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +42,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // Setup application modules
 builder.Services.AddAppModules();
+builder.Services.AddAppExceptionHandlers();
 builder.Services.ConfigureApplicationCors();
 
 var app = builder.Build();
@@ -62,11 +61,11 @@ if (app.Environment.IsDevelopment())
 // Production
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseExceptionHandler("/Error");
 app.UseHttpsRedirection();
 
 app.UseRouting();

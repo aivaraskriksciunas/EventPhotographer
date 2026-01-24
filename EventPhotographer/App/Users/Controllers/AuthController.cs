@@ -1,10 +1,11 @@
-﻿using EventPhotographer.App.Users.Entities;
+﻿using EventPhotographer.App.Users.Dto;
+using EventPhotographer.App.Users.Entities;
 using EventPhotographer.App.Users.Mappers;
-using EventPhotographer.App.Users.Dto;
 using EventPhotographer.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventPhotographer.App.Users.Controllers;
@@ -31,11 +32,7 @@ public class AuthController : ApiController
         [FromBody]LoginRequestDto loginRequest,
         [FromServices]IValidator<LoginRequestDto> validator)
     {
-        var validation = validator.Validate(loginRequest);
-        if (!validation.IsValid)
-        {
-            return BadRequest(validation.ToDictionary());
-        }
+        await validator.ValidateAndThrowAsync(loginRequest);
 
         var user = await _userManager.FindByEmailAsync(loginRequest.Email);
 
@@ -67,11 +64,7 @@ public class AuthController : ApiController
         [FromBody]RegisterRequestDto request,
         [FromServices]IValidator<RegisterRequestDto> validator)
     {
-        var validation = await validator.ValidateAsync(request);
-        if (!validation.IsValid)
-        {
-            return BadRequest(validation.ToDictionary());
-        }
+        await validator.ValidateAndThrowAsync(request);
 
         var user = new User
         {

@@ -4,20 +4,17 @@ using EventPhotographer.App.Events.Resources;
 using EventPhotographer.App.Events.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace EventPhotographer.App.Events.Controllers;
 
 public class EventsController : ApiController
 {
     private readonly EventService service;
-    private readonly IValidator<EventDto> validator;
 
-    public EventsController(
-        EventService service,
-        IValidator<EventDto> validator)
+    public EventsController(EventService service)
     {
         this.service = service;
-        this.validator = validator;
     }
 
     [HttpGet]
@@ -37,13 +34,10 @@ public class EventsController : ApiController
     [HttpPost]
     [Route("")]
     public async Task<ActionResult<Event>> Create(
-        [FromBody]EventDto resource)
+        [FromBody]EventDto resource,
+        [FromServices] IValidator<EventDto> validator)
     {
-        var result = await validator.ValidateAsync(resource);
-        if (!result.IsValid)
-        {
-            return BadRequest(result.ToDictionary());
-        }
+        await validator.ValidateAndThrowAsync(resource);
 
         var entity = await service.CreateEvent(resource);
 
@@ -58,13 +52,10 @@ public class EventsController : ApiController
     [Route("{id:guid}")]
     public async Task<ActionResult<Event>> Update(
         Guid id,
-        [FromBody] EventDto resource)
+        [FromBody] EventDto resource,
+        [FromServices] IValidator<EventDto> validator)
     {
-        var result = await validator.ValidateAsync(resource);
-        if (!result.IsValid)
-        {
-            return BadRequest(result.ToDictionary());
-        }
+        await validator.ValidateAndThrowAsync(resource);
 
         var entity = await service.GetById(id);
         if (entity == null)
