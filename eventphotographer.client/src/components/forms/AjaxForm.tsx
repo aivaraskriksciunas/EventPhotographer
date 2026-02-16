@@ -1,10 +1,8 @@
 import { Formik, Form, FormikHelpers } from 'formik';
-import { api } from '@/api/client';
 import type * as Yup from 'yup';
 
 interface ApiFormProps {
-    url: string;
-    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+    handler: (data?: any) => Promise<any>;
     initialValues?: Record<string, any>;
     validationSchema?: Yup.AnyObject;
     onSuccess?: (response: any) => void;
@@ -13,8 +11,7 @@ interface ApiFormProps {
 }
 
 export default function AjaxForm({
-    url,
-    method = 'POST',
+    handler,
     initialValues = {},
     validationSchema,
     onSuccess,
@@ -27,11 +24,7 @@ export default function AjaxForm({
     ) => {
         let res = null;
         try {
-            res = await api.request({
-                method: method,
-                url: url,
-                data: values,
-            });
+            res = await handler(values);
         } catch (error) {
             if (onError) {
                 onError(error);

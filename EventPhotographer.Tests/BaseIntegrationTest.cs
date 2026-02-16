@@ -31,7 +31,7 @@ public abstract class BaseIntegrationTest : IClassFixture<AppWebApplicationFacto
         UserManager = _scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     }
 
-    public async Task<HttpClient> GetClientWithAuth(User? user = null)
+    public async Task<HttpClient> GetClientWithAuthAsync(User? user = null)
     {
         if (user == null)
         {
@@ -43,15 +43,7 @@ public abstract class BaseIntegrationTest : IClassFixture<AppWebApplicationFacto
             };
         }
 
-        if (Db.Entry(user).State == EntityState.Detached)
-        {
-            var identityresult = await UserManager.CreateAsync(user, "Secret!123");
-
-            if (!identityresult.Succeeded)
-            {
-                throw new IntegrationTestingException();
-            }
-        }
+        await EnsureUserRegisteredAsync(user);
 
         var client = _factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions
         {
@@ -65,6 +57,33 @@ public abstract class BaseIntegrationTest : IClassFixture<AppWebApplicationFacto
         client.DefaultRequestHeaders.Add(TestAuthenticationHandler.USER_ID_HEADER, user.Id);
 
         return client;
+    }
+
+    protected async Task<User> CreateUserAsync(string email = "sample@test.com", string password = "Secret!123")
+    {
+        var user = new User
+        {
+            Email = email,
+            UserName = email,
+            Name = "Test User",
+        };
+
+        return await EnsureUserRegisteredAsync(user, password);
+    }
+
+    private async Task<User> EnsureUserRegisteredAsync(User user, string password = "Secret!123")
+    {
+        if (Db.Entry(user).State == EntityState.Detached)
+        {
+            var identityresult = await UserManager.CreateAsync(user, password);
+
+            if (!identityresult.Succeeded)
+            {
+                throw new IntegrationTestingException();
+            }
+        }
+
+        return user;
     }
 
     public Task InitializeAsync()

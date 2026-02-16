@@ -8,8 +8,9 @@ public static class CorsSetup
         {
             options.AddPolicy("DevelopmentPolicy",
                 policy => {
-                    policy.AllowAnyOrigin()
-                        .AllowAnyHeader()
+                    policy.WithOrigins("http://localhost:5173")
+                        .AllowCredentials()
+                        .WithHeaders("content-type")
                         .AllowAnyMethod();
                 }
             );

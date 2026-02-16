@@ -3,12 +3,12 @@ import TextField from '@/components/forms/TextField';
 import SubmitField from '@/components/forms/SubmitField';
 import * as Yup from 'yup';
 import { useApiFetch } from '@/api/client';
-import { getEventDurationOptions } from '@/api/events';
+import { eventsApi } from '@/api/events';
 import ChoiceField from '@/components/forms/ChoiceField';
 
 export default function NewEventPage() {
     const [durations, isDurationsLoading] = useApiFetch(
-        getEventDurationOptions,
+        eventsApi.getEventDurationOptions,
     );
 
     const intialValues = { name: '', startDate: null, eventDuration: null };
@@ -21,7 +21,7 @@ export default function NewEventPage() {
             .min(new Date(), 'Start date must be in the future')
             .nullable(),
         eventDuration: Yup.string()
-            .oneOf([], 'Invalid duration')
+            .oneOf(durations ?? [], 'Invalid duration')
             .required('Duration is required'),
     });
 
@@ -29,20 +29,22 @@ export default function NewEventPage() {
         <>
             <h1>New event</h1>
             <AjaxForm
-                url="/api/events"
-                method="POST"
+                handler={eventsApi.createEvent}
                 initialValues={intialValues}
                 validationSchema={validationSchema}
             >
-                <TextField name="Name" label="Title" type="text"></TextField>
+                <TextField name="name" type="text">
+                    Title
+                </TextField>
                 <ChoiceField
-                    name="EventDuration"
-                    label="Duration"
+                    name="eventDuration"
                     disabled={isDurationsLoading}
                     choices={
                         durations?.map((v) => ({ value: v, label: v })) ?? []
                     }
-                ></ChoiceField>
+                >
+                    Duration
+                </ChoiceField>
                 <SubmitField>Create Event</SubmitField>
             </AjaxForm>
         </>

@@ -1,8 +1,8 @@
 ﻿using EventPhotographer.App.Events.Entities;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Resources;
+using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Core;
-using System.Security.Cryptography;
 
 namespace EventPhotographer.App.Events.Services;
 
@@ -21,14 +21,13 @@ public class EventService
         return await db.Events.FindAsync(id);
     }
 
-    public async Task<Event> CreateEvent(EventDto resource)
+    public async Task<Event> CreateEvent(EventDto resource, User user)
     {
-        var entity = resource.ToEntity();
+        var entity = resource.ToEntity(user);
         entity.CreatedAt = DateTime.UtcNow;
 
         var eventDuration = Enum.Parse<EventDuration>(resource.EventDuration);
         entity.EndDate = CalculateEventEndDate(entity.StartDate, eventDuration);
-        entity.AdministratorAccessKey = GenerateAdministratorAccessCode();
 
         await db.Events.AddAsync(entity);
         await db.SaveChangesAsync();
@@ -63,10 +62,5 @@ public class EventService
             EventDuration.OneWeek => startDate.AddDays(7),
             _ => startDate.AddHours(1),
         };
-    }
-
-    private string GenerateAdministratorAccessCode()
-    {
-        return RandomNumberGenerator.GetString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-", 36);
     }
 }

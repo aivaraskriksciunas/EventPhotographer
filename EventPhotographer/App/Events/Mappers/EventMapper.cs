@@ -1,5 +1,6 @@
 ﻿using EventPhotographer.App.Events.Entities;
 using EventPhotographer.App.Events.Resources;
+using EventPhotographer.App.Users.Entities;
 using Riok.Mapperly.Abstractions;
 
 namespace EventPhotographer.App.Events.Mappers;
@@ -9,7 +10,7 @@ public static partial class EventMapper
 {
     [MapProperty(nameof(EventDto.StartDate), nameof(Event.StartDate), Use = nameof(MapStartDate))]
     [MapperIgnoreSource(nameof(EventDto.EventDuration))]
-    public static partial Event ToEntity(this EventDto resource);
+    public static partial Event ToEntity(this EventDto resource, User user);
 
     [MapProperty(nameof(EventDto.StartDate), nameof(Event.StartDate), Use = nameof(MapStartDate))]
     [MapperIgnoreSource(nameof(EventDto.EventDuration))]

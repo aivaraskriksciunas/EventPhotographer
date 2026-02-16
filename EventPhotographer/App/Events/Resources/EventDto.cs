@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace EventPhotographer.App.Events.Resources;
+﻿namespace EventPhotographer.App.Events.Resources;
 
 public class EventDto
 {

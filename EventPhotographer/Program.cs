@@ -36,7 +36,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.SlidingExpiration = true;
     options.ExpireTimeSpan = new TimeSpan(1, 0, 0); // 1 Hour
-    options.Cookie.HttpOnly = true;
     options.Cookie.Name = "AuthenticationCookie";
 });
 

@@ -1,7 +1,7 @@
 import Navbar from '@/components/base/Navbar';
 import { Outlet } from 'react-router-dom';
 
-export default function MainLayout() {
+export default function AuthLayout() {
     return (
         <div>
             <Navbar />

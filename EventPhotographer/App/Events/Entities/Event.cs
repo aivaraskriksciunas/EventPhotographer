@@ -1,4 +1,5 @@
-﻿using EventPhotographer.Core.Entities;
+﻿using EventPhotographer.App.Users.Entities;
+using EventPhotographer.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +13,11 @@ public class Event : IEntity
     public Guid Id { get; set; }
     
     public string Name { get; set; } = string.Empty;
+
+    public string? UserId { get; set; }
+
+    [Required]
+    public User? User { get; set; } = null;
 
     [Column(TypeName = "char")]
     [StringLength(36)]

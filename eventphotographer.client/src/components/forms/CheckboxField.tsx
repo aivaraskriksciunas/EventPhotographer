@@ -1,37 +1,34 @@
 import { ErrorMessage, useField, useFormikContext } from 'formik';
 import { clsx } from 'clsx';
 
-interface TextFieldProps {
+interface CheckboxFieldProps {
     name: string;
-    type?: 'text' | 'password' | 'email' | 'number';
-    placeholder?: string;
     disabled?: boolean;
     children?: React.ReactNode;
 }
 
-export default function TextField({
+export default function CheckboxField({
     name,
-    type = 'text',
-    placeholder,
     disabled = false,
     children,
-}: TextFieldProps) {
+}: CheckboxFieldProps) {
     const [field, meta] = useField(name);
     const { isSubmitting } = useFormikContext();
-    const id = `textfield-${name}`;
+    const id = `checkboxfield-${name}`;
     const hasError = meta.touched && meta.error;
 
     return (
-        <div className="form-group mb-3">
-            <label htmlFor={id}>{children}</label>
+        <div className="form-check mb-3">
             <input
                 {...field}
-                type={type}
                 id={id}
-                placeholder={placeholder}
+                type="checkbox"
                 disabled={disabled || isSubmitting}
-                className={clsx('form-control', { 'is-invalid': hasError })}
-            ></input>
+                className={clsx('form-check-input', { 'is-invalid': hasError })}
+            />
+            <label htmlFor={id} className="form-check-label">
+                {children}
+            </label>
             <ErrorMessage name={name}>
                 {(msg) => <div className="invalid-feedback">{msg}</div>}
             </ErrorMessage>

@@ -61,7 +61,7 @@ public class AuthTests : BaseIntegrationTest
     [Fact]
     public async Task GetUser_ShouldGetLoggedInUser()
     {
-        var client = await GetClientWithAuth(new User
+        var client = await GetClientWithAuthAsync(new User
         {
             Name = "Test User",
             Email = "test@test.com"

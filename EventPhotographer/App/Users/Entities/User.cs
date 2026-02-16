@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EventPhotographer.App.AccountPolicies.Entities;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace EventPhotographer.App.Users.Entities;
@@ -17,4 +19,6 @@ public class User : IdentityUser
             UserName = value;
         }
     }
+
+    public ICollection<AccountTier> TierRecords = new Collection<AccountTier>();
 }

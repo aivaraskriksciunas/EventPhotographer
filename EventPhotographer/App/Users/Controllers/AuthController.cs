@@ -5,7 +5,6 @@ using EventPhotographer.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventPhotographer.App.Users.Controllers;

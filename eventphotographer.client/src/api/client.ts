@@ -8,13 +8,15 @@ export const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true,
 });
 
 export async function fetchApi<T>(
     url: string,
     method: RequestMethod = 'GET',
+    data?: any,
 ): Promise<T> {
-    const response = await api.request<T>({ url, method });
+    const response = await api.request<T>({ url, method, data });
 
     return response.data;
 }

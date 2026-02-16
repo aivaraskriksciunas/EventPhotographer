@@ -15,6 +15,7 @@ public class EventsTests : BaseIntegrationTest
     public async Task CreateEvent_WithValidData()
     {
         // Arrange 
+        var user = await CreateUserAsync();
         var request = new EventDto
         {
             Name = "Test event",
@@ -23,7 +24,8 @@ public class EventsTests : BaseIntegrationTest
         };
 
         // Act
-        var response = await Client.PostAsJsonAsync("/api/Events", request);
+        var client = await GetClientWithAuthAsync(user);
+        var response = await client.PostAsJsonAsync("/api/Events", request);
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -60,19 +62,21 @@ public class EventsTests : BaseIntegrationTest
     public async Task GetEvent_ExistingEvent()
     {
         // Arrange 
+        var user = await CreateUserAsync();
         var entity = new EventPhotographer.App.Events.Entities.Event
         {
             Name = "Test event",
             CreatedAt = DateTime.UtcNow,
+            User = user,
         };
         await Db.Events.AddAsync(entity);
         await Db.SaveChangesAsync();
 
-        var events = await Db.Events.ToListAsync();
         Assert.Equal(1, await Db.Events.CountAsync());
 
         // Act
-        var response = await Client.GetAsync($"/api/Events/{entity.Id}");
+        var client = await GetClientWithAuthAsync(user);
+        var response = await client.GetAsync($"/api/Events/{entity.Id}");
 
         // Assert 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -84,24 +88,50 @@ public class EventsTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task UpdateEvent_WithValidData()
+    public async Task GetEvent_EnsurePermissions()
     {
         // Arrange 
         var entity = new EventPhotographer.App.Events.Entities.Event
         {
             Name = "Test event",
             CreatedAt = DateTime.UtcNow,
+            User = await CreateUserAsync(),
+        };
+        await Db.Events.AddAsync(entity);
+        await Db.SaveChangesAsync();
+
+        Assert.Equal(1, await Db.Events.CountAsync());
+
+        // Act
+        var client = await GetClientWithAuthAsync();
+        var response = await client.GetAsync($"/api/Events/{entity.Id}");
+
+        // Assert 
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateEvent_WithValidData()
+    {
+        // Arrange 
+        var user = await CreateUserAsync();
+        var entity = new EventPhotographer.App.Events.Entities.Event
+        {
+            Name = "Test event",
+            User = user,
+            CreatedAt = DateTime.UtcNow,
         };
         await Db.Events.AddAsync(entity);
         await Db.SaveChangesAsync();
 
         // Act
+        var client = await GetClientWithAuthAsync(user);
         var updateRequest = new
         {
             Name = "Updated event",
             EventDuration = EventDuration.OneDay.ToString(),
         };
-        var response = await Client.PutAsJsonAsync($"/api/Events/{entity.Id}", updateRequest);
+        var response = await client.PutAsJsonAsync($"/api/Events/{entity.Id}", updateRequest);
 
         // Assert
         await Db.Entry(entity).ReloadAsync();
@@ -109,6 +139,36 @@ public class EventsTests : BaseIntegrationTest
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(updatedEvent);
         Assert.Equal("Updated event", updatedEvent.Name);
+    }
+
+    [Fact]
+    public async Task UpdateEvent_EnsurePermissions()
+    {
+        // Arrange 
+        var entity = new EventPhotographer.App.Events.Entities.Event
+        {
+            Name = "Test event",
+            User = await CreateUserAsync(),
+            CreatedAt = DateTime.UtcNow,
+        };
+        await Db.Events.AddAsync(entity);
+        await Db.SaveChangesAsync();
+
+        // Act
+        var client = await GetClientWithAuthAsync();
+        var updateRequest = new
+        {
+            Name = "Updated event",
+            EventDuration = EventDuration.OneDay.ToString(),
+        };
+        var response = await client.PutAsJsonAsync($"/api/Events/{entity.Id}", updateRequest);
+
+        // Assert
+        await Db.Entry(entity).ReloadAsync();
+        var updatedEvent = await Db.Events.FindAsync(entity.Id);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.NotNull(updatedEvent);
+        Assert.Equal("Test event", updatedEvent.Name);
     }
 
     [Fact]

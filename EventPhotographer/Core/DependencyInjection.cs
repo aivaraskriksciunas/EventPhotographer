@@ -1,4 +1,5 @@
-﻿using EventPhotographer.App.Events;
+﻿using EventPhotographer.App.AccountPolicies;
+using EventPhotographer.App.Events;
 using EventPhotographer.App.Users;
 using EventPhotographer.Core.Exceptions;
 using FluentValidation;
@@ -11,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddEventsModule();
         services.AddUsersModule();
+        services.AddAccountPoliciesModule();
 
         // Load FluentValidation validators from this assembly
         services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped);

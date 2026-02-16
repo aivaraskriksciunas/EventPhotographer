@@ -1,5 +1,14 @@
 import { fetchApi } from '@/api/client';
 
-export const getEventDurationOptions = async (): Promise<string[]> => {
-    return fetchApi('/api/events/durations');
+interface CreateEventRequest {
+    name: string;
+    startDate: Date;
+    duration: string;
+}
+
+export const eventsApi = {
+    createEvent: async (request: CreateEventRequest) =>
+        fetchApi('/api/events', 'POST', request),
+    getEventDurationOptions: async () =>
+        fetchApi<string[]>('/api/events/durations'),
 };

@@ -3,16 +3,16 @@ import { clsx } from 'clsx';
 
 interface ChoiceFieldProps {
     name: string;
-    label: string;
     choices: Array<{ value: string; label: string }>;
     disabled?: boolean;
+    children?: React.ReactNode;
 }
 
 export default function ChoiceField({
     name,
-    label = '',
     choices,
     disabled = false,
+    children,
 }: ChoiceFieldProps) {
     const [field, meta] = useField(name);
     const { isSubmitting } = useFormikContext();
@@ -21,15 +21,18 @@ export default function ChoiceField({
 
     return (
         <div className="form-group mb-3">
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>{children}</label>
             <select
                 {...field}
                 id={id}
                 disabled={disabled || isSubmitting}
                 className={clsx('form-control', { 'is-invalid': hasError })}
             >
+                <option value=""></option>
                 {choices.map((i) => (
-                    <option value={i.value}>{i.label}</option>
+                    <option value={i.value} key={i.value}>
+                        {i.label}
+                    </option>
                 ))}
             </select>
             <ErrorMessage name={name}>
