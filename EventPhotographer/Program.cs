@@ -40,6 +40,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // Setup application modules
+builder.Services.AddConfiguration(builder.Configuration);
 builder.Services.AddAppModules();
 builder.Services.AddAppExceptionHandlers();
 builder.Services.ConfigureApplicationCors();

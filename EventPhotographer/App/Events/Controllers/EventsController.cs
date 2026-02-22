@@ -35,6 +35,16 @@ public class EventsController(
         return Ok(EventMapper.CreateResponseDto(entity));
     }
 
+    [HttpGet]
+    [Route("")]
+    public async Task<IEnumerable<EventResponseDto>> GetAll()
+    {
+        var user = await userManager.GetUserAsync(User);
+        var entities = await service.GetAllForUser(user!);
+
+        return entities.CreateResponseDtos();
+    }
+
     [HttpPost]
     [Route("")]
     public async Task<ActionResult<Event>> Create(

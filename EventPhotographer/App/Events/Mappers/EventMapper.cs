@@ -19,6 +19,8 @@ public static partial class EventMapper
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial EventResponseDto CreateResponseDto(Event entity);
 
+    public static partial IEnumerable<EventResponseDto> CreateResponseDtos(this IEnumerable<Event> entities);
+
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial AnonymousEventCreatedResponseDto CreateAnonymousEventCreatedResponseDto(Event entity);
 

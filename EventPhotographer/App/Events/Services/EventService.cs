@@ -3,6 +3,7 @@ using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Resources;
 using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.App.Events.Services;
 
@@ -19,6 +20,11 @@ public class EventService
     public async Task<Event?> GetById(Guid id)
     {
         return await db.Events.FindAsync(id);
+    }
+
+    public async Task<IEnumerable<Event>> GetAllForUser(User user)
+    {
+        return await db.Events.Where(e => e.UserId == user.Id).ToListAsync();
     }
 
     public async Task<Event> CreateEvent(EventDto resource, User user)

@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.App.Events.Resources;
+using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;
@@ -108,6 +109,47 @@ public class EventsTests : BaseIntegrationTest
 
         // Assert 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetAllEvents()
+    {
+        // Arrange
+        var user = await CreateUserAsync();
+        var otherUser = await CreateUserAsync();
+
+        var userEvents = new EventFaker()
+            .Rules((f, e) =>
+            {
+                e.User = user;
+            })
+            .Generate(3)
+        ;
+
+        var otherEvents = new EventFaker()
+            .Rules((f, e) =>
+            {
+                e.User = otherUser;
+            })
+            .Generate(4);
+
+        await Db.Events.AddRangeAsync(userEvents);
+        await Db.Events.AddRangeAsync(otherEvents);
+        await Db.SaveChangesAsync();
+
+        // Act
+        var client = await GetClientWithAuthAsync(user);
+        var response = await client.GetAsync("/api/Events");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var returnedEvents = await response.Content.ReadFromJsonAsync<List<EventResponseDto>>();
+        Assert.NotNull(returnedEvents);
+        Assert.Equal(3, returnedEvents.Count);
+        foreach (var ev in userEvents)
+        {
+            Assert.Contains(returnedEvents, e => e.Id == ev.Id);
+        }
     }
 
     [Fact]

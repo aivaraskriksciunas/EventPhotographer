@@ -1,4 +1,5 @@
-﻿using EventPhotographer.App.Users.Entities;
+﻿using Bogus;
+using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -59,8 +60,10 @@ public abstract class BaseIntegrationTest : IClassFixture<AppWebApplicationFacto
         return client;
     }
 
-    protected async Task<User> CreateUserAsync(string email = "sample@test.com", string password = "Secret!123")
+    protected async Task<User> CreateUserAsync(string? email = null, string password = "Secret!123")
     {
+        var faker = new Faker();
+        email = email ?? faker.Person.Email;
         var user = new User
         {
             Email = email,

@@ -17,6 +17,8 @@ public class AppDbContext : IdentityDbContext<User>
 
     public DbSet<AccountTier> AccountTiers { get; set; }
 
+    public DbSet<EventShareableLink> EventShareableLinks { get; set; }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);

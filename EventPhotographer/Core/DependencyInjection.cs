@@ -1,6 +1,7 @@
 ﻿using EventPhotographer.App.AccountPolicies;
 using EventPhotographer.App.Events;
 using EventPhotographer.App.Users;
+using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Exceptions;
 using FluentValidation;
 
@@ -24,6 +25,13 @@ public static class DependencyInjection
     {
         services.AddProblemDetails();
         services.AddExceptionHandler<ValidationExceptionHandler>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddConfiguration(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        services.Configure<ShareableLinkOptions>(configuration.GetSection("ShareableLink"));
 
         return services;
     }
