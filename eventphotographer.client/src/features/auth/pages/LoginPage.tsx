@@ -1,9 +1,11 @@
 import AjaxForm from '@/components/forms/AjaxForm';
 import * as Yup from 'yup';
-import { authApi } from '@/api/auth';
+import { authApi, CurrentUserResponse } from '@/api/auth';
 import TextField from '@/components/forms/TextField';
 import SubmitField from '@/components/forms/SubmitField';
 import CheckboxField from '@/components/forms/CheckboxField';
+import { useAuth } from '@/state/auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
     const intialValues = { email: '', password: '', rememberMe: false };
@@ -12,6 +14,13 @@ export default function LoginPage() {
         password: Yup.string().required(),
         rememberMe: Yup.boolean(),
     });
+    const setUser = useAuth(state => state.setUser)
+    const redirect = useNavigate();
+
+    const onLogin = (response: CurrentUserResponse) => {
+        setUser(response);
+        redirect('/');
+    }
 
     return (
         <>
@@ -19,6 +28,7 @@ export default function LoginPage() {
                 handler={authApi.login}
                 initialValues={intialValues}
                 validationSchema={schema}
+                onSuccess={onLogin}
             >
                 <TextField name="email" type="email">
                     Email

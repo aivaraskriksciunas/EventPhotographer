@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
-import { authApi } from '@/api/auth';
+import { authApi, CurrentUserResponse } from '@/api/auth';
 import AjaxForm from '@/components/forms/AjaxForm';
 import TextField from '@/components/forms/TextField';
 import SubmitField from '@/components/forms/SubmitField';
+import { useAuth } from '@/state/auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterPage() {
     const intialValues = {
@@ -20,6 +22,13 @@ export default function RegisterPage() {
             .required()
             .oneOf([Yup.ref('password')], 'Passwords must match'),
     });
+    const setUser = useAuth(state => state.setUser)
+    const redirect = useNavigate();
+
+    const onRegister = (response: CurrentUserResponse) => {
+        setUser(response);
+        redirect('/');
+    }
 
     return (
         <>
@@ -27,6 +36,7 @@ export default function RegisterPage() {
                 handler={authApi.register}
                 initialValues={intialValues}
                 validationSchema={schema}
+                onSuccess={onRegister}
             >
                 <TextField name="name" type="text">
                     Name

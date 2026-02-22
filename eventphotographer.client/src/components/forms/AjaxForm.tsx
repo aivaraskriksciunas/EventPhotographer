@@ -1,23 +1,23 @@
 import { Formik, Form, FormikHelpers } from 'formik';
 import type * as Yup from 'yup';
 
-interface ApiFormProps {
-    handler: (data?: any) => Promise<any>;
+interface ApiFormProps<T> {
+    handler: (data?: any) => Promise<T>;
     initialValues?: Record<string, any>;
     validationSchema?: Yup.AnyObject;
-    onSuccess?: (response: any) => void;
+    onSuccess?: (response: T) => void;
     onError?: (error: any) => void;
     children: React.ReactNode;
 }
 
-export default function AjaxForm({
+export default function AjaxForm<T>({
     handler,
     initialValues = {},
     validationSchema,
     onSuccess,
     onError,
     children,
-}: ApiFormProps) {
+}: ApiFormProps<T>) {
     const handleSubmit = async (
         values: Record<string, any>,
         { setSubmitting }: FormikHelpers<Record<string, any>>,
@@ -33,7 +33,7 @@ export default function AjaxForm({
         }
 
         if (onSuccess) {
-            onSuccess(res.data);
+            onSuccess(res);
         }
         setSubmitting(false);
     };

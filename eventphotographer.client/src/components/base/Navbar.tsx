@@ -7,10 +7,13 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-expand navbar-dark bg-dark px-3">
             <Link to="/" className="navbar-brand">
-                MyApp
+                Event Photographer
             </Link>
             <div className="collapse navbar-collapse">
                 <div className="navbar-nav me-auto">
+                    <Link to="/events" className="nav-link">
+                        My events
+                    </Link>
                     <Link to="/events/new" className="nav-link">
                         New event
                     </Link>
