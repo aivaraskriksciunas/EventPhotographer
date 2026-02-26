@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using EventPhotographer.App.Events.Entities;
-using EventPhotographer.App.Events.Resources;
+using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +23,7 @@ public class EventShareableLinkTests : BaseIntegrationTest
 
         // Act
         var client = await GetClientWithAuthAsync(@event.User);
-        var response = await client.GetAsync($"/api/EventShareableLink/{@event.Id}");
+        var response = await client.PostAsync($"/api/Events/{@event.Id}/ShareableLinks", null);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -34,7 +34,7 @@ public class EventShareableLinkTests : BaseIntegrationTest
         Assert.Equal(@event, link!.Event);
 
         // Send the same request again
-        response = await client.GetAsync($"/api/EventShareableLink/{@event.Id}");
+        response = await client.PostAsync($"/api/Events/{@event.Id}/ShareableLinks", null);
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         Assert.Equal(1, await Db.EventShareableLinks.CountAsync());
     }
@@ -48,7 +48,7 @@ public class EventShareableLinkTests : BaseIntegrationTest
 
         // Act
         var client = await GetClientWithAuthAsync(anotherUser);
-        var response = await client.GetAsync($"/api/EventShareableLink/{@event.Id}");
+        var response = await client.PostAsync($"/api/Events/{@event.Id}/ShareableLinks", null);
 
         // Assert
         Assert.NotEqual(HttpStatusCode.OK, response.StatusCode);
@@ -73,7 +73,7 @@ public class EventShareableLinkTests : BaseIntegrationTest
 
         // Act
         var client = await GetClientWithAuthAsync(user);
-        var response = await client.GetAsync($"/api/EventShareableLink/{@event.Id}");
+        var response = await client.PostAsync($"/api/Events/{@event.Id}/ShareableLinks", null);
 
         // Assert
         Assert.NotEqual(HttpStatusCode.OK, response.StatusCode);

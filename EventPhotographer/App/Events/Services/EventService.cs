@@ -1,6 +1,6 @@
 ﻿using EventPhotographer.App.Events.Entities;
 using EventPhotographer.App.Events.Mappers;
-using EventPhotographer.App.Events.Resources;
+using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Core;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +51,11 @@ public class EventService
         await db.SaveChangesAsync();
 
         return entity;
+    }
+
+    public bool IsEventActive(Event entity)
+    {
+        return entity.StartDate <= DateTime.Now && entity.EndDate >= DateTime.Now;
     }
 
     private DateTime CalculateEventEndDate(DateTime startDate, EventDuration eventDuration)

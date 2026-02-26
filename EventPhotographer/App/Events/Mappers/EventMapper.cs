@@ -1,5 +1,5 @@
 ﻿using EventPhotographer.App.Events.Entities;
-using EventPhotographer.App.Events.Resources;
+using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Users.Entities;
 using Riok.Mapperly.Abstractions;
 
@@ -23,6 +23,9 @@ public static partial class EventMapper
 
     [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial AnonymousEventCreatedResponseDto CreateAnonymousEventCreatedResponseDto(Event entity);
+
+    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
+    public static partial JoinEventResponseDto CreateJoinEventResponseDto(Event entity);
 
     [UserMapping(Default = false)]
     private static DateTime MapStartDate(DateTime? startDate)

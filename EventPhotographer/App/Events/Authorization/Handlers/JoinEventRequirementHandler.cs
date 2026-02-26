@@ -1,19 +1,23 @@
 ﻿using EventPhotographer.App.Events.Authorization.Requirements;
 using EventPhotographer.App.Events.Entities;
+using EventPhotographer.App.Events.Services;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace EventPhotographer.App.Events.Authorization.Handlers;
 
-public class EventAccessRequirementHandler : EventAccessHandler<EventAccessRequirement>
+public class JoinEventRequirementHandler (
+    EventService eventService) 
+    : AuthorizationHandler<JoinEventRequirement, Event>
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 
-        EventAccessRequirement requirement, 
+        JoinEventRequirement requirement, 
         Event resource)
     {
-        if (IsOwner(context.User.FindFirstValue(ClaimTypes.NameIdentifier), resource))
+        if (eventService.IsEventActive(resource))
+        {
             context.Succeed(requirement);
+        }
 
         return Task.CompletedTask;
     }

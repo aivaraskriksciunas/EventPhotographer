@@ -1,7 +1,7 @@
 ﻿using EventPhotographer.App.Events.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace EventPhotographer.App.Events.Resources;
+namespace EventPhotographer.App.Events.DTO;
 
 public class EventShareableLinkResponseDto
 {

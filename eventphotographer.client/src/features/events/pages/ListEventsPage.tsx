@@ -1,11 +1,16 @@
-import { EventResponse } from "@/api/events";
-import { Link, useLoaderData } from "react-router-dom";
+import { EventResponse } from '@/api/events';
+import { Link, useLoaderData } from 'react-router-dom';
 
 export default function ListEventsPage() {
     const events = useLoaderData();
 
     if (!events) {
-        return <div>No current events. Please <Link to="/events/new">create one</Link>.</div>
+        return (
+            <div>
+                No current events. Please{' '}
+                <Link to="/events/new">create one</Link>.
+            </div>
+        );
     }
 
     return (

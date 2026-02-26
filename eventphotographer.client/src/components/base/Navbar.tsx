@@ -10,7 +10,7 @@ export default function Navbar() {
                 Event Photographer
             </Link>
             <div className="collapse navbar-collapse">
-                <div className="navbar-nav me-auto">
+                <div className="navbar-nav">
                     <Link to="/events" className="nav-link">
                         My events
                     </Link>
@@ -18,6 +18,13 @@ export default function Navbar() {
                         New event
                     </Link>
                 </div>
+
+                <div className="navbar-nav me-auto">
+                    <Link to="/join" className="nav-link">
+                        <div className="btn btn-primary">Join</div>
+                    </Link>
+                </div>
+
                 <div className="navbar-nav">
                     {user ? (
                         <AccountDropdown user={user} />

@@ -22,13 +22,13 @@ export default function RegisterPage() {
             .required()
             .oneOf([Yup.ref('password')], 'Passwords must match'),
     });
-    const setUser = useAuth(state => state.setUser)
+    const setUser = useAuth((state) => state.setUser);
     const redirect = useNavigate();
 
     const onRegister = (response: CurrentUserResponse) => {
         setUser(response);
         redirect('/');
-    }
+    };
 
     return (
         <>

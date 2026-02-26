@@ -1,6 +1,8 @@
-﻿using FluentValidation;
+﻿using EventPhotographer.App.Events.DTO;
+using EventPhotographer.App.Events.Services;
+using FluentValidation;
 
-namespace EventPhotographer.App.Events.Resources;
+namespace EventPhotographer.App.Events.Validators;
 
 public class EventDtoValidator : AbstractValidator<EventDto>
 {

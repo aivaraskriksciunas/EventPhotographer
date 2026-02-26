@@ -10,6 +10,7 @@ import AuthLayout from './layouts/AuthLayout';
 import { authRoutes } from './features/auth/auth.routes';
 import { authApi } from './api/auth';
 import { useAuth } from './state/auth';
+import { publicEventsRoutes } from './features/public-events/public-events.routes';
 
 const authMiddleware: MiddlewareFunction = async (_, next) => {
     let currentUser = useAuth.getState().user;
@@ -32,6 +33,11 @@ const authMiddleware: MiddlewareFunction = async (_, next) => {
 };
 
 export const router = createBrowserRouter([
+    {
+        element: <MainLayout />,
+        errorElement: <Navigate to="/404" replace />,
+        children: [{ path: '/' }, ...publicEventsRoutes],
+    },
     {
         element: <MainLayout />,
         errorElement: <Navigate to="/404" replace />,

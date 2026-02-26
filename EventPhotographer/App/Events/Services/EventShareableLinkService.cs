@@ -21,6 +21,15 @@ public class EventShareableLinkService(
             .ToListAsync();
     }
 
+    public async Task<EventShareableLink?> GetShareableLinkByCode(string code)
+    {
+        return await Db.EventShareableLinks
+            .Where(x => x.Code == code)
+            .Include(x => x.Event)
+            .FirstOrDefaultAsync()
+        ;
+    }
+
     public async Task<EventShareableLink> CreateShareableLink(Event @event)
     {
         var entity = new EventShareableLink

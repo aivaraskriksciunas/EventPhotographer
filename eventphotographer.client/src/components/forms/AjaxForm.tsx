@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { Formik, Form, FormikHelpers } from 'formik';
 import type * as Yup from 'yup';
 
@@ -6,7 +7,7 @@ interface ApiFormProps<T> {
     initialValues?: Record<string, any>;
     validationSchema?: Yup.AnyObject;
     onSuccess?: (response: T) => void;
-    onError?: (error: any) => void;
+    onError?: (error: AxiosError) => void;
     children: React.ReactNode;
 }
 
@@ -26,7 +27,7 @@ export default function AjaxForm<T>({
         try {
             res = await handler(values);
         } catch (error) {
-            if (onError) {
+            if (onError && error instanceof AxiosError) {
                 onError(error);
             }
             return;

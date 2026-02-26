@@ -29,7 +29,10 @@ export const eventsRoutes: RouteObject[] = [
             {
                 path: 'share',
                 element: <ShareEventPage />,
-            }
-        ]
+                loader: async ({ params }) => {
+                    return await eventsApi.getShareableLinks(params.eventId!);
+                },
+            },
+        ],
     },
 ];

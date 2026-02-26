@@ -24,6 +24,10 @@ export const authApi = {
     login: async (loginRequest: LoginRequest) =>
         fetchApi<CurrentUserResponse>('/api/auth/login', 'POST', loginRequest),
     register: async (registerRequest: RegisterRequest) =>
-        fetchApi<CurrentUserResponse>('/api/auth/register', 'POST', registerRequest),
+        fetchApi<CurrentUserResponse>(
+            '/api/auth/register',
+            'POST',
+            registerRequest,
+        ),
     logout: async () => fetchApi('/api/auth/logout'),
 };

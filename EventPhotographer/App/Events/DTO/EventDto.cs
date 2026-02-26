@@ -1,4 +1,4 @@
-﻿namespace EventPhotographer.App.Events.Resources;
+﻿namespace EventPhotographer.App.Events.DTO;
 
 public class EventDto
 {

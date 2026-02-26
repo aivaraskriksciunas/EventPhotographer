@@ -14,13 +14,13 @@ export default function LoginPage() {
         password: Yup.string().required(),
         rememberMe: Yup.boolean(),
     });
-    const setUser = useAuth(state => state.setUser)
+    const setUser = useAuth((state) => state.setUser);
     const redirect = useNavigate();
 
     const onLogin = (response: CurrentUserResponse) => {
         setUser(response);
         redirect('/');
-    }
+    };
 
     return (
         <>
