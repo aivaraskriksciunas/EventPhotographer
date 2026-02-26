@@ -8,6 +8,7 @@ interface CreateEventRequest {
 
 export interface JoinEventRequest {
     code: string;
+    name: string;
 }
 
 export interface EventResponse {
@@ -22,11 +23,11 @@ export interface EventShareableLinkResponse {
     code: string;
 }
 
-export interface JoinEventResponse {
-    id: string;
+export interface ParticipantResponse {
+    token: string;
+    event: EventResponse;
     name: string;
-    startDate: Date;
-    endDate: Date;
+    createdAt: Date;
 }
 
 export const eventsApi = {
@@ -49,8 +50,8 @@ export const eventsApi = {
         ),
 
     joinEvent: async (request: JoinEventRequest) => 
-        fetchApi<JoinEventResponse>(
-            `/api/events/join`,
+        fetchApi<ParticipantResponse>(
+            `/api/participants/join`,
             'POST',
             request
         ),

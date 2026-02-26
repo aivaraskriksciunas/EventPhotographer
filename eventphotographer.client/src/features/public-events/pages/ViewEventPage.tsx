@@ -1,11 +1,11 @@
-import { useJoinedEvent } from "@/state/joinedEvent"
+import { useParticipant } from "@/state/participant"
 
 export default function ViewEventPage() {
-    const { event } = useJoinedEvent();
+    const { participant } = useParticipant();
 
     return (
         <>
-            <h1>{event!.name}</h1>
+            <h1>{participant!.event.name}</h1>
         </>
     )
 }

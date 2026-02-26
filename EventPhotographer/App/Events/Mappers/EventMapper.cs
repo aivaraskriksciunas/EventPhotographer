@@ -5,7 +5,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace EventPhotographer.App.Events.Mappers;
 
-[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Source)]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
 public static partial class EventMapper
 {
     [MapProperty(nameof(EventDto.StartDate), nameof(Event.StartDate), Use = nameof(MapStartDate))]
@@ -16,16 +16,11 @@ public static partial class EventMapper
     [MapperIgnoreSource(nameof(EventDto.EventDuration))]
     public static partial void UpdateFromDto([MappingTarget]this Event entity, EventDto resource);
 
-    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
     public static partial EventResponseDto CreateResponseDto(Event entity);
 
     public static partial IEnumerable<EventResponseDto> CreateResponseDtos(this IEnumerable<Event> entities);
 
-    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial AnonymousEventCreatedResponseDto CreateAnonymousEventCreatedResponseDto(Event entity);
-
-    [MapperRequiredMapping(RequiredMappingStrategy.Target)]
-    public static partial JoinEventResponseDto CreateJoinEventResponseDto(Event entity);
+    public static partial ParticipantResponseDto CreateResponseDto(Participant entity);
 
     [UserMapping(Default = false)]
     private static DateTime MapStartDate(DateTime? startDate)

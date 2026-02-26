@@ -16,5 +16,5 @@ public class EventShareableLink : IEntity
     public Guid EventId { get; set; }
 
     [Required]
-    public Event? Event { get; set; }
+    public required Event Event { get; set; }
 }

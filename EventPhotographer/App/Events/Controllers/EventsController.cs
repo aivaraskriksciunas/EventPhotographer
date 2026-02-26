@@ -1,5 +1,4 @@
 ﻿using EventPhotographer.App.Events.Authorization.Requirements;
-using EventPhotographer.App.Events.Entities;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.Services;
@@ -87,28 +86,6 @@ public class EventsController(
         await service.UpdateEvent(entity, resource);
 
         return Ok(EventMapper.CreateResponseDto(entity));
-    }
-
-    [HttpPost]
-    [Route("Join")]
-    [AllowAnonymous]
-    public async Task<ActionResult<JoinEventResponseDto>> Join(
-        [FromBody] JoinEventRequestDto resource,
-        [FromServices] EventShareableLinkService shareableLinkService)
-    {
-        var shareableLink = await shareableLinkService.GetShareableLinkByCode(resource.Code);
-        if (shareableLink == null)
-        {
-            return NotFound();
-        }
-
-        var authResult = await authorizationService.AuthorizeAsync(User, shareableLink.Event, new JoinEventRequirement());
-        if (!authResult.Succeeded)
-        {
-            return NotFound();
-        }
-
-        return Ok(EventMapper.CreateJoinEventResponseDto(shareableLink.Event!));
     }
 
     [HttpGet]

@@ -9,6 +9,7 @@ public static class DependencyInjection
     {
         services.AddScoped<Services.EventService>();
         services.AddScoped<Services.EventShareableLinkService>();
+        services.AddScoped<Services.ParticipantService>();
 
         // Authorization
         services.AddSingleton<IAuthorizationHandler, EventAccessRequirementHandler>();

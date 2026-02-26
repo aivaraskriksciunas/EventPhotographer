@@ -30,4 +30,6 @@ public class Event : IEntity
     public DateTime CreatedAt { get; set; }
 
     public ICollection<EventShareableLink> ShareableLinks { get; set; } = new List<EventShareableLink>();
+
+    public ICollection<Participant> Participants { get; set; } = new List<Participant>();
 }
