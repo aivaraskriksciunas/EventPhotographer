@@ -35,6 +35,7 @@ public class ParticipantService(
             Event = shareableLink.Event,
             EventShareableLink = shareableLink,
             CreatedAt = DateTime.UtcNow,
+            User = user,
         };
 
         await Db.Participants.AddAsync(participant);

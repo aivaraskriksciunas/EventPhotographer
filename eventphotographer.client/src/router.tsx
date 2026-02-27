@@ -19,9 +19,7 @@ const authMiddleware: MiddlewareFunction = async (_, next) => {
     if (null == currentUser) {
         try {
             currentUser = await authApi.getCurrentUser();
-        } catch (e) {
-            console.log(e); // TODO: Error handling
-        }
+        } catch (e) {}
     }
 
     if (null == currentUser) {

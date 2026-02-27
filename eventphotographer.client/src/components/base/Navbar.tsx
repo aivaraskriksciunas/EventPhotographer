@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { AuthenticatedUser, useAuth } from '@/state/auth';
+import { useParticipant } from '@/state/participant';
+import { EventResponse } from '@/api/events';
+import { truncate } from '@/utils/helpers';
 
 export default function Navbar() {
     const user = useAuth((state) => state.user);
+    const participant = useParticipant((state) => state.participant);
 
     return (
         <nav className="navbar navbar-expand navbar-dark bg-dark px-3">
@@ -20,9 +24,7 @@ export default function Navbar() {
                 </div>
 
                 <div className="navbar-nav me-auto">
-                    <Link to="/join" className="nav-link">
-                        <div className="btn btn-primary">Join</div>
-                    </Link>
+                    {participant !== null ? <CurrentEventIndicator event={participant.event}/> : <JoinEventButton/>}
                 </div>
 
                 <div className="navbar-nav">
@@ -60,4 +62,20 @@ function AccountDropdown({ user }: { user: AuthenticatedUser }) {
             </ul>
         </div>
     );
+}
+
+function JoinEventButton() {
+    return (
+        <Link to="/join" className="nav-link">
+            <div className="btn btn-primary">Join</div>
+        </Link>
+    );
+}
+
+function CurrentEventIndicator({ event }: { event: EventResponse }) {
+    return (
+        <Link to="/events/current">
+            <span className="badge text-bg-secondary">{truncate(event.name, 15)}</span>
+        </Link>
+    )
 }
