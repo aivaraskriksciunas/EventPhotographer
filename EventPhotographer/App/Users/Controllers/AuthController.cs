@@ -26,7 +26,6 @@ public class AuthController : ApiController
 
     [Route("login")]
     [HttpPost]
-    [AllowAnonymous]
     public async Task<ActionResult<UserLoginResponseDto>> Login(
         [FromBody]LoginRequestDto loginRequest,
         [FromServices]IValidator<LoginRequestDto> validator)
@@ -58,7 +57,6 @@ public class AuthController : ApiController
 
     [Route("register")]
     [HttpPost]
-    [AllowAnonymous]
     public async Task<ActionResult<UserLoginResponseDto>> Register(
         [FromBody]RegisterRequestDto request,
         [FromServices]IValidator<RegisterRequestDto> validator)
@@ -85,6 +83,7 @@ public class AuthController : ApiController
 
     [Route("logout")]
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
@@ -94,6 +93,7 @@ public class AuthController : ApiController
 
     [Route("user")]
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<UserLoginResponseDto>> GetUser()
     {
         var user = await _userManager.GetUserAsync(User);

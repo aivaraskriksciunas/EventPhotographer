@@ -15,29 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Identity
-builder.Services.AddIdentity<User, IdentityRole>(
-    options =>
-    {
-        options.Password.RequireDigit = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 8;
-
-        options.Lockout.MaxFailedAccessAttempts = 5;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-
-        options.User.RequireUniqueEmail = true;
-    })
-    .AddEntityFrameworkStores<AppDbContext>();
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.SlidingExpiration = true;
-    options.ExpireTimeSpan = new TimeSpan(1, 0, 0); // 1 Hour
-    options.Cookie.Name = "AuthenticationCookie";
-});
+builder.Services.AddAppAuth();
 
 // Setup application modules
 builder.Services.AddConfiguration(builder.Configuration);
@@ -69,6 +47,7 @@ app.UseExceptionHandler("/Error");
 app.UseHttpsRedirection();
 
 app.UseRouting();
+app.UseApplicationMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
 

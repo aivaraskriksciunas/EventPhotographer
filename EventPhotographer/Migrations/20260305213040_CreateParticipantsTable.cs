@@ -16,12 +16,12 @@ namespace EventPhotographer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                    Token = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv4()"),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
                     EventShareableLinkId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Token = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

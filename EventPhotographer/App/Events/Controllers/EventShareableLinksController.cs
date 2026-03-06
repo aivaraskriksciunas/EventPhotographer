@@ -15,6 +15,7 @@ public class EventShareableLinksController(
 {
     [HttpGet]
     [Route("")]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<EventShareableLinkResponseDto>>> View(Guid id)
     {
         var @event = await eventService.GetById(id);
@@ -40,6 +41,7 @@ public class EventShareableLinksController(
 
     [HttpPost]
     [Route("")]
+    [Authorize]
     public async Task<ActionResult<EventShareableLinkResponseDto>> Create(Guid id)
     {
         var @event = await eventService.GetById(id);

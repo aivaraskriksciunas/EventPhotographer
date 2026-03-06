@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventPhotographer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260226210226_CreateParticipantsTable")]
+    [Migration("20260305213040_CreateParticipantsTable")]
     partial class CreateParticipantsTable
     {
         /// <inheritdoc />
@@ -135,10 +135,10 @@ namespace EventPhotographer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<Guid>("Token")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuidv4()");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");

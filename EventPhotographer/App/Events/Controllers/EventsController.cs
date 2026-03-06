@@ -13,10 +13,12 @@ namespace EventPhotographer.App.Events.Controllers;
 public class EventsController(
     EventService service,
     UserManager<User> userManager,
-    IAuthorizationService authorizationService) : ApiController
+    IAuthorizationService authorizationService) 
+    : ApiController
 {
     [HttpGet]
     [Route("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<EventResponseDto>> Get(Guid id)
     {
         var entity = await service.GetById(id);
@@ -36,6 +38,7 @@ public class EventsController(
 
     [HttpGet]
     [Route("")]
+    [Authorize]
     public async Task<IEnumerable<EventResponseDto>> GetAll()
     {
         var user = await userManager.GetUserAsync(User);
@@ -46,6 +49,7 @@ public class EventsController(
 
     [HttpPost]
     [Route("")]
+    [Authorize]
     public async Task<ActionResult<EventResponseDto>> Create(
         [FromBody]EventDto resource,
         [FromServices] IValidator<EventDto> validator)
@@ -64,6 +68,7 @@ public class EventsController(
 
     [HttpPut]
     [Route("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<EventResponseDto>> Update(
         Guid id,
         [FromBody] EventDto resource,
@@ -90,7 +95,6 @@ public class EventsController(
 
     [HttpGet]
     [Route("Durations")]
-    [AllowAnonymous]
     public IActionResult GetEventDurations()
     {
         return Ok(Enum.GetNames<EventDuration>());

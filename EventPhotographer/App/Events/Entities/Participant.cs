@@ -5,14 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EventPhotographer.App.Events.Entities;
 
-[EntityTypeConfiguration(typeof(UUIDEntityConfiguration<Participant>))]
+[EntityTypeConfiguration(typeof(ParticipantEntityConfiguration))]
 [Index(nameof(Token), IsUnique = true)]
 public class Participant : IEntity
 {
     public Guid Id { get; set; }
 
-    [StringLength(100)]
-    public string Token = string.Empty;
+    public Guid Token { get; set; }
 
     [StringLength(100)]
     public required string Name { get; set; }

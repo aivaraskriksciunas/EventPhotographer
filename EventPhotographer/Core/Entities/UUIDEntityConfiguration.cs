@@ -5,7 +5,7 @@ namespace EventPhotographer.Core.Entities;
 
 internal class UUIDEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : class, IEntity
 {
-    public void Configure(EntityTypeBuilder<TEntity> builder)
+    public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id)

@@ -2,7 +2,7 @@
 using EventPhotographer.App.Users.Entities;
 using EventPhotographer.Core;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
+using System.Security.Claims;
 
 namespace EventPhotographer.App.Events.Services;
 
@@ -30,7 +30,6 @@ public class ParticipantService(
 
         participant = new Participant
         {
-            Token = await GenerateUniqueToken(),
             Name = name,
             Event = shareableLink.Event,
             EventShareableLink = shareableLink,
@@ -54,18 +53,11 @@ public class ParticipantService(
             .FirstOrDefaultAsync();
     }
 
-    private async Task<string> GenerateUniqueToken()
+    public async Task<Participant?> GetParticipantAsync(Guid token)
     {
-        var token = "";
-
-        do
-        {
-            token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32))
-                .Replace("+", "-")
-                .Replace("/", "_")
-                .Replace("=", "");
-        } while (await Db.Participants.Where(p => p.Token == token).AnyAsync());
-
-        return token;
+        return await Db.Participants
+            .Where(p => p.Token == token)
+            .Include(p => p.Event)
+            .FirstOrDefaultAsync();
     }
 }

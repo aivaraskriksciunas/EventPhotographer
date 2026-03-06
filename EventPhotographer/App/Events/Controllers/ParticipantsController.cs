@@ -3,6 +3,8 @@ using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.App.Users.Entities;
+using EventPhotographer.Core.Attributes;
+using EventPhotographer.Core.Middleware;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,9 +18,18 @@ public class ParticipantsController(
     IAuthorizationService authorizationService) 
     : ApiController
 {
+    [HttpGet]
+    [Route("Current")]
+    [ActiveParticipantRequired]
+    public async Task<ActionResult<ParticipantResponseDto>> Get()
+    {
+        var participant = Request.HttpContext.GetParticipant();
+
+        return Ok(EventMapper.CreateResponseDto(participant!));
+    }
+
     [HttpPost]
     [Route("Join")]
-    [AllowAnonymous]
     public async Task<ActionResult<ParticipantResponseDto>> Join(
         [FromBody] JoinEventRequestDto resource,
         [FromServices] IValidator<JoinEventRequestDto> validator,
@@ -44,6 +55,16 @@ public class ParticipantsController(
             resource.Name,
             user
         );
+
+        Response.Cookies.Append(
+            ParticipantMiddleware.HTTP_COOKIE_NAME,
+            participant.Token.ToString(),
+            new CookieOptions
+            {
+                Expires = participant.Event.EndDate.AddDays(1),
+                HttpOnly = true,
+                IsEssential = true
+            });
 
         return Ok(EventMapper.CreateResponseDto(participant));
     }
