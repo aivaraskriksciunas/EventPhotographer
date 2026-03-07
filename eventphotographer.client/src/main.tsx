@@ -5,9 +5,12 @@ import { router } from './router.jsx';
 
 import './scss/index.scss';
 import 'bootstrap';
+import ServicesWrapper from './ServicesWrapper.js';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <ServicesWrapper>
+            <RouterProvider router={router} />
+        </ServicesWrapper>
     </StrictMode>,
 );

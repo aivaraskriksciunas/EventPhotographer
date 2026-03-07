@@ -55,5 +55,6 @@ export const eventsApi = {
             'POST',
             request
         ),
-    
+    getCurrentEvent: async () => fetchApi<ParticipantResponse>(`/api/participants/current`),
+    leaveCurrentEvent: async () => fetchApi<null>(`/api/participants/leave`),
 };

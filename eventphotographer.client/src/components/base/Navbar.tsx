@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { AuthenticatedUser, useAuth } from '@/state/auth';
 import { useParticipant } from '@/state/participant';
-import { EventResponse } from '@/api/events';
+import { EventResponse, eventsApi } from '@/api/events';
 import { truncate } from '@/utils/helpers';
+import { X } from 'lucide-react'
 
 export default function Navbar() {
     const user = useAuth((state) => state.user);
@@ -73,9 +74,22 @@ function JoinEventButton() {
 }
 
 function CurrentEventIndicator({ event }: { event: EventResponse }) {
+
+    const { stopParticipation } = useParticipant()
+
+    const leaveEvent = () => {
+        stopParticipation();
+        eventsApi.leaveCurrentEvent();
+    }
+
     return (
         <Link to="/events/current">
-            <span className="badge text-bg-secondary">{truncate(event.name, 15)}</span>
+            <span className="badge text-bg-secondary">
+                {truncate(event.name, 15)}
+                <span onClick={leaveEvent}>
+                    <X size="16"/>
+                </span>
+            </span>
         </Link>
     )
 }
