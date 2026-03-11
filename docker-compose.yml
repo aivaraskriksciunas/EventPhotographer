@@ -10,6 +10,11 @@
       - "5432:5432"
     volumes:
       - ./db_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
 
   pgweb:
     container_name: eventphotographer_pgweb
@@ -22,7 +27,8 @@
     environment:
       - DATABASE_URL=postgres://admin:admin@postgres:5432/eventphotographer_db?sslmode=disable
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   minio:
     image: minio/minio:latest

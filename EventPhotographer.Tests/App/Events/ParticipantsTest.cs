@@ -3,11 +3,8 @@ using EventPhotographer.App.Events.Entities;
 using EventPhotographer.Tests.Fakers.Events;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace EventPhotographer.Tests.App.Events;
 
@@ -123,6 +120,30 @@ public class ParticipantsTest : BaseIntegrationTest
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal(0, await Db.Participants.CountAsync());
     }
+
+    [Fact]
+    public async Task JoinAndLeaveEvent()
+    {
+        // Arrange
+        var shareableLink = await CreateShareableLinkAsync();
+        var request = new JoinEventRequestDto
+        {
+            Name = "Test participant name",
+            Code = shareableLink.Code,
+        };
+
+        // Join and get event
+        await Client.PostAsJsonAsync("/api/participants/join", request);
+        var joinedEvent = await Client.GetFromJsonAsync<ParticipantResponseDto>("/api/participants/current");
+        Assert.NotNull(joinedEvent);
+        Assert.Equal(joinedEvent.Event.Name, shareableLink.Event.Name);
+
+        // Leave and get event 
+        await Client.GetAsync("/api/participants/leave");
+        var response = await Client.GetAsync("/api/participants/current");
+        Assert.NotEqual(HttpStatusCode.OK, response.StatusCode);
+    }
+
 
     private async Task<EventShareableLink> CreateShareableLinkAsync(
         EventFaker? eventFaker = null)

@@ -28,6 +28,15 @@ public class ParticipantsController(
         return Ok(EventMapper.CreateResponseDto(participant!));
     }
 
+    [HttpGet]
+    [Route("Leave")]
+    public ActionResult Leave()
+    {
+        Response.Cookies.Delete(ParticipantMiddleware.HTTP_COOKIE_NAME);
+
+        return Ok();
+    }
+
     [HttpPost]
     [Route("Join")]
     public async Task<ActionResult<ParticipantResponseDto>> Join(
