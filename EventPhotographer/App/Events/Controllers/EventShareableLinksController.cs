@@ -18,7 +18,7 @@ public class EventShareableLinksController(
     [Authorize]
     public async Task<ActionResult<IEnumerable<EventShareableLinkResponseDto>>> View(Guid id)
     {
-        var @event = await eventService.GetById(id);
+        var @event = await eventService.GetByIdAsync(id);
         if (@event == null)
         {
             return NotFound();
@@ -44,7 +44,7 @@ public class EventShareableLinksController(
     [Authorize]
     public async Task<ActionResult<EventShareableLinkResponseDto>> Create(Guid id)
     {
-        var @event = await eventService.GetById(id);
+        var @event = await eventService.GetByIdAsync(id);
         if (@event == null)
         {
             return NotFound();

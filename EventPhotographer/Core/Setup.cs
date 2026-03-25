@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.App.AccountPolicies;
+using EventPhotographer.App.Content;
 using EventPhotographer.App.Events;
 using EventPhotographer.App.Events.Authorization.Requirements;
 using EventPhotographer.App.Users;
@@ -19,6 +20,7 @@ public static class Setup
         services.AddEventsModule();
         services.AddUsersModule();
         services.AddAccountPoliciesModule();
+        services.AddContentModule();
 
         // Load FluentValidation validators from this assembly
         services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped);
@@ -71,6 +73,7 @@ public static class Setup
     public static IServiceCollection AddConfiguration(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.Configure<ShareableLinkOptions>(configuration.GetSection("ShareableLink"));
+        services.Configure<ObjectStorageConfiguration>(configuration.GetSection("ObjectStorage"));
 
         return services;
     }

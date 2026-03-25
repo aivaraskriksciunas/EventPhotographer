@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using EventPhotographer.App.AccountPolicies.Entities;
+using EventPhotographer.App.Content.Entities;
 
 namespace EventPhotographer.Core;
 
@@ -20,6 +21,10 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<EventShareableLink> EventShareableLinks { get; set; }
 
     public DbSet<Participant> Participants { get; set; }
+
+    public DbSet<Media> Media { get; set; }
+
+    public DbSet<MediaFile> MediaFiles { get; set; }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

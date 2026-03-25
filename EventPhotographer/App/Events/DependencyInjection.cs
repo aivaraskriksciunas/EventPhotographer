@@ -16,6 +16,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthorizationHandler, CreateShareableLinkRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, JoinEventRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, IsActiveParticipantRequirementHandler>();
+        services.AddScoped<IAuthorizationHandler, UploadEventMediaRequirementHandler>();
 
         return services;
     }

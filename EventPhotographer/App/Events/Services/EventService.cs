@@ -17,7 +17,7 @@ public class EventService
         db = context;
     }
 
-    public async Task<Event?> GetById(Guid id)
+    public async Task<Event?> GetByIdAsync(Guid id)
     {
         return await db.Events.FindAsync(id);
     }

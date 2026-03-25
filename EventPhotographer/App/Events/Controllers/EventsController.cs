@@ -21,7 +21,7 @@ public class EventsController(
     [Authorize]
     public async Task<ActionResult<EventResponseDto>> Get(Guid id)
     {
-        var entity = await service.GetById(id);
+        var entity = await service.GetByIdAsync(id);
         if (entity == null)
         {
             return NotFound();
@@ -76,7 +76,7 @@ public class EventsController(
     {
         await validator.ValidateAndThrowAsync(resource);
 
-        var entity = await service.GetById(id);
+        var entity = await service.GetByIdAsync(id);
         if (entity == null)
         {
             return NotFound();

@@ -1,13 +1,17 @@
-using EventPhotographer.App.Users.Entities;
+using Amazon.Extensions.NETCore.Setup;
 using EventPhotographer.Core;
+using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+builder.Services.AddObjectStorage(
+    builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ConfigurationException("Object storage settings are not configured")
 );
 
 builder.Services.AddControllers();
@@ -42,6 +46,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+await app.SetupObjectStorageAsync();
 
 app.UseExceptionHandler("/Error");
 app.UseHttpsRedirection();
