@@ -49,12 +49,13 @@ export const eventsApi = {
             'POST',
         ),
 
-    joinEvent: async (request: JoinEventRequest) => 
+    joinEvent: async (request: JoinEventRequest) =>
         fetchApi<ParticipantResponse>(
             `/api/participants/join`,
             'POST',
-            request
+            request,
         ),
-    getCurrentEvent: async () => fetchApi<ParticipantResponse>(`/api/participants/current`),
+    getCurrentEvent: async () =>
+        fetchApi<ParticipantResponse>(`/api/participants/current`),
     leaveCurrentEvent: async () => fetchApi<null>(`/api/participants/leave`),
 };

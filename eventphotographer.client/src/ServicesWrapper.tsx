@@ -1,36 +1,36 @@
-import { useEffect } from "react";
-import { useAuth } from "./state/auth"
-import { useParticipant } from "./state/participant";
-import { eventsApi } from "./api/events";
-import { authApi } from "./api/auth";
+import { useEffect } from 'react';
+import { useAuth } from './state/auth';
+import { useParticipant } from './state/participant';
+import { eventsApi } from './api/events';
+import { authApi } from './api/auth';
 
-export default function ServicesWrapper({ children }: {children: React.ReactNode}) {
+export default function ServicesWrapper({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const { setUser, logout } = useAuth();
-    const { setParticipant } = useParticipant()
-    
-    const getCurrentUser = async () => {
-        try {
-            let currentUser = await authApi.getCurrentUser()
-            setUser(currentUser)
-        }
-        catch { 
-            logout()
-        }
-    }
+    const { setParticipant } = useParticipant();
 
-    const getCurrentParticipation = async () => {
-        try {
-            let currentParticipant = await eventsApi.getCurrentEvent();
-            setParticipant(currentParticipant)
-        } catch {
-            setParticipant(null)
-        }
-    }
+    useEffect(() => {
+        const initialize = async () => {
+            try {
+                const currentUser = await authApi.getCurrentUser();
+                setUser(currentUser);
+            } catch {
+                logout();
+            }
 
-    useEffect(() => {getCurrentUser()}, []);
-    useEffect(() => {getCurrentParticipation()}, []);
+            try {
+                const currentParticipant = await eventsApi.getCurrentEvent();
+                setParticipant(currentParticipant);
+            } catch {
+                setParticipant(null);
+            }
+        };
 
-    return (
-        <>{children}</>
-    )
+        initialize();
+    }, [setUser, logout, setParticipant]);
+
+    return <>{children}</>;
 }

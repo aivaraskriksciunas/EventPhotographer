@@ -7,11 +7,11 @@ const hasActiveEventMiddleware: MiddlewareFunction = async (_, next) => {
     const joinedEvent = useParticipant.getState().participant;
 
     if (null === joinedEvent) {
-        throw redirect("/login");
+        throw redirect('/login');
     }
 
     await next();
-}
+};
 
 export const publicEventsRoutes: RouteObject[] = [
     {
@@ -22,5 +22,5 @@ export const publicEventsRoutes: RouteObject[] = [
         path: '/events/current',
         element: <ViewEventPage />,
         middleware: [hasActiveEventMiddleware],
-    }
+    },
 ];

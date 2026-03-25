@@ -3,7 +3,7 @@ import { AuthenticatedUser, useAuth } from '@/state/auth';
 import { useParticipant } from '@/state/participant';
 import { EventResponse, eventsApi } from '@/api/events';
 import { truncate } from '@/utils/helpers';
-import { X } from 'lucide-react'
+import { X } from 'lucide-react';
 
 export default function Navbar() {
     const user = useAuth((state) => state.user);
@@ -25,7 +25,11 @@ export default function Navbar() {
                 </div>
 
                 <div className="navbar-nav me-auto">
-                    {participant !== null ? <CurrentEventIndicator event={participant.event}/> : <JoinEventButton/>}
+                    {participant !== null ? (
+                        <CurrentEventIndicator event={participant.event} />
+                    ) : (
+                        <JoinEventButton />
+                    )}
                 </div>
 
                 <div className="navbar-nav">
@@ -74,22 +78,21 @@ function JoinEventButton() {
 }
 
 function CurrentEventIndicator({ event }: { event: EventResponse }) {
-
-    const { stopParticipation } = useParticipant()
+    const { stopParticipation } = useParticipant();
 
     const leaveEvent = () => {
         stopParticipation();
         eventsApi.leaveCurrentEvent();
-    }
+    };
 
     return (
         <Link to="/events/current">
             <span className="badge text-bg-secondary">
                 {truncate(event.name, 15)}
                 <span onClick={leaveEvent}>
-                    <X size="16"/>
+                    <X size="16" />
                 </span>
             </span>
         </Link>
-    )
+    );
 }

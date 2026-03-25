@@ -49,7 +49,7 @@ function CreateShareableLinkAction({
 
         try {
             await eventsApi.createShareableLink(event.id);
-        } catch (error) {
+        } catch {
             // TODO: Error handling
         } finally {
             setIsLoading(false);
