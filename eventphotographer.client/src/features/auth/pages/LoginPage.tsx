@@ -6,8 +6,11 @@ import SubmitField from '@/components/forms/SubmitField';
 import CheckboxField from '@/components/forms/CheckboxField';
 import { useAuth } from '@/state/auth';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+    const { t } = useTranslation();
+
     const intialValues = { email: '', password: '', rememberMe: false };
     const schema = Yup.object({
         email: Yup.string().required().email(),
@@ -23,22 +26,26 @@ export default function LoginPage() {
     };
 
     return (
-        <>
-            <AjaxForm
-                handler={authApi.login}
-                initialValues={intialValues}
-                validationSchema={schema}
-                onSuccess={onLogin}
-            >
-                <TextField name="email" type="email">
-                    Email
-                </TextField>
-                <TextField name="password" type="password">
-                    Password
-                </TextField>
-                <CheckboxField name="rememberMe">Remember me?</CheckboxField>
-                <SubmitField>Save</SubmitField>
-            </AjaxForm>
-        </>
+        <div className="card">
+            <div className="card-body">
+                <AjaxForm
+                    handler={authApi.login}
+                    initialValues={intialValues}
+                    validationSchema={schema}
+                    onSuccess={onLogin}
+                >
+                    <TextField name="email" type="email">
+                        {t('Email')}
+                    </TextField>
+                    <TextField name="password" type="password">
+                        {t('Password')}
+                    </TextField>
+                    <CheckboxField name="rememberMe">
+                        {t('Remember me?')}
+                    </CheckboxField>
+                    <SubmitField>{t('Save')}</SubmitField>
+                </AjaxForm>
+            </div>
+        </div>
     );
 }

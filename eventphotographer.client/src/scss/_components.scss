@@ -1,0 +1,85 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lora';
+    font-weight: 700;
+}
+
+a {
+    color: var(--color-primary);
+
+    &:hover {
+        color: var(--color-primary-lightest);
+    }
+}
+
+.navbar {
+    background-color: var(--color-background);
+    border-bottom: var(--border-width-lg) solid var(--color-primary);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.btn {
+    border-radius: var(--border-inner-radius);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    border: 0;
+    border-bottom: var(--border-width-lg) solid var(--color-primary-darker);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: var(--border-width) solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-primary-lighter);
+}
+
+.form-control {
+    border: 0;
+    // border: 1px solid var(--color-background-darker);
+    border-bottom: 2px solid var(--color-primary);
+    background-color: var(--color-background-darker);
+
+    &:disabled {
+        color: var(--color-text-lighter);
+        background-color: var(--color-background-darkest);
+        border-color: var(--color-background-darkest);
+    }
+
+    &.is-invalid {
+        background: var(--color-danger-background);
+        color: var(--color-danger);
+    }
+}
+
+.card {
+    background-color: var(--color-background);
+    border: 0;
+    border-radius: var(--border-radius);
+
+    .card-body {
+        padding: var(--spacing-4);
+    }
+}
+
+.dropdown-menu {
+    background-color: var(--color-background);
+    padding: 0;
+    overflow: hidden;
+
+    .dropdown-item {
+        padding: var(--spacing-1) var(--spacing-3);
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--color-primary-background);
+    }
+}

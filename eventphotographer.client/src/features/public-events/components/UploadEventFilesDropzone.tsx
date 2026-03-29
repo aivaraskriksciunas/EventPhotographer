@@ -19,7 +19,7 @@ export default function UploadEventFilesDropzone() {
 
     return (
         <>
-            <div className="dropzone" {...getRootProps()}>
+            <div className="dropzone mb-3" {...getRootProps()}>
                 <input {...getInputProps()}></input>
                 {isDragActive ? (
                     <span>Dragging...</span>

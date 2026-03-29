@@ -5,6 +5,7 @@ import { router } from './router.jsx';
 
 import './scss/index.scss';
 import 'bootstrap';
+import './i18n.js';
 import ServicesWrapper from './ServicesWrapper.js';
 
 createRoot(document.getElementById('root')!).render(

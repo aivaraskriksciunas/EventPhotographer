@@ -16,10 +16,10 @@ export default function ListEventsPage() {
     return (
         <div className="">
             {events.map((event: EventResponse) => (
-                <div className="card" key={event.id}>
+                <div className="card mb-3" key={event.id}>
                     <div className="card-body">
                         <Link to={`/events/${event.id}`}>
-                            <h5 className="card-title">{event.name}</h5>
+                            <h4 className="card-title">{event.name}</h4>
                         </Link>
                     </div>
                 </div>

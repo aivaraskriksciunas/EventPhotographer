@@ -4,34 +4,48 @@ import ListEventsPage from './pages/ListEventsPage';
 import { eventsApi } from '@/api/events';
 import ViewEventPage from './pages/ViewEventPage';
 import ShareEventPage from './pages/ShareEventPage';
+import DashboardLayout from '@/layouts/DashboardLayout';
 
 export const eventsRoutes: RouteObject[] = [
     {
+        element: <DashboardLayout />,
         path: '/events',
-        element: <ListEventsPage />,
-        loader: eventsApi.getAllEvents,
-    },
-    {
-        path: '/events/new',
-        element: <NewEventPage />,
-    },
-    {
-        id: 'view-event',
-        path: '/events/:eventId',
-        loader: async ({ params }) => {
-            return await eventsApi.getEvent(params.eventId!);
-        },
         children: [
             {
                 path: '',
-                element: <ViewEventPage />,
+                element: <ListEventsPage />,
+                loader: eventsApi.getAllEvents,
             },
             {
-                path: 'share',
-                element: <ShareEventPage />,
+                path: 'new',
+                element: <NewEventPage />,
+            },
+            {
+                id: 'view-event',
+                path: ':eventId',
                 loader: async ({ params }) => {
-                    return await eventsApi.getShareableLinks(params.eventId!);
+                    const [ event, media ] = await Promise.all([
+                        eventsApi.getEvent(params.eventId!),
+                        eventsApi.getEventMedia(params.eventId!)
+                    ])
+                    
+                    return { event, media };
                 },
+                children: [
+                    {
+                        path: '',
+                        element: <ViewEventPage />,
+                    },
+                    {
+                        path: 'share',
+                        element: <ShareEventPage />,
+                        loader: async ({ params }) => {
+                            return await eventsApi.getShareableLinks(
+                                params.eventId!,
+                            );
+                        },
+                    },
+                ],
             },
         ],
     },

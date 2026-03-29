@@ -1,5 +1,6 @@
 ﻿using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.Entities;
+using EventPhotographer.Core.Middleware;
 using EventPhotographer.Tests.Fakers.Events;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +54,8 @@ public class ParticipantsTest : BaseIntegrationTest
         };
 
         // Act
-        await Client.PostAsJsonAsync("/api/participants/join", request);
+        var response = await Client.PostAsJsonAsync("/api/participants/join", request);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var joinedEvent = await Client.GetFromJsonAsync<ParticipantResponseDto>("/api/participants/current");
 
         // Assert
@@ -152,7 +154,7 @@ public class ParticipantsTest : BaseIntegrationTest
         var faker = new EventFaker()
             .RuleFor(e => e.User, (f, e) => e.User = user)
             .RuleFor(e => e.StartDate, (f, e) => f.Date.Recent(1))
-            .RuleFor(e => e.EndDate, (f, e) => f.Date.Soon());
+            .RuleFor(e => e.EndDate, (f, e) => f.Date.Soon(3));
 
         var @event = faker.Generate();
         var shareableLink = new EventShareableLinkFaker()

@@ -1,6 +1,6 @@
 import { AxiosProgressEvent } from 'axios';
 import { mediaApi } from '@/api/media';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type FileUploadStatus = 'Pending' | 'Uploading' | 'Success' | 'Error';
 
@@ -12,6 +12,7 @@ interface UploadedFile {
 }
 
 export default function UploadedFileHandler({ rawFile }: { rawFile: File }) {
+    const isUploaded = useRef(false);
     const [file, setFile] = useState<UploadedFile>({
         rawFile: rawFile,
         status: 'Pending' as FileUploadStatus,
@@ -50,12 +51,17 @@ export default function UploadedFileHandler({ rawFile }: { rawFile: File }) {
     };
 
     useEffect(() => {
+        if (isUploaded.current === true) {
+            return;
+        }
+
         uploadFile(file);
+        isUploaded.current = true;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rawFile]);
 
     return (
-        <div className="card">
+        <div className="card mb-3">
             <div className="card-body">
                 <h5 className="card-title">File</h5>
                 <div
@@ -63,8 +69,8 @@ export default function UploadedFileHandler({ rawFile }: { rawFile: File }) {
                     role="progressbar"
                     aria-label="Basic example"
                     aria-valuenow={progress}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
                 >
                     <div
                         className="progress-bar"

@@ -7,7 +7,11 @@ export default function AuthLayout() {
             <Navbar />
 
             <main className="container mt-4">
-                <Outlet />
+                <div className="row justify-content-center">
+                    <div className="col-lg-4 col-md-6 col-12">
+                        <Outlet />
+                    </div>
+                </div>
             </main>
         </div>
     );

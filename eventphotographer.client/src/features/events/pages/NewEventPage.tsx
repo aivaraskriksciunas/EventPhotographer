@@ -5,8 +5,11 @@ import * as Yup from 'yup';
 import { useApiFetch } from '@/api/client';
 import { eventsApi } from '@/api/events';
 import ChoiceField from '@/components/forms/ChoiceField';
+import { useTranslation } from 'react-i18next';
 
 export default function NewEventPage() {
+    const { t } = useTranslation();
+
     const [durations, isDurationsLoading] = useApiFetch(
         eventsApi.getEventDurationOptions,
     );
@@ -26,27 +29,30 @@ export default function NewEventPage() {
     });
 
     return (
-        <>
-            <h1>New event</h1>
-            <AjaxForm
-                handler={eventsApi.createEvent}
-                initialValues={intialValues}
-                validationSchema={validationSchema}
-            >
-                <TextField name="name" type="text">
-                    Title
-                </TextField>
-                <ChoiceField
-                    name="eventDuration"
-                    disabled={isDurationsLoading}
-                    choices={
-                        durations?.map((v) => ({ value: v, label: v })) ?? []
-                    }
+        <div className="card">
+            <div className="card-body">
+                <h1>{t('New event')}</h1>
+                <AjaxForm
+                    handler={eventsApi.createEvent}
+                    initialValues={intialValues}
+                    validationSchema={validationSchema}
                 >
-                    Duration
-                </ChoiceField>
-                <SubmitField>Create Event</SubmitField>
-            </AjaxForm>
-        </>
+                    <TextField name="name" type="text">
+                        {t('Title')}
+                    </TextField>
+                    <ChoiceField
+                        name="eventDuration"
+                        disabled={isDurationsLoading}
+                        choices={
+                            durations?.map((v) => ({ value: v, label: v })) ??
+                            []
+                        }
+                    >
+                        {t('Duration')}
+                    </ChoiceField>
+                    <SubmitField>{t('Create event')}</SubmitField>
+                </AjaxForm>
+            </div>
+        </div>
     );
 }

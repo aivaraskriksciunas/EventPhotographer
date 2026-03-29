@@ -7,6 +7,7 @@ export default function ViewEventPage() {
     return (
         <>
             <h1>{participant!.event.name}</h1>
+
             <UploadEventFilesDropzone />
         </>
     );

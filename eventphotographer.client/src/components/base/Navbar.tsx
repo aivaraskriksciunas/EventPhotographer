@@ -10,7 +10,7 @@ export default function Navbar() {
     const participant = useParticipant((state) => state.participant);
 
     return (
-        <nav className="navbar navbar-expand navbar-dark bg-dark px-3">
+        <nav className="navbar navbar-expand px-3">
             <Link to="/" className="navbar-brand">
                 Event Photographer
             </Link>

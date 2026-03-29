@@ -1,20 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import 'bootstrap/scss/bootstrap';
-
-:root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+@import './variables';
 
 body {
     margin: 0;
     place-items: center;
     min-height: 100vh;
+}
+
+@import './components';
+
+.lucide {
+    width: 1em;
+    height: 1em;
 }
 
 .dropzone {
@@ -28,4 +26,31 @@ body {
     border: 3px dashed #aaa;
     border-radius: 8px;
     cursor: pointer;
+}
+
+.sidebar {
+    color: var(--color-text-lighter);
+
+    #sidebar-title {
+        font-size: 1.5em;
+    }
+
+    .nav-link {
+        color: var(--color-text-lighter);
+        padding: var(--spacing-1) 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-link:hover {
+        color: var(--color-primary-lightest);
+    }
+}
+
+.eventImageCard {
+    img {
+        height: 250px;
+        object-fit: cover;
+        object-position: center center;
+    }
 }

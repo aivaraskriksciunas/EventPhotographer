@@ -5,8 +5,11 @@ import TextField from '@/components/forms/TextField';
 import SubmitField from '@/components/forms/SubmitField';
 import { useAuth } from '@/state/auth';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function RegisterPage() {
+    const { t } = useTranslation();
+
     const intialValues = {
         name: '',
         email: '',
@@ -39,18 +42,18 @@ export default function RegisterPage() {
                 onSuccess={onRegister}
             >
                 <TextField name="name" type="text">
-                    Name
+                    {t('Name')}
                 </TextField>
                 <TextField name="email" type="email">
-                    Email
+                    {t('Email')}
                 </TextField>
                 <TextField name="password" type="password">
-                    Password
+                    {t('Password')}
                 </TextField>
                 <TextField name="passwordConfirmation" type="password">
-                    Repeat password
+                    {t('Repeat password')}
                 </TextField>
-                <SubmitField>Save</SubmitField>
+                <SubmitField>{t('Save')}</SubmitField>
             </AjaxForm>
         </>
     );

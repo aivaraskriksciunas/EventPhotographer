@@ -3,10 +3,12 @@ import AjaxForm from '@/components/forms/AjaxForm';
 import SubmitField from '@/components/forms/SubmitField';
 import TextField from '@/components/forms/TextField';
 import { useParticipant } from '@/state/participant';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 export default function JoinEventPage() {
+    const { t } = useTranslation();
     const { setParticipant: setJoinedEvent } = useParticipant();
     const navigate = useNavigate();
 
@@ -22,17 +24,24 @@ export default function JoinEventPage() {
     };
 
     return (
-        <div>
-            <AjaxForm<ParticipantResponse>
-                handler={eventsApi.joinEvent}
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSuccess={joinEvent}
-            >
-                <TextField name="code">Code:</TextField>
-                <TextField name="name">Name: </TextField>
-                <SubmitField>Save</SubmitField>
-            </AjaxForm>
+        <div className="row justify-content-center">
+            <div className="col-lg-8 col-md-10">
+                <div className="card">
+                    <div className="card-body">
+                        <h2>{t('Join event')}</h2>
+                        <AjaxForm<ParticipantResponse>
+                            handler={eventsApi.joinEvent}
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSuccess={joinEvent}
+                        >
+                            <TextField name="code">{t('Code')}:</TextField>
+                            <TextField name="name">{t('Name')}:</TextField>
+                            <SubmitField>{t('Join')}</SubmitField>
+                        </AjaxForm>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

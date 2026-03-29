@@ -30,6 +30,18 @@ export interface ParticipantResponse {
     createdAt: Date;
 }
 
+export interface EventMediaFileResponse {
+    id: string;
+    mimeType: string;
+    fileSize: number;
+}
+
+export interface EventMediaResponse {
+    id: string;
+    createdAt: Date;
+    files: EventMediaFileResponse[];
+}
+
 export const eventsApi = {
     createEvent: async (request: CreateEventRequest) =>
         fetchApi<EventResponse>('/api/events', 'POST', request),
@@ -58,4 +70,7 @@ export const eventsApi = {
     getCurrentEvent: async () =>
         fetchApi<ParticipantResponse>(`/api/participants/current`),
     leaveCurrentEvent: async () => fetchApi<null>(`/api/participants/leave`),
+
+    getEventMedia: async (eventId: string) =>
+        fetchApi<EventMediaResponse[]>(`/api/events/${eventId}/media`),
 };
