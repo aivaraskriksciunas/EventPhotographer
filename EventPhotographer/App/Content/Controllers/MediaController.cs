@@ -7,10 +7,9 @@ using EventPhotographer.Core.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using EventPhotographer.App.Content.Mappers;
 using EventPhotographer.App.Content.Authorization;
-using Amazon.S3;
+using FluentValidation;
 
 namespace EventPhotographer.App.Content.Controllers;
 
@@ -42,14 +41,18 @@ public class MediaController (
     }
 
     [HttpPost("{uploadToken:guid}/Upload")]
+    [RequestSizeLimit(50_000_000)] // 50 MB
     [ActiveParticipantRequired]
     public async Task<IActionResult> UploadFile(
         Guid uploadToken,
         IFormFile file,
+        [FromServices] IValidator<IFormFile> fileValidator, 
         [FromServices] ParticipantService participantService,
         [FromServices] UserManager<User> userManager,
-        [FromServices] IAmazonS3 s3Client)
+        [FromServices] MediaStorageService storageService)
     {
+        await fileValidator.ValidateAndThrowAsync(file);
+
         var participant = HttpContext.GetParticipant();
         var media = await mediaService.GetByUploadTokenAsync(uploadToken);
         if (media == null)
@@ -60,24 +63,41 @@ public class MediaController (
         var result = await authorizationService.AuthorizeAsync(
             User,
             media,
-            new ManageMediaRequirement());
+            [new ManageMediaRequirement(), new UploadFileRequirement()]);
 
         if (!result.Succeeded)
         {
             return NotFound();
         }
 
-        using (var fileStream = file.OpenReadStream())
-        {
-            await s3Client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
-            {
-                BucketName = "event-photographer",
-                Key = $"{media.Id}",
-                InputStream = fileStream,
-                ContentType = file.ContentType,
-            });
-        }
+        await mediaService.UploadFile(media, file);
 
         return Ok();
+    }
+
+    [HttpGet("file/{fileId:guid}")]
+    [Produces("application/octet-stream")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetFile(
+        Guid fileId,
+        [FromServices] MediaStorageService mediaStorageService)
+    {
+        var file = await mediaService.GetFileByIdAsync(fileId);
+        if (file == null)
+        {
+            return NotFound(); 
+        }
+
+        var fileStream = await mediaStorageService.GetFileAsync(file.Path);
+        if (fileStream == null)
+        {
+            return NotFound();
+        }
+
+        return new FileStreamResult(fileStream.ResponseStream, file.MimeType)
+        {
+            FileDownloadName = file.Path
+        };
     }
 }

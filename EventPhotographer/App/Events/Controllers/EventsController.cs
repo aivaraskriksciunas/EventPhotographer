@@ -27,7 +27,7 @@ public class EventsController(
             return NotFound();
         }
 
-        var result = await authorizationService.AuthorizeAsync(User, entity, new EventAccessRequirement());
+        var result = await authorizationService.AuthorizeAsync(User, entity, new ManageEventRequirement());
         if (!result.Succeeded)
         {
             return NotFound();
@@ -82,7 +82,7 @@ public class EventsController(
             return NotFound();
         }
 
-        var result = await authorizationService.AuthorizeAsync(User, entity, new EventAccessRequirement());
+        var result = await authorizationService.AuthorizeAsync(User, entity, new ManageEventRequirement());
         if (!result.Succeeded)
         {
             return NotFound();

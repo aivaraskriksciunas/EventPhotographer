@@ -24,7 +24,7 @@ public class EventShareableLinksController(
             return NotFound();
         }
            
-        var result = await authorizationService.AuthorizeAsync(User, @event, new EventAccessRequirement());
+        var result = await authorizationService.AuthorizeAsync(User, @event, new ManageEventRequirement());
         if (!result.Succeeded)
         {
             return Forbid();

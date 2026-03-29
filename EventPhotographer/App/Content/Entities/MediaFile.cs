@@ -17,7 +17,7 @@ public class MediaFile : IEntity
     public required string MimeType { get; set; }
 
     [Column(TypeName = "int")]
-    public required uint FileSize { get; set; }
+    public required ulong FileSize { get; set; }
 
     public Guid MediaId { get; set; }
     public required Media Media { get; set; }

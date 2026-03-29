@@ -2,6 +2,6 @@
 
 namespace EventPhotographer.App.Events.Authorization.Requirements;
 
-public class EventAccessRequirement : IAuthorizationRequirement
+public class ManageEventRequirement : IAuthorizationRequirement
 {
 }

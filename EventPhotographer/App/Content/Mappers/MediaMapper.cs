@@ -8,4 +8,6 @@ namespace EventPhotographer.App.Content.Mappers;
 public partial class MediaMapper
 {
     public static partial MediaResponseDto ToResponse(Media media);
+
+    public static partial IEnumerable<MediaResponseDto> ToResponse(IEnumerable<Media> media);
 }

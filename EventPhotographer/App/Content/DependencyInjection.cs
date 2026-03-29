@@ -9,8 +9,11 @@ public static class DependencyInjection
     public static IServiceCollection AddContentModule(this IServiceCollection services)
     {
         services.AddScoped<MediaService>();
+        services.AddScoped<MediaStorageService>();
+        services.AddSingleton<FileContentTypeReader>();
 
         services.AddScoped<IAuthorizationHandler, ManageMediaRequirementHandler>();
+        services.AddScoped<IAuthorizationHandler, UploadFileRequirementHandler>();
 
         return services;
     }

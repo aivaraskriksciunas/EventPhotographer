@@ -5,11 +5,11 @@ using System.Security.Claims;
 
 namespace EventPhotographer.App.Events.Authorization.Handlers;
 
-public class EventAccessRequirementHandler : EventAccessHandler<EventAccessRequirement>
+public class ManageEventRequirementHandler : EventAccessHandler<ManageEventRequirement>
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 
-        EventAccessRequirement requirement, 
+        ManageEventRequirement requirement, 
         Event resource)
     {
         if (IsOwner(context.User.FindFirstValue(ClaimTypes.NameIdentifier), resource))

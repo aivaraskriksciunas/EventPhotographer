@@ -12,7 +12,7 @@ public static class DependencyInjection
         services.AddScoped<Services.ParticipantService>();
 
         // Authorization
-        services.AddSingleton<IAuthorizationHandler, EventAccessRequirementHandler>();
+        services.AddSingleton<IAuthorizationHandler, ManageEventRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, CreateShareableLinkRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, JoinEventRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, IsActiveParticipantRequirementHandler>();

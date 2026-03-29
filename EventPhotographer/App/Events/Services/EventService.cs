@@ -24,7 +24,10 @@ public class EventService
 
     public async Task<IEnumerable<Event>> GetAllForUser(User user)
     {
-        return await db.Events.Where(e => e.UserId == user.Id).ToListAsync();
+        return await db.Events
+            .Where(e => e.UserId == user.Id)
+            .OrderByDescending(e => e.CreatedAt)
+            .ToListAsync();
     }
 
     public async Task<Event> CreateEvent(EventDto resource, User user)
