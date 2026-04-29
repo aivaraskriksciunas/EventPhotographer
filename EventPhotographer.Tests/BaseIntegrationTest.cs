@@ -1,6 +1,6 @@
 ﻿using Bogus;
-using EventPhotographer.App.Users.Entities;
-using EventPhotographer.Core;
+using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.TestHost;

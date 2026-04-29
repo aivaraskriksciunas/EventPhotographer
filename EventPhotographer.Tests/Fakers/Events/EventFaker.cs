@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Events.Entities;
+﻿using EventPhotographer.Data.Entities.Events;
 using Bogus;
 
 namespace EventPhotographer.Tests.Fakes.Events;

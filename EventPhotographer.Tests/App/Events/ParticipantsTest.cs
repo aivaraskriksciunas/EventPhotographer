@@ -1,7 +1,6 @@
-﻿using EventPhotographer.App.Events.DTO;
+﻿using EventPhotographer.App.Events.DTO.Request;
 using EventPhotographer.App.Events.DTO.Response;
-using EventPhotographer.App.Events.Entities;
-using EventPhotographer.Core.Middleware;
+using EventPhotographer.Data.Entities.Events;
 using EventPhotographer.Tests.Fakers.Events;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;

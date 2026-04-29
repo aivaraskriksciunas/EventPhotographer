@@ -1,4 +1,4 @@
-﻿using EventPhotographer.Core;
+﻿using EventPhotographer.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
