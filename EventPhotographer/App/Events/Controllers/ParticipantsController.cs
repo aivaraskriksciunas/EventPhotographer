@@ -1,8 +1,9 @@
 ﻿using EventPhotographer.App.Events.Authorization.Requirements;
-using EventPhotographer.App.Events.DTO;
+using EventPhotographer.App.Events.DTO.Request;
+using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Services;
-using EventPhotographer.App.Users.Entities;
+using EventPhotographer.Data.Entities.Users;
 using EventPhotographer.Core.Attributes;
 using EventPhotographer.Core.Middleware;
 using FluentValidation;

@@ -1,14 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventPhotographer.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.Core.Startup;
 
-public static class DatabaseStartup
+public class DatabaseStartup : IHostedService
 {
+    private readonly IServiceProvider _services;
+    private readonly ILogger<DatabaseStartup> _logger;
 
-    public static void ApplyMigrations(this WebApplication app)
+    public DatabaseStartup(
+        IServiceProvider services,
+        ILogger<DatabaseStartup> logger) 
+    { 
+        _services = services;
+        _logger = logger;
+    }
+
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        dbContext.Database.Migrate();
+        _logger.LogInformation("Running database migrations...");
+        using (var scope = _services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await dbContext.Database.MigrateAsync(cancellationToken);
+        }
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }

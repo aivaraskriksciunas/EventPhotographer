@@ -1,6 +1,6 @@
-﻿using EventPhotographer.App.Events.Entities;
-using EventPhotographer.App.Users.Entities;
-using EventPhotographer.Core;
+﻿using EventPhotographer.Data.Entities.Events;
+using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 

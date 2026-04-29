@@ -1,8 +1,8 @@
-﻿using EventPhotographer.App.Events.Entities;
+﻿using EventPhotographer.Data.Entities.Events;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.DTO;
-using EventPhotographer.App.Users.Entities;
-using EventPhotographer.Core;
+using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.App.Events.Services;

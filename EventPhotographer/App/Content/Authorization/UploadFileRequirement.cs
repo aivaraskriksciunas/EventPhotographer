@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Content.Entities;
+﻿using EventPhotographer.Data.Entities.Content;
 using EventPhotographer.App.Content.Services;
 using Microsoft.AspNetCore.Authorization;
 

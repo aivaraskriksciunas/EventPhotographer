@@ -1,8 +1,9 @@
 ﻿using EventPhotographer.App.Content.DTO;
-using EventPhotographer.App.Content.Entities;
-using EventPhotographer.App.Events.Entities;
+using EventPhotographer.Data.Entities.Content;
+using EventPhotographer.Data.Entities.Events;
+using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Services;
-using EventPhotographer.Core;
+using EventPhotographer.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.App.Content.Services;
@@ -68,11 +69,29 @@ public class MediaService(
         return mediaFile;
     }
 
-    public async Task<IEnumerable<Media>> GetForEventAsync(Event @event)
+    public async Task<IEnumerable<EventMediaResponseDto>> GetForEventAsync(Event @event)
     {
         return await dbContext.Media
             .Where(m => m.EventId == @event.Id)
             .Include(m => m.Files)
+            .Include(m => m.Participant)
+            .Select(m => new EventMediaResponseDto
+            {
+                Id = m.Id,
+                CreatedAt = m.CreatedAt,
+                Participant = m.Participant != null ? new Events.DTO.ParticipantDto
+                {
+                    Id = m.Participant.Id,
+                    CreatedAt = m.Participant.CreatedAt,
+                    Name = m.Participant.Name,
+                } : null,
+                Files = m.Files.Select(f => new EventMediaFileResponseDto
+                {
+                    Id = f.Id,
+                    MimeType = f.MimeType,
+                    FileSize = f.FileSize,
+                }).ToList(),
+            })
             .ToListAsync();
     }
 

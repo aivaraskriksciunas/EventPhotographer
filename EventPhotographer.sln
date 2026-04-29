@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "EventPhotographer.Client", "EventPhotographer.Client\EventPhotographer.Client.esproj", "{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Data", "EventPhotographer.Data\EventPhotographer.Data.csproj", "{FC560215-63C3-434B-B049-EEEEC4DB4D63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{FC560215-63C3-434B-B049-EEEEC4DB4D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC560215-63C3-434B-B049-EEEEC4DB4D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC560215-63C3-434B-B049-EEEEC4DB4D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC560215-63C3-434B-B049-EEEEC4DB4D63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

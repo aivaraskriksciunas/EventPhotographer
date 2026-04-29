@@ -1,6 +1,6 @@
-﻿using EventPhotographer.App.AccountPolicies.Resources;
-using EventPhotographer.App.Users.Entities;
-using EventPhotographer.Core;
+﻿using EventPhotographer.Data.Entities.AccountPolicies;
+using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.App.AccountPolicies.Services;

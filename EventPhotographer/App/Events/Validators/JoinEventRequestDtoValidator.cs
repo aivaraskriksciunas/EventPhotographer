@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Events.DTO;
+﻿using EventPhotographer.App.Events.DTO.Request;
 using FluentValidation;
 
 namespace EventPhotographer.App.Events.Validators;

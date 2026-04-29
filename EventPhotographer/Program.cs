@@ -3,12 +3,12 @@ using EventPhotographer.Core;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
 using Microsoft.EntityFrameworkCore;
+using EventPhotographer.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+builder.Services.AddDataServices(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ConfigurationException("Database DefaultConnection is not provided"));
+builder.Services.AddHostedService<DatabaseStartup>();
 
 builder.Services.AddObjectStorage(
     builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ConfigurationException("Object storage settings are not configured")
@@ -34,8 +34,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    app.ApplyMigrations();
 
     app.UseDevelopmentCorsPolicy();
 }

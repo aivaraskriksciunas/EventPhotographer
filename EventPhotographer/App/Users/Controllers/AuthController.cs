@@ -1,7 +1,7 @@
 ﻿using EventPhotographer.App.Users.Dto;
-using EventPhotographer.App.Users.Entities;
+using EventPhotographer.Data.Entities.Users;
 using EventPhotographer.App.Users.Mappers;
-using EventPhotographer.Core;
+using EventPhotographer.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

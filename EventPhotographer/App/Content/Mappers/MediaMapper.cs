@@ -1,5 +1,5 @@
 ﻿using EventPhotographer.App.Content.DTO;
-using EventPhotographer.App.Content.Entities;
+using EventPhotographer.Data.Entities.Content;
 using Riok.Mapperly.Abstractions;
 
 namespace EventPhotographer.App.Content.Mappers;

@@ -5,7 +5,7 @@ using EventPhotographer.App.Events.Authorization.Requirements;
 using EventPhotographer.App.Events.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EventPhotographer.App.Events.DTO;
+using EventPhotographer.App.Events.DTO.Response;
 
 namespace EventPhotographer.App.Events.Controllers;
 
@@ -33,8 +33,6 @@ public class EventMediaController(
             return NotFound();
         }
 
-        var media = await mediaService.GetForEventAsync(@event);
-
-        return Ok(EventMediaMapper.ToResponse(media));
+        return Ok(await mediaService.GetForEventAsync(@event));
     }
 }

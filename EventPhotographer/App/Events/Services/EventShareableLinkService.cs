@@ -1,5 +1,5 @@
-﻿using EventPhotographer.App.Events.Entities;
-using EventPhotographer.Core;
+﻿using EventPhotographer.Data.Entities.Events;
+using EventPhotographer.Data;
 using EventPhotographer.Core.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

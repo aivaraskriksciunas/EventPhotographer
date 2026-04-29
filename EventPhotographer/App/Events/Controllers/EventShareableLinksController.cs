@@ -1,9 +1,9 @@
 ﻿using EventPhotographer.App.Events.Authorization.Requirements;
 using EventPhotographer.App.Events.Mappers;
-using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EventPhotographer.App.Events.DTO.Response;
 
 namespace EventPhotographer.App.Events.Controllers;
 

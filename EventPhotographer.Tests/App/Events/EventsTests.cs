@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.App.Events.DTO;
+using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;

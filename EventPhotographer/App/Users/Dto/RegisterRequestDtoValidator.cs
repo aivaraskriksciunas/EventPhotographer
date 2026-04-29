@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Users.Entities;
+﻿using EventPhotographer.Data.Entities.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 

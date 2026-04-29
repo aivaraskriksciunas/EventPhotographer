@@ -2,7 +2,7 @@
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.App.Content.DTO;
 using EventPhotographer.App.Content.Services;
-using EventPhotographer.App.Users.Entities;
+using EventPhotographer.Data.Entities.Users;
 using EventPhotographer.Core.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
