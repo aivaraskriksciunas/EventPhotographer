@@ -39,6 +39,10 @@ export interface EventMediaFileResponse {
 export interface EventMediaResponse {
     id: string;
     createdAt: Date;
+    participant: {
+        name: string;
+        id: string;
+    } | null;
     files: EventMediaFileResponse[];
 }
 

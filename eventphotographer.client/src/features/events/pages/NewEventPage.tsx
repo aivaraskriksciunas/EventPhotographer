@@ -3,12 +3,14 @@ import TextField from '@/components/forms/TextField';
 import SubmitField from '@/components/forms/SubmitField';
 import * as Yup from 'yup';
 import { useApiFetch } from '@/api/client';
-import { eventsApi } from '@/api/events';
+import { EventResponse, eventsApi } from '@/api/events';
 import ChoiceField from '@/components/forms/ChoiceField';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewEventPage() {
     const { t } = useTranslation();
+    const redirect = useNavigate();
 
     const [durations, isDurationsLoading] = useApiFetch(
         eventsApi.getEventDurationOptions,
@@ -28,6 +30,10 @@ export default function NewEventPage() {
             .required('Duration is required'),
     });
 
+    const onSuccess = (response: EventResponse) => {
+        redirect(`/events/${response.id}`);
+    }
+
     return (
         <div className="card">
             <div className="card-body">
@@ -36,6 +42,7 @@ export default function NewEventPage() {
                     handler={eventsApi.createEvent}
                     initialValues={intialValues}
                     validationSchema={validationSchema}
+                    onSuccess={onSuccess}
                 >
                     <TextField name="name" type="text">
                         {t('Title')}

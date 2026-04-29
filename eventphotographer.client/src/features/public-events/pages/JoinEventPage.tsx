@@ -2,6 +2,7 @@ import { eventsApi, ParticipantResponse } from '@/api/events';
 import AjaxForm from '@/components/forms/AjaxForm';
 import SubmitField from '@/components/forms/SubmitField';
 import TextField from '@/components/forms/TextField';
+import { useAuth } from '@/state/auth';
 import { useParticipant } from '@/state/participant';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +11,10 @@ import * as Yup from 'yup';
 export default function JoinEventPage() {
     const { t } = useTranslation();
     const { setParticipant: setJoinedEvent } = useParticipant();
+    const { user } = useAuth();
     const navigate = useNavigate();
 
-    const initialValues = { code: '', name: '' };
+    const initialValues = { code: '', name: user?.name ?? '' };
     const validationSchema = Yup.object({
         code: Yup.string().required(),
         name: Yup.string().min(3).max(100).required(),

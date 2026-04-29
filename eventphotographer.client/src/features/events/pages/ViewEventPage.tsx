@@ -1,4 +1,5 @@
 import { EventMediaResponse, EventResponse } from '@/api/events';
+import { User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link, useRouteLoaderData } from 'react-router-dom';
 
@@ -32,9 +33,17 @@ function SingleEventFile({ media }: { media: EventMediaResponse }) {
             <div className="card eventImageCard">
                 <img
                     className="card-img-top"
+                    loading='lazy'
                     src={`http://localhost:5252/api/media/file/${media.files[0].id}`}
                 />
-                <div className="card-body"></div>
+                <div className="card-body">
+                    <div className="card-text">
+                        <User className='me-1'/>
+                        {media.participant
+                            ? media.participant.name
+                            : 'Unknown'}
+                    </div>
+                </div>
             </div>
         </div>
     );

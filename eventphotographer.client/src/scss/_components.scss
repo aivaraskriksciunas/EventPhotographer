@@ -44,7 +44,6 @@ a {
 
 .form-control {
     border: 0;
-    // border: 1px solid var(--color-background-darker);
     border-bottom: 2px solid var(--color-primary);
     background-color: var(--color-background-darker);
 
@@ -68,6 +67,26 @@ a {
     .card-body {
         padding: var(--spacing-4);
     }
+
+    .card-meta {
+        color: var(--color-text-lightest);
+        font-size: 0.875rem;
+        font-weight: 300;
+    }
+}
+
+.card-success {
+    background-color: var(--color-success-background);
+    border-bottom: 2px solid var(--color-success);
+
+    .progress-bar {
+        background-color: var(--color-success)
+    }
+}
+
+.card-error {
+    background-color: var(--color-danger-background);
+    border-bottom: 2px solid var(--color-danger);
 }
 
 .dropdown-menu {
@@ -82,4 +101,9 @@ a {
     .dropdown-item:hover {
         background-color: var(--color-primary-background);
     }
+}
+
+.progress {
+    --bs-progress-bg: var(--color-background-darkest);
+    --bs-progress-bar-bg: var(--color-primary);
 }

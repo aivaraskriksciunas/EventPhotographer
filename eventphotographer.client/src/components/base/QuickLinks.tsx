@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { SmilePlus, User, Hourglass, CalendarPlus } from 'lucide-react';
+import { SmilePlus, User, Hourglass, CalendarPlus, CalendarDays } from 'lucide-react';
 
 export default function QuickLinks() {
     const { t } = useTranslation();
@@ -13,9 +13,13 @@ export default function QuickLinks() {
                     <CalendarPlus className="me-2" />
                     {t('New event')}
                 </Link>
+                <Link to="/events" className="nav-link">
+                    <CalendarDays className='me-2' />
+                    {t('My events')}
+                </Link>
                 <Link to="/" className="nav-link">
                     <Hourglass className="me-2" />
-                    {t('My past events')}
+                    {t('Past events')}
                 </Link>
                 <Link to="/" className="nav-link">
                     <User className="me-2" />

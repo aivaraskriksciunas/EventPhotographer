@@ -21,6 +21,7 @@
     --spacing-4: 1.5rem;
     --spacing-5: 2rem;
 
+    /** Theme colors */
     --color-primary: hsl(205, 63%, 19%);
     --color-primary-lighter: hsl(205, 63%, 35%);
     --color-primary-lightest: hsl(205, 63%, 48%);
@@ -44,7 +45,7 @@
 
     --color-text: hsl(205, 1%, 8%);
     --color-text-lighter: hsl(205, 3%, 20%);
-    --color-text-lightest: hsl(205, 3%, 30%);
+    --color-text-lightest: hsl(205, 3%, 40%);
 
     --color-missing: #f700ff;
     --color-missing-rgb: 247, 0, 255;
@@ -52,6 +53,38 @@
     --border-radius: 16px;
     --border-inner-radius: 8px;
 
+
+    /** Overwritten Boostrap variables */    
+    --bs-primary: var(--color-primary);
+    --bs-secondary: var(--color-gray-3);
+    --bs-secondary-bg: var(--color-gray-5);
+
+    --bs-success: var(--color-success);
+    --bs-danger: var(--color-danger);
+    // --bs-danger-rgb: var(--color-danger-rgb);
+    --bs-primary-text-emphasis: var(--color-primary-darker);
+    --bs-danger-text-emphasis: var(--color-danger-darker);
+    --bs-danger-bg-subtle: var(--color-danger-background);
+
+    --bs-font-sans-serif: var(--font-body)
+        --bs-body-font-family: var(--font-body);
+    --bs-body-font-size: 16px;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+
+    --bs-tertiary-bg: var(--color-primary-background);
+    --bs-body-color: var(--color-text);
+    --bs-body-bg: var(--color-background-darkest);
+    --bs-border-color: var(--color-primary);
+    --bs-form-invalid-color: var(--color-danger);
+    --bs-form-invalid-border-color: var(--color-danger);
+    --bs-link-color: var(--color-primary);
+    --bs-link-decoration: underline;
+    --bs-link-hover-color: var(--color-primary-lightest);
+    --bs-emphasis-color: var(--color-primary);
+
+
+    /** Bootstrap variables to replace */
     --bs-blue: var(--color-missing);
     --bs-indigo: var(--color-missing);
     --bs-purple: var(--color-missing);
@@ -148,32 +181,4 @@
     --bs-form-valid-color: var(--color-missing);
     --bs-form-valid-border-color: var(--color-missing);
 
-    --bs-primary: var(--color-primary);
-    --bs-secondary: var(--color-gray-3);
-    --bs-secondary-bg: var(--color-gray-5);
-
-    --bs-success: var(--color-success);
-    --bs-danger: var(--color-danger);
-    // --bs-danger-rgb: var(--color-danger-rgb);
-    --bs-primary-text-emphasis: var(--color-primary-darker);
-    --bs-danger-text-emphasis: var(--color-danger-darker);
-    --bs-danger-bg-subtle: var(--color-danger-background);
-
-    --bs-font-sans-serif: var(--font-body)
-        --bs-body-font-family: var(--font-body);
-    --bs-body-font-size: 16px;
-    --bs-body-font-weight: 400;
-    --bs-body-line-height: 1.5;
-
-    --bs-tertiary-bg: var(--color-primary-background);
-    --bs-body-color: var(--color-text);
-    --bs-body-bg: var(--color-background-darkest);
-    --bs-border-color: var(--color-primary);
-    --bs-form-invalid-color: var(--color-danger);
-    --bs-form-invalid-border-color: var(--color-danger);
-    --bs-link-color: var(--color-primary);
-    --bs-link-decoration: underline;
-    --bs-link-hover-color: var(--color-primary-lightest);
-    --bs-emphasis-color: var(--color-primary);
-    // --bs-emphasis-color-rgb: var(--color-primary-rgb);
 }

@@ -1,6 +1,9 @@
 import { AxiosProgressEvent } from 'axios';
 import { mediaApi } from '@/api/media';
 import { useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
+import { CircleCheck } from 'lucide-react';
+import { truncate } from '@/utils/helpers';
 
 type FileUploadStatus = 'Pending' | 'Uploading' | 'Success' | 'Error';
 
@@ -61,22 +64,28 @@ export default function UploadedFileHandler({ rawFile }: { rawFile: File }) {
     }, [rawFile]);
 
     return (
-        <div className="card mb-3">
+        <div className={clsx("card mb-3", {'card-success': file.status === 'Success', 'card-error': file.status === 'Error'})}>
             <div className="card-body">
-                <h5 className="card-title">File</h5>
-                <div
-                    className="progress"
-                    role="progressbar"
-                    aria-label="Basic example"
-                    aria-valuenow={progress}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                >
-                    <div
-                        className="progress-bar"
-                        style={{ width: progress + '%' }}
-                    ></div>
+                <div className="card-title d-flex align-items-center">
+                    {progress === 100 ? <CircleCheck className='me-1' /> : null}
+                    {truncate(file.rawFile.name, 20)}
                 </div>
+                {progress < 100 ? (
+                    <div
+                        className="progress"
+                        role="progressbar"
+                        aria-label="Basic example"
+                        aria-valuenow={progress}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                    >
+                        <div
+                            className="progress-bar"
+                            style={{ width: progress + '%' }}
+                        ></div>
+                    </div>
+                ) : null}
+
                 {file?.error ? (
                     <p className="card-text text-danger">{file.error}</p>
                 ) : null}

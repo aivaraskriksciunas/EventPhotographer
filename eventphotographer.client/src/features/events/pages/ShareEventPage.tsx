@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 export default function ShareEventPage() {
-    const event = useRouteLoaderData('view-event');
+    const { event } = useRouteLoaderData('view-event');
     const shareableLinks = useLoaderData();
 
     return (
@@ -46,14 +46,14 @@ function CreateShareableLinkAction({
 
     const handleCreateLink = async () => {
         setIsLoading(true);
-
+        
         try {
             await eventsApi.createShareableLink(event.id);
+            navigate(0); // Refresh the page
         } catch {
             // TODO: Error handling
         } finally {
             setIsLoading(false);
-            navigate(0); // Refresh the page
         }
     };
 
