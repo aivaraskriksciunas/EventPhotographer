@@ -1,0 +1,50 @@
+services:
+  eventphotographer:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      # ASPNETCORE_HTTPS_PORTS: 8081
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=eventphotographer_db;Username=admin;Password=admin"
+      ObjectStorage__ServiceURL: "http://minio:9000"
+      ObjectStorage__ForcePathStyle: true
+      ObjectStorage__AccessKey: admin
+      ObjectStorage__Password: minioadmin123
+      ObjectStorage__BucketName: event-photographer
+    ports:
+      - "8000:8080"
+      # - "8001:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      # - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      # - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+   
+  postgres:
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: eventphotographer_db
+    volumes:
+      - ./db_data:/var/lib/postgresql
+
+  pgweb:
+    container_name: eventphotographer_pgweb
+    restart: 'no'
+    image: sosedoff/pgweb
+    ports: 
+      - "8008:8081" 
+    environment:
+      - DATABASE_URL=postgres://admin:admin@postgres:5432/eventphotographer_db?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  minio: 
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9000:9000"      # API port
+      - "8009:9001"      # Console/Web UI port
+    volumes:
+      - ./storage_data:/data

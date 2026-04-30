@@ -34,7 +34,7 @@ function SingleEventFile({ media }: { media: EventMediaResponse }) {
                 <img
                     className="card-img-top"
                     loading='lazy'
-                    src={`http://localhost:5252/api/media/file/${media.files[0].id}`}
+                    src={`http://localhost:8000/api/media/file/${media.files[0].id}`}
                 />
                 <div className="card-body">
                     <div className="card-text">
