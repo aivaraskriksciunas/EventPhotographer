@@ -22,16 +22,19 @@ export default function ListEventsPage() {
             {events.map((event: EventResponse) => (
                 <div className="card mb-3" key={event.id}>
                     <div className="card-body">
-                        <div className='d-flex align-items-center'>
+                        <div className="d-flex align-items-center">
                             <Link to={`/events/${event.id}`}>
-                                <h4 className="card-title me-2">{event.name}</h4>
+                                <h4 className="card-title me-2">
+                                    {event.name}
+                                </h4>
                             </Link>
                             <EventStatusBadge event={event} />
                         </div>
-                        <div className='card-meta'>
-                            <div className='d-flex align-items-center'>
-                                <Calendar className='me-1' />
-                                {formatLongDateTime(event.startDate)} - {formatLongDateTime(event.endDate)}
+                        <div className="card-meta">
+                            <div className="d-flex align-items-center">
+                                <Calendar className="me-1" />
+                                {formatLongDateTime(event.startDate)} -{' '}
+                                {formatLongDateTime(event.endDate)}
                             </div>
                         </div>
                     </div>

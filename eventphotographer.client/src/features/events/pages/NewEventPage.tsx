@@ -33,7 +33,7 @@ export default function NewEventPage() {
 
     const onSuccess = (response: EventResponse) => {
         redirect(`/events/${response.id}`);
-    }
+    };
 
     return (
         <div className="card">

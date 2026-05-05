@@ -23,7 +23,7 @@ export default function DateField({
     const { isSubmitting } = useFormikContext();
     const id = `datefield-${name}`;
     const hasError = meta.touched && meta.error;
-    
+
     let dateFormat = 'MMMM d, yyyy';
     if (showTimeSelect) {
         dateFormat += ' h:mm aa';
@@ -33,13 +33,13 @@ export default function DateField({
         <div className="form-group mb-3 has-validation">
             <label htmlFor={id}>{children}</label>
             <div className={clsx({ 'is-invalid': hasError })}>
-                <DatePicker 
+                <DatePicker
                     id={id}
                     placeholderText={placeholder}
                     disabled={disabled || isSubmitting}
                     className={clsx('form-control', { 'is-invalid': hasError })}
                     selected={field.value ? new Date(field.value) : null}
-                    onChange={(date: Date|null) => helpers.setValue(date)}
+                    onChange={(date: Date | null) => helpers.setValue(date)}
                     onBlur={field.onBlur}
                     showTimeSelect={showTimeSelect}
                     timeIntervals={timeIntervals}

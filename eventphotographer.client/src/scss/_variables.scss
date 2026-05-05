@@ -53,8 +53,7 @@
     --border-radius: 16px;
     --border-inner-radius: 8px;
 
-
-    /** Overwritten Boostrap variables */    
+    /** Overwritten Boostrap variables */
     --bs-primary: var(--color-primary);
     --bs-secondary: var(--color-gray-3);
     --bs-secondary-bg: var(--color-gray-5);
@@ -82,7 +81,6 @@
     --bs-link-decoration: underline;
     --bs-link-hover-color: var(--color-primary-lightest);
     --bs-emphasis-color: var(--color-primary);
-
 
     /** Bootstrap variables to replace */
     --bs-blue: var(--color-missing);
@@ -180,5 +178,4 @@
     --bs-focus-ring-color: rgba(13, 110, 253, 0.25);
     --bs-form-valid-color: var(--color-missing);
     --bs-form-valid-border-color: var(--color-missing);
-
 }

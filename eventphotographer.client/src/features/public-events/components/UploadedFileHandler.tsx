@@ -64,10 +64,15 @@ export default function UploadedFileHandler({ rawFile }: { rawFile: File }) {
     }, [rawFile]);
 
     return (
-        <div className={clsx("card mb-3", {'card-success': file.status === 'Success', 'card-error': file.status === 'Error'})}>
+        <div
+            className={clsx('card mb-3', {
+                'card-success': file.status === 'Success',
+                'card-error': file.status === 'Error',
+            })}
+        >
             <div className="card-body">
                 <div className="card-title d-flex align-items-center">
-                    {progress === 100 ? <CircleCheck className='me-1' /> : null}
+                    {progress === 100 ? <CircleCheck className="me-1" /> : null}
                     {truncate(file.rawFile.name, 20)}
                 </div>
                 {progress < 100 ? (

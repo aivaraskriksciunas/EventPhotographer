@@ -46,7 +46,7 @@ function CreateShareableLinkAction({
 
     const handleCreateLink = async () => {
         setIsLoading(true);
-        
+
         try {
             await eventsApi.createShareableLink(event.id);
             navigate(0); // Refresh the page

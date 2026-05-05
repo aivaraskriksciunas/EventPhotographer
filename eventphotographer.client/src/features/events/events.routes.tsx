@@ -24,11 +24,11 @@ export const eventsRoutes: RouteObject[] = [
                 id: 'view-event',
                 path: ':eventId',
                 loader: async ({ params }) => {
-                    const [ event, media ] = await Promise.all([
+                    const [event, media] = await Promise.all([
                         eventsApi.getEvent(params.eventId!),
-                        eventsApi.getEventMedia(params.eventId!)
-                    ])
-                    
+                        eventsApi.getEventMedia(params.eventId!),
+                    ]);
+
                     return { event, media };
                 },
                 children: [
