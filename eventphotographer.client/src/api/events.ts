@@ -2,7 +2,7 @@ import { fetchApi } from '@/api/client';
 
 interface CreateEventRequest {
     name: string;
-    startDate: Date;
+    startDate: string;
     duration: string;
 }
 
@@ -14,8 +14,8 @@ export interface JoinEventRequest {
 export interface EventResponse {
     id: string;
     name: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
 }
 
 export interface EventShareableLinkResponse {
@@ -27,7 +27,7 @@ export interface ParticipantResponse {
     token: string;
     event: EventResponse;
     name: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export interface EventMediaFileResponse {
@@ -38,7 +38,7 @@ export interface EventMediaFileResponse {
 
 export interface EventMediaResponse {
     id: string;
-    createdAt: Date;
+    createdAt: string;
     participant: {
         name: string;
         id: string;

@@ -1,11 +1,11 @@
-﻿using EventPhotographer.Data.Entities.Content;
-using EventPhotographer.App.Content.Services;
+﻿using EventPhotographer.App.Content.Services;
 using Microsoft.AspNetCore.Authorization;
+using EventPhotographer.Core.Features.Content.Entities;
 
 namespace EventPhotographer.App.Content.Authorization;
 
 public class UploadFileRequirementHandler(
-    MediaService mediaService) 
+    ApiMediaService mediaService) 
     : AuthorizationHandler<UploadFileRequirement, Media>
 {
     protected override async Task HandleRequirementAsync(

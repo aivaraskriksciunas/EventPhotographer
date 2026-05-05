@@ -1,4 +1,4 @@
-﻿using EventPhotographer.Data.Entities.Events;
+﻿using EventPhotographer.Core.Features.Events.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

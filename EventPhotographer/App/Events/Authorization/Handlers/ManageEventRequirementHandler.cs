@@ -1,5 +1,5 @@
 ﻿using EventPhotographer.App.Events.Authorization.Requirements;
-using EventPhotographer.Data.Entities.Events;
+using EventPhotographer.Core.Features.Events.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 

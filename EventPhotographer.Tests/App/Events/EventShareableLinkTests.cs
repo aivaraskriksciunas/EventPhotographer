@@ -1,11 +1,11 @@
 ﻿using Bogus;
-using EventPhotographer.Data.Entities.Events;
-using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Core.Entities.Users;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;
 using EventPhotographer.App.Events.DTO.Response;
+using EventPhotographer.Core.Features.Events.Entities;
 
 namespace EventPhotographer.Tests.App.Events;
 

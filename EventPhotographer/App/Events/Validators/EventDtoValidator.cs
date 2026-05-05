@@ -1,5 +1,6 @@
 ﻿using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.Services;
+using EventPhotographer.Core.Features.Events.Entities;
 using FluentValidation;
 
 namespace EventPhotographer.App.Events.Validators;

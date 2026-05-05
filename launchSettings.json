@@ -1,10 +1,25 @@
 {
   "profiles": {
-    "Docker Compose": {
+    "Docker Compose (Worker)": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
-      "serviceActions": {
-        "eventphotographer": "StartDebugging"
+      "composeLaunchAction": "None",
+      "composeLaunchServiceName": "eventphotographer-worker",
+      "composeProfile": {
+        "includes": [
+          "worker"
+        ]
+      }
+    },
+    "Docker Compose (App)": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "None",
+      "composeLaunchServiceName": "eventphotographer",
+      "composeProfile": {
+        "includes": [
+          "web"
+        ]
       }
     }
   }

@@ -6,3 +6,11 @@
 .text-lightest {
     color: var(--color-text-lightest);
 }
+
+.bg-success {
+    background-color: var(--color-success) !important;
+}
+
+.bg-secondary {
+    background-color: var(--color-text-lightest) !important;
+}

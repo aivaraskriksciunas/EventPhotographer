@@ -2,17 +2,18 @@
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.Services;
-using EventPhotographer.Data.Entities.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EventPhotographer.App.Events.DTO.Response;
+using EventPhotographer.Core.Features.Events.Entities;
+using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.App.Events.Controllers;
 
 public class EventsController(
-    EventService service,
+    ApiEventService service,
     UserManager<User> userManager,
     IAuthorizationService authorizationService) 
     : ApiController

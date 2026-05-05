@@ -1,6 +1,7 @@
 ﻿using EventPhotographer.App.Events.DTO;
 using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Services;
+using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -66,7 +67,7 @@ public class EventsTests : BaseIntegrationTest
     {
         // Arrange 
         var user = await CreateUserAsync();
-        var entity = new EventPhotographer.Data.Entities.Events.Event
+        var entity = new EventPhotographer.Core.Entities.Events.Event
         {
             Name = "Test event",
             CreatedAt = DateTime.UtcNow,
@@ -83,7 +84,7 @@ public class EventsTests : BaseIntegrationTest
 
         // Assert 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var returnedEvent = await response.Content.ReadFromJsonAsync<EventPhotographer.Data.Entities.Events.Event>();
+        var returnedEvent = await response.Content.ReadFromJsonAsync<Event>();
         Assert.NotNull(returnedEvent);
         Assert.Equal(entity.Name, returnedEvent.Name);
         Assert.Equal(entity.CreatedAt.ToShortDateString(), entity.CreatedAt.ToShortDateString());
@@ -94,7 +95,7 @@ public class EventsTests : BaseIntegrationTest
     public async Task GetEvent_EnsurePermissions()
     {
         // Arrange 
-        var entity = new EventPhotographer.Data.Entities.Events.Event
+        var entity = new EventPhotographer.Core.Entities.Events.Event
         {
             Name = "Test event",
             CreatedAt = DateTime.UtcNow,
@@ -159,7 +160,7 @@ public class EventsTests : BaseIntegrationTest
     {
         // Arrange 
         var user = await CreateUserAsync();
-        var entity = new EventPhotographer.Data.Entities.Events.Event
+        var entity = new EventPhotographer.Core.Entities.Events.Event
         {
             Name = "Test event",
             User = user,
@@ -189,7 +190,7 @@ public class EventsTests : BaseIntegrationTest
     public async Task UpdateEvent_EnsurePermissions()
     {
         // Arrange 
-        var entity = new EventPhotographer.Data.Entities.Events.Event
+        var entity = new EventPhotographer.Core.Entities.Events.Event
         {
             Name = "Test event",
             User = await CreateUserAsync(),

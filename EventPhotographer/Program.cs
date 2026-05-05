@@ -1,18 +1,17 @@
-using Amazon.Extensions.NETCore.Setup;
 using EventPhotographer.Core;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
 using Microsoft.EntityFrameworkCore;
-using EventPhotographer.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataServices(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ConfigurationException("Database DefaultConnection is not provided"));
+builder.Services.AddDataServices(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ApplicationException("Database DefaultConnection is not provided"));
 builder.Services.AddHostedService<DatabaseStartup>();
 
 builder.Services.AddObjectStorage(
-    builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ConfigurationException("Object storage settings are not configured")
+    builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ApplicationException("Object storage settings are not configured")
 );
+builder.Services.AddHostedService<ObjectStorageStartup>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -23,6 +22,7 @@ builder.Services.AddAppAuth();
 
 // Setup application modules
 builder.Services.AddConfiguration(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddAppModules();
 builder.Services.AddAppExceptionHandlers();
 builder.Services.ConfigureApplicationCors();
@@ -45,8 +45,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
     app.UseHttpsRedirection();
 }
-
-await app.SetupObjectStorageAsync();
 
 app.UseExceptionHandler("/Error");
 

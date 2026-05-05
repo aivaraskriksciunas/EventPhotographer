@@ -7,9 +7,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddEventsModule(this IServiceCollection services)
     {
-        services.AddScoped<Services.EventService>();
-        services.AddScoped<Services.EventShareableLinkService>();
-        services.AddScoped<Services.ParticipantService>();
+        services.AddScoped<Services.ApiEventService>();
 
         // Authorization
         services.AddSingleton<IAuthorizationHandler, ManageEventRequirementHandler>();

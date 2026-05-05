@@ -3,14 +3,14 @@ using EventPhotographer.App.Content;
 using EventPhotographer.App.Events;
 using EventPhotographer.App.Events.Authorization.Requirements;
 using EventPhotographer.App.Users;
-using EventPhotographer.Data;
-using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Core;
 using EventPhotographer.Core.Attributes;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Exceptions;
 using EventPhotographer.Core.Middleware;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.Core;
 

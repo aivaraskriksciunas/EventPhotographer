@@ -1,4 +1,4 @@
-﻿using EventPhotographer.Data.Entities.Events;
+﻿using EventPhotographer.Core.Features.Events.Entities;
 
 namespace EventPhotographer.App.Events.Services;
 

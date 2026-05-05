@@ -1,4 +1,4 @@
-﻿using EventPhotographer.Data;
+﻿using EventPhotographer.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.Core.Startup;

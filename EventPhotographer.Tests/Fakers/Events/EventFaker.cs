@@ -1,5 +1,5 @@
-﻿using EventPhotographer.Data.Entities.Events;
-using Bogus;
+﻿using Bogus;
+using EventPhotographer.Core.Features.Events.Entities;
 
 namespace EventPhotographer.Tests.Fakes.Events;
 

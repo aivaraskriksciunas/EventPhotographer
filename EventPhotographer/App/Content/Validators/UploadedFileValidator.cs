@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.App.Content.Services;
+using EventPhotographer.Core.Features.Content.Services;
 using FluentValidation;
 
 namespace EventPhotographer.App.Content.Validators;

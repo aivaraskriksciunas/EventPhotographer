@@ -1,6 +1,6 @@
-﻿using EventPhotographer.Data.Entities.Content;
-using EventPhotographer.App.Events.Services;
+﻿using EventPhotographer.App.Events.Services;
 using Microsoft.AspNetCore.Authorization;
+using EventPhotographer.Core.Features.Content.Entities;
 
 namespace EventPhotographer.App.Content.Authorization;
 

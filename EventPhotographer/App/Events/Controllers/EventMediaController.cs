@@ -11,8 +11,8 @@ namespace EventPhotographer.App.Events.Controllers;
 
 [Route("api/Events/{eventId:guid}/Media")]
 public class EventMediaController(
-    EventService eventService,
-    MediaService mediaService,
+    ApiEventService eventService,
+    ApiMediaService mediaService,
     IAuthorizationService authorizationService) : ApiController
 {
     [HttpGet]

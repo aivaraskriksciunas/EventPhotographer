@@ -7,6 +7,7 @@ import { EventResponse, eventsApi } from '@/api/events';
 import ChoiceField from '@/components/forms/ChoiceField';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import DateField from '@/components/forms/DateField';
 
 export default function NewEventPage() {
     const { t } = useTranslation();
@@ -47,6 +48,9 @@ export default function NewEventPage() {
                     <TextField name="name" type="text">
                         {t('Title')}
                     </TextField>
+                    <DateField name="startDate" showTimeSelect={true}>
+                        {t('Start date')}
+                    </DateField>
                     <ChoiceField
                         name="eventDuration"
                         disabled={isDurationsLoading}

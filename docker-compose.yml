@@ -1,9 +1,17 @@
 services:
   eventphotographer:
     image: ${DOCKER_REGISTRY-}eventphotographer
+    container_name: eventphotographer_app
     build:
       context: .
       dockerfile: EventPhotographer/Dockerfile
+
+  eventphotographer-worker:
+    image: ${DOCKER_REGISTRY-}eventphotographer-worker
+    container_name: eventphotographer_worker
+    build:
+      context: .
+      dockerfile: EventPhotographer.Worker/Dockerfile
 
   postgres:
     image: postgres:alpine 

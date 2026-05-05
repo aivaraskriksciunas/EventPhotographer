@@ -1,5 +1,5 @@
 ﻿using EventPhotographer.App.Users.Dto;
-using EventPhotographer.Data.Entities.Users;
+using EventPhotographer.Core.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;

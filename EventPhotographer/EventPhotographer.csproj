@@ -70,14 +70,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.24" />
-    <PackageReference Include="AWSSDK.S3" Version="4.0.18.7" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
@@ -86,7 +80,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventPhotographer.Data\EventPhotographer.Data.csproj" />
+    <ProjectReference Include="..\EventPhotographer.Core\EventPhotographer.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Configuration\" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ namespace EventPhotographer.App.Events.Controllers;
 [Route("api/Events/{id:guid}/ShareableLinks")]
 public class EventShareableLinksController(
     EventShareableLinkService service,
-    EventService eventService,
+    ApiEventService eventService,
     IAuthorizationService authorizationService) : ApiController
 {
     [HttpGet]

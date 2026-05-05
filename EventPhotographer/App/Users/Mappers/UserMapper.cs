@@ -1,6 +1,6 @@
-﻿using EventPhotographer.Data.Entities.Users;
-using EventPhotographer.App.Users.Dto;
+﻿using EventPhotographer.App.Users.Dto;
 using Riok.Mapperly.Abstractions;
+using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.App.Users.Mappers;
 

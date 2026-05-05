@@ -2,7 +2,6 @@
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.App.Content.DTO;
 using EventPhotographer.App.Content.Services;
-using EventPhotographer.Data.Entities.Users;
 using EventPhotographer.Core.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,11 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using EventPhotographer.App.Content.Mappers;
 using EventPhotographer.App.Content.Authorization;
 using FluentValidation;
+using EventPhotographer.Core.Features.Content.Services;
+using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.App.Content.Controllers;
 
 public class MediaController (
-    MediaService mediaService,
+    ApiMediaService mediaService,
     IAuthorizationService authorizationService) : ApiController
 {
     [HttpPost]
