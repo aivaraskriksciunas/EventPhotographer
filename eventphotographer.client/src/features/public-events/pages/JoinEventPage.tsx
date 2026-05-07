@@ -5,16 +5,17 @@ import TextField from '@/components/forms/TextField';
 import { useAuth } from '@/state/auth';
 import { useParticipant } from '@/state/participant';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
 export default function JoinEventPage() {
     const { t } = useTranslation();
     const { setParticipant: setJoinedEvent } = useParticipant();
     const { user } = useAuth();
+    const params = useParams();
     const navigate = useNavigate();
 
-    const initialValues = { code: '', name: user?.name ?? '' };
+    const initialValues = { code: params.code || '', name: user?.name ?? '' };
     const validationSchema = Yup.object({
         code: Yup.string().required(),
         name: Yup.string().min(3).max(100).required(),

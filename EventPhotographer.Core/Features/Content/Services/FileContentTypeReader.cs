@@ -18,6 +18,7 @@ public class FileContentTypeReader
         { ".wav", "audio/wav" },
         { ".webp", "image/webp" },
         { ".mov", "video/quicktime" },
+        { ".zip", "application/zip" },
     };
 
     private static readonly Dictionary<string, List<byte[]>> _fileSignature = new Dictionary<string, List<byte[]>>

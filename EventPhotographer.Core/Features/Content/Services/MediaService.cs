@@ -1,4 +1,4 @@
-﻿using EventPhotographer.Core;
+﻿using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Content.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -21,20 +21,44 @@ public class MediaService
         this.mediaStorageService = mediaStorageService;
     }
 
+    public async Task<Media> CreateArchive(Event @event)
+    {
+        var media = new Media
+        {
+            Event = @event,
+            Type = MediaType.Archive,
+        };
+
+        await dbContext.AddAsync(media);
+        await dbContext.SaveChangesAsync();
+
+        return media;
+    }
+
     public async Task<MediaFile> UploadFile(Media media, IFormFile file)
     {
         var ext = fileContentTypeReader.DetermineFileExtension(file) ?? "";
+        using var readStream = file.OpenReadStream();
+
+        return await UploadFile(media, readStream, ext);
+    }
+
+    public async Task<MediaFile> UploadFile(Media media, Stream file, string extension)
+    {
+        var mimeType = FileContentTypeReader.GetMimeTypeFromExtension(extension) ?? throw new ArgumentException("Unsupported Mime Type");
+        var fileLength = (ulong)file.Length;
         var path = await mediaStorageService.UploadFile(
             file,
-            Guid.NewGuid().ToString() + ext
+            mimeType,
+            Guid.NewGuid().ToString() + extension
         );
 
         var mediaFile = new MediaFile
         {
             Media = media,
-            MimeType = FileContentTypeReader.GetMimeTypeFromExtension(ext) ?? throw new ArgumentException("Unsupported Mime Type"),
+            MimeType = mimeType,
             Path = path,
-            FileSize = (ulong)file.Length,
+            FileSize = fileLength,
         };
 
         await dbContext.AddAsync(mediaFile);

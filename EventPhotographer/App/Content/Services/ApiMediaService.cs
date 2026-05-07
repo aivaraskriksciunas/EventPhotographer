@@ -52,6 +52,7 @@ public class ApiMediaService : Core.Features.Content.Services.MediaService
     {
         return await dbContext.Media
             .Where(m => m.EventId == @event.Id)
+            .Where(m => m.Type == MediaType.UserUpload)
             .Include(m => m.Files)
             .Include(m => m.Participant)
             .Select(m => new EventMediaResponseDto
@@ -72,5 +73,33 @@ public class ApiMediaService : Core.Features.Content.Services.MediaService
                 }).ToList(),
             })
             .ToListAsync();
+    }
+
+    public async Task<EventMediaResponseDto?> GetArchiveForEventAsync(Event @event)
+    {
+        return await dbContext.Media
+            .Where(m => m.EventId == @event.Id)
+            .Where(m => m.Type == MediaType.Archive)
+            .Include(m => m.Files)
+            .Include(m => m.Participant)
+            .Select(m => new EventMediaResponseDto
+            {
+                Id = m.Id,
+                CreatedAt = m.CreatedAt,
+                Participant = m.Participant != null ? new Events.DTO.ParticipantDto
+                {
+                    Id = m.Participant.Id,
+                    CreatedAt = m.Participant.CreatedAt,
+                    Name = m.Participant.Name,
+                } : null,
+                Files = m.Files.Select(f => new EventMediaFileResponseDto
+                {
+                    Id = f.Id,
+                    MimeType = f.MimeType,
+                    FileSize = f.FileSize,
+                }).ToList(),
+            })
+            .OrderByDescending(m => m.CreatedAt)
+            .FirstOrDefaultAsync();
     }
 }

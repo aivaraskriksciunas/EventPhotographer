@@ -12,7 +12,7 @@ public class Media : IEntity
 
     public Guid? UploadToken { get; set; } = null;
 
-    public MediaType Type { get; set; } = MediaType.Image;
+    public MediaType Type { get; set; } = MediaType.UserUpload;
 
     public Guid EventId { get; set; }
     public required Event Event { get; set; }
@@ -38,6 +38,7 @@ internal class MediaEntityConfiguration : UUIDEntityConfiguration<Media>
 
         builder.Property(e => e.Type)
             .HasConversion<string>()
+            .HasDefaultValue(MediaType.UserUpload)
             .HasMaxLength(25);
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EventPhotographer.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTypeToMedia : Migration
+    public partial class AddMediaType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,7 +27,7 @@ namespace EventPhotographer.Core.Migrations
                 type: "character varying(25)",
                 maxLength: 25,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "UserUpload");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Media_UploadToken",

@@ -1,4 +1,5 @@
-﻿using EventPhotographer.Core.Features.Users.Entities;
+﻿using EventPhotographer.Core.Features.Content.Entities;
+using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Util;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -32,4 +33,6 @@ public class Event : IEntity
     public ICollection<EventShareableLink> ShareableLinks { get; set; } = new List<EventShareableLink>();
 
     public ICollection<Participant> Participants { get; set; } = new List<Participant>();
+
+    public ICollection<Media> Media { get; set; } = new List<Media>();
 }

@@ -6,6 +6,6 @@ namespace EventPhotographer.Core.Features.Content.Entities;
 
 public enum MediaType
 {
-    Image = 0,
+    UserUpload = 0,
     Archive,
 }

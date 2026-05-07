@@ -23,7 +23,7 @@ builder.Services.AddQuartz(options =>
         {
             trigger
                 .ForJob(fileCompressorJob)
-                .WithSimpleSchedule(action => action.WithIntervalInSeconds(10).RepeatForever());
+                .WithSimpleSchedule(action => action.WithIntervalInSeconds(60).RepeatForever());
         });
 });
 

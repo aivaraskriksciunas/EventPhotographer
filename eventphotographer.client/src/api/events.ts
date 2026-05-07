@@ -77,4 +77,8 @@ export const eventsApi = {
 
     getEventMedia: async (eventId: string) =>
         fetchApi<EventMediaResponse[]>(`/api/events/${eventId}/media`),
+    getEventArchive: async (eventId: string) =>
+        fetchApi<EventMediaResponse | null>(
+            `/api/events/${eventId}/media/archives`,
+        ),
 };

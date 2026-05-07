@@ -6,6 +6,7 @@ using EventPhotographer.App.Events.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EventPhotographer.App.Events.DTO.Response;
+using EventPhotographer.Core.Features.Content.Entities;
 
 namespace EventPhotographer.App.Events.Controllers;
 
@@ -34,5 +35,26 @@ public class EventMediaController(
         }
 
         return Ok(await mediaService.GetForEventAsync(@event));
+    }
+
+    [HttpGet("Archives")]
+    [Authorize]
+    public async Task<ActionResult<EventMediaResponseDto?>> ListArchives(
+        Guid eventId)
+    {
+        var @event = await eventService.GetByIdAsync(eventId);
+        if (@event == null)
+        {
+            return NotFound();
+        }
+
+        var result = await authorizationService.AuthorizeAsync(
+            User, @event, new ManageEventRequirement());
+        if (!result.Succeeded)
+        {
+            return NotFound();
+        }
+
+        return Ok(await mediaService.GetArchiveForEventAsync(@event));
     }
 }

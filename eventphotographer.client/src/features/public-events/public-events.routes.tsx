@@ -15,7 +15,7 @@ const hasActiveEventMiddleware: MiddlewareFunction = async (_, next) => {
 
 export const publicEventsRoutes: RouteObject[] = [
     {
-        path: '/join',
+        path: '/join/:code?',
         element: <JoinEventPage />,
     },
     {

@@ -23,11 +23,11 @@ export default function QuickLinks() {
                     <CalendarDays className="me-2" />
                     {t('My events')}
                 </Link>
-                <Link to="/" className="nav-link">
+                <Link to="/coming-soon" className="nav-link">
                     <Hourglass className="me-2" />
                     {t('Past events')}
                 </Link>
-                <Link to="/" className="nav-link">
+                <Link to="/coming-soon" className="nav-link">
                     <User className="me-2" />
                     {t('Account')}
                 </Link>

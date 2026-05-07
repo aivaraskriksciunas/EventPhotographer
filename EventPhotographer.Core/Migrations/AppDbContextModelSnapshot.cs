@@ -22,7 +22,7 @@ namespace EventPhotographer.Core.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.AccountPolicies.AccountTier", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Entities.AccountPolicies.AccountTier", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("AccountTiers");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Content.Media", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Content.Entities.Media", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,8 +66,10 @@ namespace EventPhotographer.Core.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasColumnType("character varying(25)")
+                        .HasDefaultValue("UserUpload");
 
                     b.Property<Guid?>("UploadToken")
                         .ValueGeneratedOnAdd()
@@ -85,7 +87,7 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("Media");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Content.MediaFile", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Content.Entities.MediaFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,7 +117,7 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("MediaFiles");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.Event", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Event", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +155,7 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.EventShareableLink", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.EventShareableLink", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +180,7 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("EventShareableLinks");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.Participant", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Participant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,7 +223,7 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("Participants");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Users.User", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Users.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -422,24 +424,24 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.AccountPolicies.AccountTier", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Entities.AccountPolicies.AccountTier", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", "User")
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Content.Media", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Content.Entities.Media", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Events.Event", "Event")
+                    b.HasOne("EventPhotographer.Core.Features.Events.Entities.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventPhotographer.Data.Entities.Events.Participant", "Participant")
+                    b.HasOne("EventPhotographer.Core.Features.Events.Entities.Participant", "Participant")
                         .WithMany()
                         .HasForeignKey("ParticipantId");
 
@@ -448,9 +450,9 @@ namespace EventPhotographer.Core.Migrations
                     b.Navigation("Participant");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Content.MediaFile", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Content.Entities.MediaFile", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Content.Media", "Media")
+                    b.HasOne("EventPhotographer.Core.Features.Content.Entities.Media", "Media")
                         .WithMany("Files")
                         .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,9 +461,9 @@ namespace EventPhotographer.Core.Migrations
                     b.Navigation("Media");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.Event", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Event", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", "User")
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -470,9 +472,9 @@ namespace EventPhotographer.Core.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.EventShareableLink", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.EventShareableLink", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Events.Event", "Event")
+                    b.HasOne("EventPhotographer.Core.Features.Events.Entities.Event", "Event")
                         .WithMany("ShareableLinks")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -481,19 +483,19 @@ namespace EventPhotographer.Core.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.Participant", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Participant", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Events.Event", "Event")
+                    b.HasOne("EventPhotographer.Core.Features.Events.Entities.Event", "Event")
                         .WithMany("Participants")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventPhotographer.Data.Entities.Events.EventShareableLink", "EventShareableLink")
+                    b.HasOne("EventPhotographer.Core.Features.Events.Entities.EventShareableLink", "EventShareableLink")
                         .WithMany()
                         .HasForeignKey("EventShareableLinkId");
 
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", "User")
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -515,7 +517,7 @@ namespace EventPhotographer.Core.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", null)
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -524,7 +526,7 @@ namespace EventPhotographer.Core.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", null)
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -539,7 +541,7 @@ namespace EventPhotographer.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", null)
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -548,19 +550,19 @@ namespace EventPhotographer.Core.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("EventPhotographer.Data.Entities.Users.User", null)
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Content.Media", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Content.Entities.Media", b =>
                 {
                     b.Navigation("Files");
                 });
 
-            modelBuilder.Entity("EventPhotographer.Data.Entities.Events.Event", b =>
+            modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Event", b =>
                 {
                     b.Navigation("Participants");
 
