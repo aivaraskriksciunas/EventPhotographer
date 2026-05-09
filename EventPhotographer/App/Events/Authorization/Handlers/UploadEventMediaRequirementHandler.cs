@@ -12,7 +12,7 @@ public class UploadEventMediaRequirementHandler : EventAccessHandler<UploadEvent
         Event resource)
     {
         if (DateTime.UtcNow <= resource.StartDate
-            || DateTime.UtcNow.AddDays(1) >= resource.EndDate) 
+            || DateTime.UtcNow >= resource.EndDate.AddDays(1)) 
         {
             context.Fail();
             return Task.CompletedTask;
