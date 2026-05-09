@@ -44,10 +44,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseApplicationCorsPolicy();
 app.UseExceptionHandler("/Error");
 
 app.UseRouting();
+app.UseApplicationCorsPolicy();
 app.UseApplicationMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();

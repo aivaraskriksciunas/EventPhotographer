@@ -10,7 +10,7 @@ public static class CorsSetup
                 policy => {
                     policy.WithOrigins(clientUrl)
                         .AllowCredentials()
-                        .WithHeaders("content-type")
+                        .AllowAnyHeader()
                         .AllowAnyMethod();
                 }
             );
