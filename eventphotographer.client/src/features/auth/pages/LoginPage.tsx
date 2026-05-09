@@ -45,6 +45,7 @@ export default function LoginPage() {
                     </CheckboxField>
                     <SubmitField>{t('Save')}</SubmitField>
                 </AjaxForm>
+                <small>{t('Don\'t have an account yet?')} <a href="/register">{t('Register')}</a></small>
             </div>
         </div>
     );

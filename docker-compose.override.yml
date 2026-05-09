@@ -29,6 +29,8 @@ services:
       - worker
    
   postgres:
+    image: postgres:alpine 
+    container_name: eventphotographer_db
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -40,6 +42,11 @@ services:
     profiles: 
       - web
       - worker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
 
   pgweb:
     container_name: eventphotographer_pgweb
@@ -57,6 +64,8 @@ services:
       - worker
 
   minio: 
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: minioadmin123

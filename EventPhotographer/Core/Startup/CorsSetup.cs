@@ -2,13 +2,13 @@
 
 public static class CorsSetup
 {
-    public static void ConfigureApplicationCors(this IServiceCollection services)
+    public static void ConfigureApplicationCors(this IServiceCollection services, string clientUrl)
     {
         services.AddCors(options =>
         {
-            options.AddPolicy("DevelopmentPolicy",
+            options.AddPolicy("CorsPolicy",
                 policy => {
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins(clientUrl)
                         .AllowCredentials()
                         .WithHeaders("content-type")
                         .AllowAnyMethod();
@@ -17,8 +17,8 @@ public static class CorsSetup
         });
     }
 
-    public static void UseDevelopmentCorsPolicy(this IApplicationBuilder app)
+    public static void UseApplicationCorsPolicy(this IApplicationBuilder app)
     {
-        app.UseCors("DevelopmentPolicy");
+        app.UseCors("CorsPolicy");
     }
 }

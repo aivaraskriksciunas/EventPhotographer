@@ -25,7 +25,7 @@ builder.Services.AddConfiguration(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddAppModules();
 builder.Services.AddAppExceptionHandlers();
-builder.Services.ConfigureApplicationCors();
+builder.Services.ConfigureApplicationCors(builder.Configuration.GetValue<string>("ClientUrl") ?? throw new ArgumentException("ClientUrl is not configured"));
 
 var app = builder.Build();
 
@@ -34,8 +34,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    app.UseDevelopmentCorsPolicy();
 }
 
 // Production
@@ -46,6 +44,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseApplicationCorsPolicy();
 app.UseExceptionHandler("/Error");
 
 app.UseRouting();

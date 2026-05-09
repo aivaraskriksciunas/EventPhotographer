@@ -34,27 +34,30 @@ export default function RegisterPage() {
     };
 
     return (
-        <>
-            <AjaxForm
-                handler={authApi.register}
-                initialValues={intialValues}
-                validationSchema={schema}
-                onSuccess={onRegister}
-            >
-                <TextField name="name" type="text">
-                    {t('Name')}
-                </TextField>
-                <TextField name="email" type="email">
-                    {t('Email')}
-                </TextField>
-                <TextField name="password" type="password">
-                    {t('Password')}
-                </TextField>
-                <TextField name="passwordConfirmation" type="password">
-                    {t('Repeat password')}
-                </TextField>
-                <SubmitField>{t('Save')}</SubmitField>
-            </AjaxForm>
-        </>
+        <div className="card">
+            <div className="card-body">
+                <AjaxForm
+                    handler={authApi.register}
+                    initialValues={intialValues}
+                    validationSchema={schema}
+                    onSuccess={onRegister}
+                >
+                    <TextField name="name" type="text">
+                        {t('Name')}
+                    </TextField>
+                    <TextField name="email" type="email">
+                        {t('Email')}
+                    </TextField>
+                    <TextField name="password" type="password">
+                        {t('Password')}
+                    </TextField>
+                    <TextField name="passwordConfirmation" type="password">
+                        {t('Repeat password')}
+                    </TextField>
+                    <SubmitField>{t('Save')}</SubmitField>
+                </AjaxForm>
+                <small>{t('Already have an account?')} <a href="/login">{t('Login')}</a></small>
+            </div>
+        </div>
     );
 }
