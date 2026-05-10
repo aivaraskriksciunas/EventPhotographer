@@ -53,6 +53,7 @@ public class ApiMediaService : Core.Features.Content.Services.MediaService
         return await dbContext.Media
             .Where(m => m.EventId == @event.Id)
             .Where(m => m.Type == MediaType.UserUpload)
+            .Where(m => m.Files.Any())
             .Include(m => m.Files)
             .Include(m => m.Participant)
             .Select(m => new EventMediaResponseDto
