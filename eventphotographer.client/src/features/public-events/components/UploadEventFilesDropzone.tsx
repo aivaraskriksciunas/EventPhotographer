@@ -1,21 +1,31 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import UploadedFileHandler from './UploadedFileHandler';
+import UploadedBatchHandler from './UploadedBatchHandler';
+import { AnimatePresence, motion } from "motion/react";
 
 export default function UploadEventFilesDropzone() {
-    const [files, setFiles] = useState<File[]>([]);
+    const [batches, setBatches] = useState<{ id: string, files: File[] }[]>([]);
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
-            setFiles([...files, ...acceptedFiles]);
+            setBatches(prev => [
+                { id: crypto.randomUUID(), files: acceptedFiles },
+                ...prev,
+            ]);
         },
-        [files],
+        [batches],
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         multiple: true,
     });
+
+    const hideUploadedBatch = (id: string) => {
+        setTimeout(() => {
+            setBatches(prev => prev.filter(batch => batch.id !== id));
+        }, 3000);
+    }
 
     return (
         <>
@@ -28,11 +38,19 @@ export default function UploadEventFilesDropzone() {
                 )}
             </div>
             <div className="row">
-                {files.map((file, i) => (
-                    <div className="col-md-3" key={i}>
-                        <UploadedFileHandler rawFile={file} />
-                    </div>
-                ))}
+                <AnimatePresence>
+                    {batches.map(batch => (
+                        <motion.div
+                            className="col-12 mb-3"
+                            key={batch.id}
+                            initial={{ opacity: 0, transform: 'translateX(-10%)' }}
+                            animate={{ opacity: 1, transform: 'translateX(0)', transition: { duration: 0.8 } }}
+                            exit={{ opacity: 0, transform: 'translateX(-10%)' }}
+                        >
+                            <UploadedBatchHandler batch={batch.files} onSuccess={() => hideUploadedBatch(batch.id)}/>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             </div>
         </>
     );

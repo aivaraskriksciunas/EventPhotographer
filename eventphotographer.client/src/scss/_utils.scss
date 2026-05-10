@@ -6,8 +6,16 @@
     color: var(--color-text-lightest);
 }
 
+.text-danger {
+    color: var(--color-danger) !important;
+}
+
 .bg-success {
     background-color: var(--color-success) !important;
+}
+
+.bg-danger {
+    background-color: var(--color-danger) !important;
 }
 
 .bg-secondary {
