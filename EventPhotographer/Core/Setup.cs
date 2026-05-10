@@ -11,6 +11,7 @@ using EventPhotographer.Core.Middleware;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using EventPhotographer.Core.Features.Users.Entities;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace EventPhotographer.Core;
 
@@ -64,6 +65,10 @@ public static class Setup
             options.ExpireTimeSpan = new TimeSpan(1, 0, 0); // 1 Hour
             options.Cookie.Name = "AuthenticationCookie";
         });
+
+        services.AddDataProtection()
+            .PersistKeysToDbContext<AppDbContext>()
+            .SetApplicationName("EventPhotographer");
 
         services.AddAuthorizationBuilder()
             .AddPolicy(ActiveParticipantRequiredAttribute.POLICY_NAME, policy => policy.Requirements.Add(new IsActiveParticipantRequirement()));

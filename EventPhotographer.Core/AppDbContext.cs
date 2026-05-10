@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using EventPhotographer.Core.Entities.AccountPolicies;
 using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Events.Entities;
@@ -8,7 +9,7 @@ using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.Core;
 
-public class AppDbContext : IdentityDbContext<User>
+public class AppDbContext : IdentityDbContext<User>, IDataProtectionKeyContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -25,6 +26,8 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<Media> Media { get; set; }
 
     public DbSet<MediaFile> MediaFiles { get; set; }
+
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
