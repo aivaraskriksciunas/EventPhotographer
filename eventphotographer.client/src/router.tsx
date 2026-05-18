@@ -3,6 +3,7 @@ import {
     MiddlewareFunction,
     Navigate,
     redirect,
+    redirectDocument,
 } from 'react-router-dom';
 import { eventsRoutes } from './features/events/events.routes';
 import AuthLayout from './layouts/AuthLayout';
@@ -57,12 +58,17 @@ export const router = createBrowserRouter([
         ],
     },
     {
+        path: '/privacy-policy',
+        loader: () => redirectDocument('/privacy-policy.html'),
+    },
+    {
         element: <AuthLayout />,
-        errorElement: <Navigate to="/404" />,
+        errorElement: <Navigate to="/404" replace/>,
         children: [{ path: '/' }, ...authRoutes],
     },
     {
         path: '/404',
+        
         lazy: {
             Component: async () =>
                 (await import('./pages/NotFoundErrorPage')).default,

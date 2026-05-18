@@ -49,6 +49,22 @@ body {
     }
 }
 
+#page-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    
+    #main-content {
+        flex: 1;
+    }
+}
+
+footer {
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-background-darkest);
+    margin-top: 1rem;
+}
+
 .eventImageCard {
     img {
         height: 250px;

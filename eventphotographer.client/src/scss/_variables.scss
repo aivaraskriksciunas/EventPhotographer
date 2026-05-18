@@ -27,7 +27,8 @@
     --color-primary-lightest: hsl(205, 63%, 48%);
     --color-primary-darker: hsl(205, 63%, 13%);
     --color-primary-background: hsl(205, 63%, 92%);
-    --bs-border-color-translucent: hsla(205, 63%, 19%, 0.25);
+    --color-border: hsla(205, 63%, 19%, 0.25);
+    --bs-border-color-translucent: var(--color-border);
 
     --color-success: hsl(71, 45%, 40%);
     --color-success-lighter: hsl(71, 45%, 46%);
