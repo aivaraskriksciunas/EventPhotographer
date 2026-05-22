@@ -1,7 +1,7 @@
 # Consultez https://aka.ms/customizecontainer pour savoir comment personnaliser votre conteneur de débogage et comment Visual Studio utilise ce Dockerfile pour générer vos images afin d’accélérer le débogage.
 
 # Cet index est utilisé lors de l’exécution à partir de VS en mode rapide (par défaut pour la configuration de débogage)
-FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 WORKDIR /app
 
@@ -11,6 +11,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["EventPhotographer.Worker/EventPhotographer.Worker.csproj", "EventPhotographer.Worker/"]
+COPY ["EventPhotographer.Core/EventPhotographer.Core.csproj", "EventPhotographer.Core/"]
 RUN dotnet restore "./EventPhotographer.Worker/EventPhotographer.Worker.csproj"
 COPY . .
 WORKDIR "/src/EventPhotographer.Worker"

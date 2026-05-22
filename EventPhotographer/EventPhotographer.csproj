@@ -79,6 +79,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
+    <PackageReference Include="Sentry.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.0" />
@@ -86,10 +87,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventPhotographer.Core\EventPhotographer.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Core\Configuration\" />
   </ItemGroup>
 
 </Project>

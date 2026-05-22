@@ -1,16 +1,19 @@
-﻿using EventPhotographer.App.Events.Authorization.Requirements;
-using EventPhotographer.App.Events.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using EventPhotographer.App.Events.Services;
 using EventPhotographer.Core.Features.Events.Entities;
+using Microsoft.AspNetCore.Authorization;
 
-namespace EventPhotographer.App.Events.Authorization.Handlers;
+namespace EventPhotographer.App.Events.Authorization;
 
-public class IsActiveParticipantRequirementHandler (
+public class IsActiveParticipantRequirement : IAuthorizationRequirement
+{
+}
+
+public class IsActiveParticipantRequirementHandler(
     IHttpContextAccessor httpContextAccessor)
     : AuthorizationHandler<IsActiveParticipantRequirement>
 {
     protected override Task HandleRequirementAsync(
-        AuthorizationHandlerContext context, 
+        AuthorizationHandlerContext context,
         IsActiveParticipantRequirement requirement)
     {
         var httpContext = httpContextAccessor.HttpContext;
@@ -19,7 +22,7 @@ public class IsActiveParticipantRequirementHandler (
         {
             context.Succeed(requirement);
         }
-        else 
+        else
         {
             context.Fail();
         }

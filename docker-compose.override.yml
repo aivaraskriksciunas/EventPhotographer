@@ -9,6 +9,7 @@ services:
       ObjectStorage__AccessKey: admin
       ObjectStorage__Password: minioadmin123
       ObjectStorage__BucketName: event-photographer
+      Sentry__Dsn: 
     ports:
       - "8000:8080"
     volumes:
@@ -25,8 +26,14 @@ services:
       ObjectStorage__AccessKey: admin
       ObjectStorage__Password: minioadmin123
       ObjectStorage__BucketName: event-photographer
+      Sentry__Dsn: 
     profiles: 
       - worker
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq: 
+        condition: service_healthy
    
   postgres:
     image: postgres:alpine 
@@ -76,4 +83,41 @@ services:
       - ./storage_data:/data
     profiles: 
       - web
+      - worker
+
+  # bugsink:
+  #   container_name: eventphotographer_bugsink
+  #   image: bugsink/bugsink:latest
+  #   environment:
+  #     SECRET_KEY: ")gi5x)k=)%ug4_iy5g1-t97&pzxwy$fi^k$-%mlyhme5h_n18R9Kl+GD2osxOHea2h$c)6Gf)f}oEZYVK,>M$aoxAwB|xPI.46Pjy.h;%xL:[M)"
+  #     CREATE_SUPERUSER: "admin:admin"
+  #     PORT: 8010
+  #     DATABASE_PATH: "/data/bugsink.db"
+  #     SINGLE_TEAM: True
+  #     SINGLE_USER: True
+  #   volumes: 
+  #     - ./bugsink_data:/data
+  #   ports: 
+  #     - "8010:8010"
+  #   profiles: 
+  #     - web 
+  #     - worker
+
+  rabbitmq:
+    container_name: eventphotographer_rabbitmq
+    image: rabbitmq:4-management
+    ports:
+      - "8011:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 3s
+      timeout: 30s
+      retries: 10
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit 
+      RABBITMQ_DEFAULT_PASS: rabbit-admin
+    volumes:
+      - ./rabbitmq_data:/var/lib/rabbitmq
+    profiles:
+      - web 
       - worker

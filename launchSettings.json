@@ -21,6 +21,16 @@
           "web"
         ]
       }
+    },
+    "Docker Compose (Both)": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeProfile": {
+        "includes": [
+          "web",
+          "worker"
+        ]
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Events.Authorization.Requirements;
+﻿using EventPhotographer.App.Events.Authorization;
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.App.Content.DTO;
 using EventPhotographer.App.Content.Services;

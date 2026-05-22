@@ -1,21 +1,24 @@
-﻿using EventPhotographer.App.Events.Authorization.Requirements;
-using EventPhotographer.App.Events.Services;
+﻿using EventPhotographer.App.Events.Services;
+using EventPhotographer.Core.Features.Events.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using EventPhotographer.Core.Features.Events.Entities;
 
-namespace EventPhotographer.App.Events.Authorization.Handlers;
+namespace EventPhotographer.App.Events.Authorization;
 
-public class CreateShareableLinkRequirementHandler(
+public class CreateShareableLinkRequirement : IAuthorizationRequirement
+{
+}
+
+internal class CreateShareableLinkRequirementHandler(
     EventShareableLinkService service) : EventAccessHandler<CreateShareableLinkRequirement>
 {
     protected override async Task HandleRequirementAsync(
-        AuthorizationHandlerContext context, 
-        CreateShareableLinkRequirement requirement, 
+        AuthorizationHandlerContext context,
+        CreateShareableLinkRequirement requirement,
         Event resource)
     {
         var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        
+
         if (IsOwner(userId, resource)
             && EventIsNotPassed(resource)
             && await EventHasExistingShareableLink(resource) == false)

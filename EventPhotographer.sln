@@ -6,10 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer", "EventPhotographer\EventPhotographer.csproj", "{B1632730-CBEF-4465-9F94-2D20F9B21760}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{C0B02FB0-930A-46A2-8F00-AEDB8304AB20}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		docker-compose.old.yml = docker-compose.old.yml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Tests", "EventPhotographer.Tests\EventPhotographer.Tests.csproj", "{C92F37EA-4CC0-4990-AD7D-4B9ED44F1A1F}"
 EndProject

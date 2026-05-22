@@ -5,12 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseSentry(options =>
+{
+    options.SendDefaultPii = true;
+});
+
+// Database
 builder.Services.AddDataServices(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ApplicationException("Database DefaultConnection is not provided"));
 
+// Object Storage
 builder.Services.AddObjectStorage(
     builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ApplicationException("Object storage settings are not configured")
 );
 builder.Services.AddHostedService<ObjectStorageStartup>();
+
+// RabbitMQ + MassTransit
+builder.Services.AddApplicationMessageQueues(builder.Configuration.GetConnectionString("RabbitMq") ?? throw new ApplicationException("RabbitMq connection string is not provided"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

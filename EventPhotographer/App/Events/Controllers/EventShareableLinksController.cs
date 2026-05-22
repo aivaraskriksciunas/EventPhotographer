@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Events.Authorization.Requirements;
+﻿using EventPhotographer.App.Events.Authorization;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Services;
 using Microsoft.AspNetCore.Authorization;

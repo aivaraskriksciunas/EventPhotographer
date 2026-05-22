@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Events.Authorization.Handlers;
+﻿using EventPhotographer.App.Events.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EventPhotographer.App.Events;
@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthorizationHandler, JoinEventRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, IsActiveParticipantRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, UploadEventMediaRequirementHandler>();
+        services.AddScoped<IAuthorizationHandler, GenerateFileArchiveRequirementHandler>();
 
         return services;
     }

@@ -2,6 +2,10 @@
 db_data
 cloudbeaver_data
 storage_data
+bugsink_data
+rabbitmq_data
+EventPhotographer/Sentry
+EventPhotographer.Worker/Sentry
 
 # Prod files
 docker-compose.prod.yml

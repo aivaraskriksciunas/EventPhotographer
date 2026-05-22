@@ -1,9 +1,8 @@
 ﻿using EventPhotographer.App.AccountPolicies;
 using EventPhotographer.App.Content;
 using EventPhotographer.App.Events;
-using EventPhotographer.App.Events.Authorization.Requirements;
+using EventPhotographer.App.Events.Authorization;
 using EventPhotographer.App.Users;
-using EventPhotographer.Core;
 using EventPhotographer.Core.Attributes;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Exceptions;
@@ -12,6 +11,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using EventPhotographer.Core.Features.Users.Entities;
 using Microsoft.AspNetCore.DataProtection;
+using EventPhotographer.Core.Features.MessagingIntegrations;
 
 namespace EventPhotographer.Core;
 
@@ -23,6 +23,7 @@ public static class Setup
         services.AddUsersModule();
         services.AddAccountPoliciesModule();
         services.AddContentModule();
+        services.AddMessagingIntegrationServices();
 
         // Load FluentValidation validators from this assembly
         services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped);
@@ -80,6 +81,7 @@ public static class Setup
     {
         services.Configure<ShareableLinkOptions>(configuration.GetSection("ShareableLink"));
         services.Configure<ObjectStorageConfiguration>(configuration.GetSection("ObjectStorage"));
+        services.Configure<WhatsAppConfiguration>(configuration.GetSection("WhatsApp"));
 
         return services;
     }

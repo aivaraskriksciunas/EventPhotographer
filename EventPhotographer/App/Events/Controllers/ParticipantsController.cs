@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Events.Authorization.Requirements;
+﻿using EventPhotographer.App.Events.Authorization;
 using EventPhotographer.App.Events.DTO.Request;
 using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Mappers;

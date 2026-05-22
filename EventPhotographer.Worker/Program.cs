@@ -1,31 +1,34 @@
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
 using EventPhotographer.Core;
-using EventPhotographer.Worker.Workers;
 using Quartz;
+using EventPhotographer.Worker.Startup;
+using Sentry.Extensions.Logging;
+using EventPhotographer.Worker;
 
 var builder = Host.CreateApplicationBuilder(args);
 
+builder.Services.Configure<SentryLoggingOptions>(builder.Configuration.GetSection("Sentry"));
+
+builder.Logging.AddSentry();
+
+// Database
 builder.Services.AddDataServices(
     builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ApplicationException("Database DefaultConnection is not provided"));
 
+// Object Storage
 builder.Services.AddObjectStorage(
     builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ApplicationException("ObjectStorage configuration is not provided"));
 
-builder.Services.AddApplicationServices();
+// RabbitMQ + EasyNetQ
+builder.Services.AddApplicationMessageQueues(
+    builder.Configuration.GetConnectionString("RabbitMq") ?? throw new ApplicationException("RabbitMq connection string is not provided"));
+builder.Services.AddHostedService<RegisterMessageConsumers>();
 
-builder.Services.AddQuartz(options =>
-{
-    var fileCompressorJob = JobKey.Create(nameof(EventCompressedFileGenerator));
-    options
-        .AddJob<EventCompressedFileGenerator>(fileCompressorJob)
-        .AddTrigger(trigger =>
-        {
-            trigger
-                .ForJob(fileCompressorJob)
-                .WithSimpleSchedule(action => action.WithIntervalInSeconds(60).RepeatForever());
-        });
-});
+// Servicess
+builder.Services.AddApplicationServices();
+builder.Services.AddWorkerServices();
+builder.Services.AddScheduler();
 
 builder.Services.AddQuartzHostedService(opt =>
 {
