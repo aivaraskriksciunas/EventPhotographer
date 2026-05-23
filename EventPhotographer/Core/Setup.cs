@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using EventPhotographer.Core.Features.Users.Entities;
 using Microsoft.AspNetCore.DataProtection;
 using EventPhotographer.Core.Features.MessagingIntegrations;
+using EventPhotographer.App.MessagingIntegrations;
 
 namespace EventPhotographer.Core;
 
@@ -23,7 +24,7 @@ public static class Setup
         services.AddUsersModule();
         services.AddAccountPoliciesModule();
         services.AddContentModule();
-        services.AddMessagingIntegrationServices();
+        services.AddMessagingIntegrationsModule();
 
         // Load FluentValidation validators from this assembly
         services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped);

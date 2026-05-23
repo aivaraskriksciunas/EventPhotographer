@@ -1,5 +1,6 @@
 ﻿using EventPhotographer.Core.Features.Content;
 using EventPhotographer.Core.Features.Events;
+using EventPhotographer.Core.Features.MessagingIntegrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,5 +19,6 @@ public static class DependencyInjection
     {
         services.AddEventServices();
         services.AddContentServices();
+        services.AddMessagingIntegrationServices();
     }
 }

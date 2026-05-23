@@ -21,8 +21,8 @@ public class EventDtoValidator : AbstractValidator<EventDto>
         {
             RuleFor(x => x.StartDate!.Value)
                 .GreaterThan(DateTime.UtcNow.AddMinutes(-1))
-                .LessThan(DateTime.UtcNow.AddDays(7))
-                .WithMessage("Date must not be more than 1 week in the future");
+                .LessThan(DateTime.UtcNow.AddMonths(6))
+                .WithMessage("Date must not be more than 6 months in the future");
         });
     }
 }

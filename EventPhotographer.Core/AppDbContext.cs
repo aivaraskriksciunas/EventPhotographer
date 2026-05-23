@@ -6,6 +6,7 @@ using EventPhotographer.Core.Entities.AccountPolicies;
 using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
+using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 
 namespace EventPhotographer.Core;
 
@@ -26,6 +27,8 @@ public class AppDbContext : IdentityDbContext<User>, IDataProtectionKeyContext
     public DbSet<Media> Media { get; set; }
 
     public DbSet<MediaFile> MediaFiles { get; set; }
+
+    public DbSet<WhatsAppWebhookPayloadLogEntry> WhatsAppWebhookPayloadLogEntries { get; set; }
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
