@@ -6,7 +6,7 @@ namespace EventPhotographer.Core.Startup;
 public static class MessageQueuesSetup
 {
     public static void AddApplicationMessageQueues(
-        this IServiceCollection services, 
+        this IServiceCollection services,
         string connectionString)
     {
         services.AddEasyNetQ(connectionString)

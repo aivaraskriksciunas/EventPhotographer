@@ -1,10 +1,10 @@
+using EventPhotographer.Core;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
-using EventPhotographer.Core;
-using Quartz;
-using EventPhotographer.Worker.Startup;
-using Sentry.Extensions.Logging;
 using EventPhotographer.Worker;
+using EventPhotographer.Worker.Startup;
+using Quartz;
+using Sentry.Extensions.Logging;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -27,6 +27,7 @@ builder.Services.AddHostedService<RegisterMessageConsumers>();
 
 // Servicess
 builder.Services.AddApplicationServices();
+builder.Services.AddWorkerConsumers();
 builder.Services.AddWorkerServices();
 builder.Services.AddScheduler();
 

@@ -1,7 +1,7 @@
-﻿using EventPhotographer.Core.Util;
+﻿using EventPhotographer.Core.Features.Events.Entities;
+using EventPhotographer.Core.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using EventPhotographer.Core.Features.Events.Entities;
 
 namespace EventPhotographer.Core.Features.Content.Entities;
 

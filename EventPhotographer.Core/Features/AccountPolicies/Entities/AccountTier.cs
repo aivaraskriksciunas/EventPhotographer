@@ -1,7 +1,7 @@
-﻿using EventPhotographer.Core.Util;
+﻿using EventPhotographer.Core.Features.Users.Entities;
+using EventPhotographer.Core.Util;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.Core.Entities.AccountPolicies;
 

@@ -1,5 +1,4 @@
-﻿using EventPhotographer.App.MessagingIntegrations.Services;
-using System.ComponentModel.Design;
+﻿using EventPhotographer.App.MessagingIntegrations.Services.WhatsApp;
 
 namespace EventPhotographer.App.MessagingIntegrations;
 

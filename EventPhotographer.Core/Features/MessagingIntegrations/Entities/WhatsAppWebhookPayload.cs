@@ -5,9 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 
-[EntityTypeConfiguration(typeof(UUIDEntityConfiguration<WhatsAppWebhookPayloadLogEntry>))]
+[Table("WhatsAppWebhookPayloads")]
+[EntityTypeConfiguration(typeof(UUIDEntityConfiguration<WhatsAppWebhookPayload>))]
 [Index(nameof(Hash), IsUnique = true)]
-public class WhatsAppWebhookPayloadLogEntry : IEntity
+public class WhatsAppWebhookPayload : IEntity
 {
     public Guid Id { get; set; }
 
@@ -20,4 +21,6 @@ public class WhatsAppWebhookPayloadLogEntry : IEntity
     public bool IsValid { get; set; } = false;
 
     public DateTime ReceivedAt { get; set; } = DateTime.UtcNow;
+
+    public bool IsProcessed { get; set; } = false;
 }

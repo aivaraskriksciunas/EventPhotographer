@@ -1,11 +1,9 @@
-﻿using EventPhotographer.Core;
-using EventPhotographer.Core.Configuration;
-using Microsoft.EntityFrameworkCore;
+﻿using EventPhotographer.Core.Configuration;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EventPhotographer.App.MessagingIntegrations.Services;
+namespace EventPhotographer.App.MessagingIntegrations.Services.WhatsApp;
 
 public class WhatsAppWebhookService(
     IOptions<WhatsAppConfiguration> _whatsappOptions)
@@ -14,11 +12,16 @@ public class WhatsAppWebhookService(
 
     public bool ValidateSignature(string signature, string body)
     {
-        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(configuration.SecretKey));
-        var hash = Convert.ToHexString(
+        using HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(configuration.SecretKey));
+        string hash = Convert.ToHexString(
             hmac.ComputeHash(Encoding.UTF8.GetBytes(body)))
             .ToUpper();
 
         return signature.ToUpper() == $"SHA256={hash}";
+    }
+
+    public bool IsVerificationTokenValid(string token)
+    {
+        return token == configuration.VerificationToken;
     }
 }

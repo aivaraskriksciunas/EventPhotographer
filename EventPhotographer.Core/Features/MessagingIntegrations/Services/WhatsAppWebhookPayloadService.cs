@@ -1,14 +1,20 @@
 ﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace EventPhotographer.Core.Features.MessagingIntegrations.Services;
 
-public class WhatsAppWebhookPayloadLogService(
+public class WhatsAppWebhookPayloadService(
     AppDbContext db)
 {
+
+    public async Task<WhatsAppWebhookPayload?> GetAsync(Guid id)
+    {
+        return await db.WhatsAppWebhookPayloadLogEntries
+            .Where(w => w.Id == id)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<bool> WasWebhookAlreadyReceivedAsync(string hash)
     {
         return await db.WhatsAppWebhookPayloadLogEntries
@@ -16,15 +22,14 @@ public class WhatsAppWebhookPayloadLogService(
             .AnyAsync();
     }
 
-    public async Task<WhatsAppWebhookPayloadLogEntry> LogWebhookPayload(string payload, string hash, bool isValid)
+    public async Task<WhatsAppWebhookPayload> LogWebhookPayloadAsync(string payload, string hash, bool isValid)
     {
-        var payloadBytes = Encoding.UTF8.GetBytes(payload);
-        var entity = new WhatsAppWebhookPayloadLogEntry 
-        { 
-            Payload = Convert.ToBase64String(payloadBytes), 
+        WhatsAppWebhookPayload entity = new WhatsAppWebhookPayload
+        {
+            Payload = payload,
             Hash = NormalizeHash(hash),
             IsValid = isValid,
-            ReceivedAt = DateTime.UtcNow 
+            ReceivedAt = DateTime.UtcNow
         };
 
         await db.AddAsync(entity);

@@ -8,6 +8,8 @@ public static class DependencyInjection
     public static void AddMessagingIntegrationServices(this IServiceCollection services)
     {
         services.AddScoped<WhatsAppIntegrationService>();
-        services.AddScoped<WhatsAppWebhookPayloadLogService>();
+        services.AddScoped<WhatsAppWebhookPayloadService>();
+        services.AddScoped<WhatsAppMessageService>();
+        services.AddScoped<WhatsAppContactService>();
     }
 }

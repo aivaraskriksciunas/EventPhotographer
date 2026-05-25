@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace EventPhotographer.Core.Features.Events.Entities;
 

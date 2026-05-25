@@ -1,10 +1,11 @@
-﻿using EventPhotographer.Core.Features.Content.Services;
+﻿using Amazon.S3.Model;
 using EventPhotographer.Core;
 using EventPhotographer.Core.Features.Content.Entities;
+using EventPhotographer.Core.Features.Content.Services;
+using EventPhotographer.Core.Features.Events.Entities;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using System.IO.Compression;
-using EventPhotographer.Core.Features.Events.Entities;
 
 namespace EventPhotographer.Worker.Workers;
 
@@ -19,7 +20,7 @@ internal class EventCompressedFileGenerator : IJob
         AppDbContext dbContext,
         MediaStorageService mediaStorageService,
         MediaService mediaService)
-    { 
+    {
         _dbContext = dbContext;
         _mediaStorageService = mediaStorageService;
         _mediaService = mediaService;

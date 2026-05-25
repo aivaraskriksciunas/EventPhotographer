@@ -7,7 +7,8 @@ public static class CorsSetup
         services.AddCors(options =>
         {
             options.AddPolicy("CorsPolicy",
-                policy => {
+                policy =>
+                {
                     policy.WithOrigins(clientUrl)
                         .AllowCredentials()
                         .AllowAnyHeader()

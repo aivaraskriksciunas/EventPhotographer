@@ -6,7 +6,7 @@ namespace EventPhotographer.Worker.Startup;
 
 internal class RegisterMessageConsumers(
     IBus bus,
-    IServiceProvider serviceProvider) 
+    IServiceProvider serviceProvider)
     : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)

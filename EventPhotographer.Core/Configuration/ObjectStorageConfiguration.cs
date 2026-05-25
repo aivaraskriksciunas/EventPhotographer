@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventPhotographer.Core.Configuration;
+﻿namespace EventPhotographer.Core.Configuration;
 
 public class ObjectStorageConfiguration
 {

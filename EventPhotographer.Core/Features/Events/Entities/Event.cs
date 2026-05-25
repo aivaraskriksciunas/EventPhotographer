@@ -12,7 +12,7 @@ namespace EventPhotographer.Core.Features.Events.Entities;
 public class Event : IEntity
 {
     public Guid Id { get; set; }
-    
+
     public string Name { get; set; } = string.Empty;
 
     public string? UserId { get; set; }
@@ -23,11 +23,11 @@ public class Event : IEntity
     [Column(TypeName = "char")]
     [StringLength(36)]
     public string? AdministratorAccessKey { get; set; }
-    
+
     public DateTime StartDate { get; set; }
-    
+
     public DateTime EndDate { get; set; }
-    
+
     public DateTime CreatedAt { get; set; }
 
     public ICollection<EventShareableLink> ShareableLinks { get; set; } = new List<EventShareableLink>();

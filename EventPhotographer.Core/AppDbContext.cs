@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
-using EventPhotographer.Core.Entities.AccountPolicies;
+﻿using EventPhotographer.Core.Entities.AccountPolicies;
 using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Events.Entities;
-using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
+using EventPhotographer.Core.Features.Users.Entities;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventPhotographer.Core;
 
@@ -28,7 +28,15 @@ public class AppDbContext : IdentityDbContext<User>, IDataProtectionKeyContext
 
     public DbSet<MediaFile> MediaFiles { get; set; }
 
-    public DbSet<WhatsAppWebhookPayloadLogEntry> WhatsAppWebhookPayloadLogEntries { get; set; }
+    public DbSet<WhatsAppWebhookPayload> WhatsAppWebhookPayloadLogEntries { get; set; }
+
+    public DbSet<WhatsAppContact> WhatsAppContacts { get; set; }
+
+    public DbSet<WhatsAppMessage> WhatsAppMessages { get; set; }
+
+    public DbSet<WhatsAppText> WhatsAppTexts { get; set; }
+
+    public DbSet<WhatsAppMedia> WhatsAppMedia { get; set; }
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 

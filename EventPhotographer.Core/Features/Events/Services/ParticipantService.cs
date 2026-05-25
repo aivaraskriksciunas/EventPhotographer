@@ -1,8 +1,7 @@
 ﻿using EventPhotographer.Core;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.App.Events.Services;
 

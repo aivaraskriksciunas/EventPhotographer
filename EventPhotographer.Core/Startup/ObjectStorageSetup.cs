@@ -9,14 +9,14 @@ public static class ObjectStorageSetup
 {
     public static void AddObjectStorage(this IServiceCollection services, ObjectStorageConfiguration config)
     {
-        var credentials = new BasicAWSCredentials(config.AccessKey, config.Password);
-        var s3config = new AmazonS3Config
+        BasicAWSCredentials credentials = new BasicAWSCredentials(config.AccessKey, config.Password);
+        AmazonS3Config s3config = new AmazonS3Config
         {
             ServiceURL = config.ServiceURL,
             ForcePathStyle = config.ForcePathStyle,
         };
 
-        var s3Client = new AmazonS3Client(credentials, s3config);
+        AmazonS3Client s3Client = new AmazonS3Client(credentials, s3config);
 
         services.AddSingleton<IAmazonS3>(s3Client);
     }

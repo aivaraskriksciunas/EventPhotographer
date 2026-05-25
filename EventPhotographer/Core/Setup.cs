@@ -2,17 +2,16 @@
 using EventPhotographer.App.Content;
 using EventPhotographer.App.Events;
 using EventPhotographer.App.Events.Authorization;
+using EventPhotographer.App.MessagingIntegrations;
 using EventPhotographer.App.Users;
 using EventPhotographer.Core.Attributes;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Exceptions;
+using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Middleware;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using EventPhotographer.Core.Features.Users.Entities;
 using Microsoft.AspNetCore.DataProtection;
-using EventPhotographer.Core.Features.MessagingIntegrations;
-using EventPhotographer.App.MessagingIntegrations;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventPhotographer.Core;
 
@@ -30,7 +29,7 @@ public static class Setup
         services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped);
 
         services.AddScoped<ParticipantMiddleware>();
-        
+
         return services;
     }
 
