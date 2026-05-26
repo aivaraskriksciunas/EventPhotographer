@@ -35,7 +35,7 @@ internal class WhatsAppClient(
         {
             messaging_product = "whatsapp",
             recipient_type = "individual",
-            to = message.PhoneNumber,
+            to = message.WhatsAppContact.WhatsAppUserId ?? message.PhoneNumber,
             context = new { message_id = message.WhatsAppId },
             type = "text",
             text = new { body }
