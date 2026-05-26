@@ -31,15 +31,23 @@ internal class WhatsAppClient(
 
     public async Task ReplyToMessage(WhatsAppMessage message, string body)
     {
-        var payload = new
+        var payload = new Dictionary<string, object?>
         {
-            messaging_product = "whatsapp",
-            recipient_type = "individual",
-            to = message.WhatsAppContact.WhatsAppUserId ?? message.PhoneNumber,
-            context = new { message_id = message.WhatsAppId },
-            type = "text",
-            text = new { body }
+            ["messaging_product"] = "whatsapp",
+            ["recipient_type"] = "individual",
+            ["type"] = "text",
+            ["text"] = new { body },
+            ["context"] = new { message_id = message.WhatsAppId },
         };
+
+        if (message.WhatsAppContact.WhatsAppUserId != null)
+        {
+            payload["recipient"] = message.WhatsAppContact.WhatsAppUserId;
+        }
+        else
+        {
+            payload["to"] = message.PhoneNumber;
+        }
 
         using var response = await httpClient.PostAsync(
             "messages",
