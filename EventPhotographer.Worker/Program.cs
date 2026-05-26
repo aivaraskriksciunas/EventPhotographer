@@ -2,6 +2,7 @@ using EventPhotographer.Core;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
 using EventPhotographer.Worker;
+using EventPhotographer.Worker.Configuration;
 using EventPhotographer.Worker.Startup;
 using Quartz;
 using Sentry.Extensions.Logging;
@@ -9,6 +10,7 @@ using Sentry.Extensions.Logging;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.Configure<SentryLoggingOptions>(builder.Configuration.GetSection("Sentry"));
+builder.Services.Configure<WhatsAppConfiguration>(builder.Configuration.GetSection("WhatsApp"));
 
 builder.Logging.AddSentry();
 
@@ -26,6 +28,7 @@ builder.Services.AddApplicationMessageQueues(
 builder.Services.AddHostedService<RegisterMessageConsumers>();
 
 // Servicess
+builder.Services.AddWorkerHttpClients(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddWorkerConsumers();
 builder.Services.AddWorkerServices();

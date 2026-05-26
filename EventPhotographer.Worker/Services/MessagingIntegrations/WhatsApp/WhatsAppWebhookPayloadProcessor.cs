@@ -1,13 +1,15 @@
 ﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Exceptions;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
+using EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.MessageContentProcessors;
 using System.Text.Json;
 
 namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
 
 internal class WhatsAppWebhookPayloadProcessor(
     WhatsAppContactService contactService,
-    WhatsAppMessageService messageService)
+    WhatsAppMessageService messageService,
+    IEnumerable<IMessageContentProcessor> contentProcessors)
 {
     public async Task HandlePayload(JsonDocument payload)
     {
@@ -72,6 +74,9 @@ internal class WhatsAppWebhookPayloadProcessor(
             foreach (var jsonMessage in jsonMessages.EnumerateArray())
             {
                 var message = await ProcessMessage(jsonMessage, contacts);
+                if (message == null) continue;
+
+                await ProcessMessageContentAsync(message, jsonMessage);
             }
         }
     }
@@ -109,7 +114,8 @@ internal class WhatsAppWebhookPayloadProcessor(
             return null;
         }
 
-        var from = message.GetProperty("from").GetString();
+        var from = message.GetProperty("from").GetString()?.Replace("+", "");
+        var fromPhoneNumber = message.GetProperty("from").GetString() ?? throw new WhatsAppWebhookException("From number was not provided");
         var type = message.GetProperty("type").GetString() ?? throw new WhatsAppWebhookException("Message type was not provided");
         string? fromUserId = TryGetString(message, "from_user_id");
 
@@ -126,10 +132,16 @@ internal class WhatsAppWebhookPayloadProcessor(
             throw new WhatsAppWebhookException($"Could not find contact for message with id {id} and from {from}");
         }
 
+        if (!fromPhoneNumber.StartsWith("+"))
+        {
+            fromPhoneNumber = "+" + fromPhoneNumber;
+        }
+
         return await messageService.CreateAsync(new WhatsAppMessage
         {
             WhatsAppId = id,
             Type = type,
+            PhoneNumber = fromPhoneNumber,
             ReceivedAt = DateTime.UtcNow,
             WhatsAppContact = contact,
         });
@@ -143,5 +155,15 @@ internal class WhatsAppWebhookPayloadProcessor(
         }
 
         return null;
+    }
+
+    private async Task ProcessMessageContentAsync(WhatsAppMessage message, JsonElement json)
+    {
+        var processor = contentProcessors.FirstOrDefault(p => p.Supports(message));
+
+        if (processor != null)
+        {
+            await processor.ProcessMessageContentAsync(message, json);
+        }
     }
 }

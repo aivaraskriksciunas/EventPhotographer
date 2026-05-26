@@ -15,6 +15,9 @@ public class WhatsAppMessage : IEntity
     [MaxLength(50)]
     public required string Type { get; set; }
 
+    [MaxLength(50)]
+    public required string PhoneNumber { get; set; } 
+
     public DateTime ReceivedAt { get; set; } = DateTime.UtcNow;
 
     public required WhatsAppContact WhatsAppContact { get; set; }

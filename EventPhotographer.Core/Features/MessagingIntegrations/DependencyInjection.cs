@@ -11,5 +11,7 @@ public static class DependencyInjection
         services.AddScoped<WhatsAppWebhookPayloadService>();
         services.AddScoped<WhatsAppMessageService>();
         services.AddScoped<WhatsAppContactService>();
+        services.AddScoped<WhatsAppTextService>();
+        services.AddScoped<WhatsAppMediaService>();
     }
 }
