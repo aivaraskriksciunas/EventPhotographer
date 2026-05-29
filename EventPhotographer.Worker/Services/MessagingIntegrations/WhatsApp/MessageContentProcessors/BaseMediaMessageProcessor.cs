@@ -11,6 +11,7 @@ namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.Messa
 abstract internal class BaseMediaMessageProcessor(
     WhatsAppMediaService whatsAppMediaService,
     WhatsAppClient whatsAppClient,
+    WhatsAppMediaClient whatsAppMediaClient,
     EventPermissionsService eventPermissionsService,
     ParticipantService participantService,
     MediaService mediaService) 
@@ -62,7 +63,7 @@ abstract internal class BaseMediaMessageProcessor(
 
         await mediaService.UploadFile(
             mediaEntity,
-            await whatsAppClient.DownloadMediaAsync(media),
+            await whatsAppMediaClient.DownloadMediaAsync(media),
             FileContentTypeReader.GetExtensionFromMimeType(media.MimeType)!);
 
         await whatsAppClient.ReactToMessage(message, "\u2764\uFE0F");

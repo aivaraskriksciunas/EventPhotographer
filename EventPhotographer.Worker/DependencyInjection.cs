@@ -34,5 +34,9 @@ internal static class DependencyInjection
             client.BaseAddress = new Uri($"https://graph.facebook.com/{whatsAppConfig.ApiVersion}/{whatsAppConfig.BusinessPhoneNumberId}/");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", whatsAppConfig.AccessToken);
         });
+        services.AddHttpClient<WhatsAppMediaClient>(client =>
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", whatsAppConfig.AccessToken);
+        });
     }
 }

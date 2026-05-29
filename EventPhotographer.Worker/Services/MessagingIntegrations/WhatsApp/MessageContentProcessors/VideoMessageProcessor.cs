@@ -12,10 +12,11 @@ internal class VideoMessageProcessor : BaseMediaMessageProcessor
     public VideoMessageProcessor(
         WhatsAppMediaService whatsAppMediaService, 
         WhatsAppClient whatsAppClient, 
+        WhatsAppMediaClient whatsAppMediaClient,
         EventPermissionsService eventPermissionsService,
         ParticipantService participantService,
         MediaService mediaService) 
-        : base(whatsAppMediaService, whatsAppClient, eventPermissionsService, participantService, mediaService)
+        : base(whatsAppMediaService, whatsAppClient, whatsAppMediaClient, eventPermissionsService, participantService, mediaService)
     {}
 
     public static string MessageType => "video";

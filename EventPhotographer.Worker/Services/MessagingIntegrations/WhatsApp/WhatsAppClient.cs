@@ -57,12 +57,4 @@ internal class WhatsAppClient(HttpClient httpClient)
             JsonContent.Create(payload));
         response.EnsureSuccessStatusCode();
     }
-
-    public async Task<Stream> DownloadMediaAsync(WhatsAppMedia media)
-    {
-        var response = await httpClient.GetAsync(media.Url);
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadAsStreamAsync();
-    }
 }
