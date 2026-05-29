@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.App.Events.Services;
+using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Events.Services;
 using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
@@ -29,7 +30,7 @@ internal class TextMessageProcessor(
         var match = Regex.Match(body ?? "", @"\b\d{6}\b");
         if (!match.Success)
         {
-            await whatsAppClient.ReplyToMessage(message, "Please enter the code of an ongoing event, or create your own at livealbum.eu.");
+            await ReplyWithCurrentEvent(message);
             return;
         }
 
@@ -49,5 +50,21 @@ internal class TextMessageProcessor(
         await whatsAppClient.ReplyToMessage(
             message,
             $"You have joined '{participant.Event.Name}'! You can send me the pictures you want to share with the hosts at any time. I will react to them when I receive them :) Have fun!");
+    }
+
+    private async Task ReplyWithCurrentEvent(WhatsAppMessage message)
+    {
+        Participant? participant = null;
+        if (message.WhatsAppContact.ActiveParticipantId != null)
+        {
+            participant = await participantService.GetById((Guid)message.WhatsAppContact.ActiveParticipantId);
+        }
+
+        if (participant != null)
+        {
+            await whatsAppClient.ReplyToMessage(message, $"You are currently sending pictures to '{participant.Event.Name}'. Send me the code of another event to switch, or create your own event at livealbum.eu.");
+        }
+
+        await whatsAppClient.ReplyToMessage(message, "Please enter the code of an ongoing event, or create your own at livealbum.eu.");
     }
 }

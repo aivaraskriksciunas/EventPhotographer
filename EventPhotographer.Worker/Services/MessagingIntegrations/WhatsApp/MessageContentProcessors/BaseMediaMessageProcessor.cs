@@ -4,6 +4,7 @@ using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Events.Services;
 using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.MessageContentProcessors;
@@ -67,5 +68,27 @@ abstract internal class BaseMediaMessageProcessor(
             FileContentTypeReader.GetExtensionFromMimeType(media.MimeType)!);
 
         await whatsAppClient.ReactToMessage(message, "\u2764\uFE0F");
+        await ReplyWithCompliment(message);
+    }
+
+    public async Task ReplyWithCompliment(WhatsAppMessage message)
+    {
+        // 5% chance of replying with a message
+        var chance = RandomNumberGenerator.GetInt32(100);
+        if (chance >= 95) return;
+
+        string[] compliments = 
+        {
+            "Wow! 🔥",
+            "Thanks for sharing! The hosts will be amazed",
+            "Looking great!",
+            "You're a star! ⭐",
+            "Here's a star for sharing the pictures: ⭐",
+            "That's amazing",
+            "Chef's kiss! 😘",
+        };
+
+        var chosenCompliment = compliments[Random.Shared.Next(compliments.Length)];
+        await whatsAppClient.ReplyToMessage(message, chosenCompliment);
     }
 }
