@@ -63,6 +63,7 @@ internal class TextMessageProcessor(
         if (participant != null)
         {
             await whatsAppClient.ReplyToMessage(message, $"You are currently sending pictures to '{participant.Event.Name}'. Send me the code of another event to switch, or create your own event at livealbum.eu.");
+            return;
         }
 
         await whatsAppClient.ReplyToMessage(message, "Please enter the code of an ongoing event, or create your own at livealbum.eu.");

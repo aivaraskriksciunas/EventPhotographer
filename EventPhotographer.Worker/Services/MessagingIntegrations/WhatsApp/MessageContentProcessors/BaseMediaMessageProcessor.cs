@@ -73,9 +73,9 @@ abstract internal class BaseMediaMessageProcessor(
 
     public async Task ReplyWithCompliment(WhatsAppMessage message)
     {
-        // 5% chance of replying with a message
+        // 5% chance of replying with a compliment
         var chance = RandomNumberGenerator.GetInt32(100);
-        if (chance >= 95) return;
+        if (chance >= 5) return;
 
         string[] compliments = 
         {
@@ -83,9 +83,10 @@ abstract internal class BaseMediaMessageProcessor(
             "Thanks for sharing! The hosts will be amazed",
             "Looking great!",
             "You're a star! ⭐",
-            "Here's a star for sharing the pictures: ⭐",
+            "Here's a star for this awesome picture: ⭐",
             "That's amazing",
             "Chef's kiss! 😘",
+            "This is art!",
         };
 
         var chosenCompliment = compliments[Random.Shared.Next(compliments.Length)];
