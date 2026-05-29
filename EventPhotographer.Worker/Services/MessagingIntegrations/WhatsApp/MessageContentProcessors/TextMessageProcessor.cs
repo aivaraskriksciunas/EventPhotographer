@@ -1,28 +1,53 @@
-﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
+﻿using EventPhotographer.App.Events.Services;
+using EventPhotographer.Core.Features.Events.Services;
+using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.MessageContentProcessors;
 
 internal class TextMessageProcessor(
     WhatsAppTextService whatsAppTextService,
-    WhatsAppClient whatsAppClient) 
+    WhatsAppContactService whatsAppContactService,
+    WhatsAppClient whatsAppClient,
+    EventShareableLinkService shareableLinkService,
+    ParticipantService participantService,
+    EventPermissionsService eventPermissionsService) 
     : IMessageContentProcessor
 {
+    public static string MessageType => "text";
+
     public async Task ProcessMessageContentAsync(WhatsAppMessage message, JsonElement json)
     {
         var body = json.GetProperty("text").GetProperty("body").GetString();
         
-        // Register message in the log
         await whatsAppTextService.CreateAsync(message, body ?? "");
-
-        // Send reply
         await whatsAppClient.MarkAsReadAsync(message);
-        await whatsAppClient.ReplyToMessage(message, "Hello!");
-    }
 
-    public bool Supports(WhatsAppMessage message)
-    {
-        return message.Type == "text";
+        // Interpret message
+        var match = Regex.Match(body ?? "", @"\b\d{6}\b");
+        if (!match.Success)
+        {
+            await whatsAppClient.ReplyToMessage(message, "Please enter the code of an ongoing event, or create your own at livealbum.eu.");
+            return;
+        }
+
+        string code = match.Value;
+        var shareableLink = await shareableLinkService.GetShareableLinkByCode(code);
+        if (shareableLink?.Event == null || !eventPermissionsService.CanJoinEvent(shareableLink.Event))
+        {
+            await whatsAppClient.ReplyToMessage(message, "I don't know any event with this code :(");
+            return;
+        }
+
+        // Join event and send confirmation message
+        var participant = await participantService.CreateOrGetParticipantAsync(shareableLink, message.WhatsAppContact.ProfileName);
+        message.WhatsAppContact.ActiveParticipant = participant;
+        await whatsAppContactService.UpdateAsync(message.WhatsAppContact);
+
+        await whatsAppClient.ReplyToMessage(
+            message,
+            $"You have joined '{participant.Event.Name}'! You can send me the pictures you want to share with the hosts at any time. I will react to them when I receive them :) Have fun!");
     }
 }

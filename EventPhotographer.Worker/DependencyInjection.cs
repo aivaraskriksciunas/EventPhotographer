@@ -18,8 +18,10 @@ internal static class DependencyInjection
     {
         services.AddScoped<WhatsAppWebhookPayloadProcessor>();
 
-        services.AddScoped<IMessageContentProcessor, MediaMessageProcessor>();
-        services.AddScoped<IMessageContentProcessor, TextMessageProcessor>();
+        services.AddScoped<MessageContentProcessorFactory>();
+        services.AddKeyedTransient<IMessageContentProcessor, TextMessageProcessor>(TextMessageProcessor.MessageType);
+        services.AddKeyedTransient<IMessageContentProcessor, VideoMessageProcessor>(VideoMessageProcessor.MessageType);
+        services.AddKeyedTransient<IMessageContentProcessor, ImageMessageProcessor>(ImageMessageProcessor.MessageType);
     }
 
     public static void AddWorkerHttpClients(this IServiceCollection services, IConfiguration configuration)

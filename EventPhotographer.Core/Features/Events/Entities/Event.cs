@@ -35,4 +35,9 @@ public class Event : IEntity
     public ICollection<Participant> Participants { get; set; } = new List<Participant>();
 
     public ICollection<Media> Media { get; set; } = new List<Media>();
+
+    public bool IsActive()
+    {
+        return StartDate <= DateTime.Now && EndDate > DateTime.Now;
+    }
 }

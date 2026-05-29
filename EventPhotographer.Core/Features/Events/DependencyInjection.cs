@@ -9,6 +9,7 @@ internal static class DependencyInjection
     public static void AddEventServices(this IServiceCollection services)
     {
         services.AddScoped<EventService>();
+        services.AddSingleton<EventPermissionsService>();
         services.AddScoped<EventShareableLinkService>();
         services.AddScoped<ParticipantService>();
     }

@@ -35,4 +35,11 @@ public class WhatsAppContactService(
 
         return existingContact;
     }
+
+    public async Task<WhatsAppContact> UpdateAsync(WhatsAppContact contact)
+    {
+        await db.SaveChangesAsync();
+
+        return contact;
+    }
 }

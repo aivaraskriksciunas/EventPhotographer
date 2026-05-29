@@ -23,6 +23,8 @@ public class UploadedFileValidator : AbstractValidator<IFormFile>
 
     private bool ValidateContentType(IFormFile file)
     {
-        return _contentTypeReader.DetermineFileExtension(file) != null;
+        bool isValid = _contentTypeReader.DetermineFileExtension(file.OpenReadStream()) != null;
+
+        return isValid;
     }
 }

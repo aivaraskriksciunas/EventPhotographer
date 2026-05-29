@@ -27,11 +27,6 @@ public class EventService
             .ToListAsync();
     }
 
-    public bool IsEventActive(Event entity)
-    {
-        return entity.StartDate <= DateTime.Now && entity.EndDate >= DateTime.Now;
-    }
-
     protected DateTime CalculateEventEndDate(DateTime startDate, EventDuration eventDuration)
     {
         return eventDuration switch

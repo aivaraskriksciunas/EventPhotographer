@@ -98,9 +98,9 @@ public class FileContentTypeReader
 
     private static readonly int _maxSignatureLength = _fileSignature.Values.SelectMany(v => v).Max(m => m.Length);
 
-    public string? DetermineFileExtension(IFormFile file)
+    public string? DetermineFileExtension(Stream stream)
     {
-        using (var reader = new BinaryReader(file.OpenReadStream()))
+        using (var reader = new BinaryReader(stream, System.Text.Encoding.Default, true))
         {
             var headerBytes = reader.ReadBytes(_maxSignatureLength);
 
@@ -114,13 +114,32 @@ public class FileContentTypeReader
                     return ext;
                 }
             }
-        }        
+        }
 
+        stream.Position = 0;
         return null;
     }
 
     public static string? GetMimeTypeFromExtension(string extension)
     {
         return _mimeTypes.TryGetValue(extension, out var mimeType) ? mimeType : null;
+    }
+
+    public static bool IsAllowedMimeType(string mimeType)
+    {
+        // TODO: refactor this mess
+        return mimeType != "application/zip" && _mimeTypes.ContainsValue(mimeType);
+    }
+
+    public static string? GetExtensionFromMimeType(string mimeType)
+    {
+        mimeType = mimeType.ToLower();
+
+        if (!_mimeTypes.ContainsValue(mimeType))
+        {
+            return null;
+        }
+
+        return _mimeTypes.First(k => k.Value == mimeType).Key;
     }
 }

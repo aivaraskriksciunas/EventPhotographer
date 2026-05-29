@@ -1,19 +1,10 @@
 ﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
-using EventPhotographer.Worker.Configuration;
-using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
-using System.Net.Mime;
-using System.Text;
-using System.Text.Json;
 
 namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
 
-internal class WhatsAppClient(
-    HttpClient httpClient,
-    IOptions<WhatsAppConfiguration> _config)
+internal class WhatsAppClient(HttpClient httpClient)
 {
-    private readonly WhatsAppConfiguration config = _config.Value;
-
     public async Task MarkAsReadAsync(WhatsAppMessage message)
     {
         var payload = new
@@ -45,5 +36,33 @@ internal class WhatsAppClient(
             "messages",
             JsonContent.Create(payload));
         response.EnsureSuccessStatusCode();
+    }
+
+    public async Task ReactToMessage(WhatsAppMessage message, string emoji)
+    {
+        var payload = new
+        {
+            messaging_product = "whatsapp",
+            recipient_type = "individual",
+            to = message.PhoneNumber,
+            type = "reaction",
+            reaction = new { 
+                message_id = message.WhatsAppId,
+                emoji,
+            },
+        };
+
+        using var response = await httpClient.PostAsync(
+            "messages",
+            JsonContent.Create(payload));
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<Stream> DownloadMediaAsync(WhatsAppMedia media)
+    {
+        var response = await httpClient.GetAsync(media.Url);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStreamAsync();
     }
 }

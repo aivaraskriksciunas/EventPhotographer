@@ -60,7 +60,7 @@ public class ParticipantsController(
         }
 
         var user = await userManager.GetUserAsync(User);
-        var participant = await participantService.CreateOrGetParticipant(
+        var participant = await participantService.CreateOrGetParticipantAsync(
             shareableLink,
             resource.Name,
             user

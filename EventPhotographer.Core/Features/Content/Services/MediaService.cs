@@ -1,6 +1,5 @@
 ﻿using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Content.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.Core.Features.Content.Services;
@@ -21,6 +20,21 @@ public class MediaService
         this.mediaStorageService = mediaStorageService;
     }
 
+    public async Task<Media> CreateMedia(Participant participant)
+    {
+        var media = new Media
+        {
+            Event = participant.Event,
+            Participant = participant,
+            UploadToken = Guid.NewGuid(),
+        };
+
+        await dbContext.AddAsync(media);
+        await dbContext.SaveChangesAsync();
+
+        return media;
+    }
+
     public async Task<Media> CreateArchive(Event @event)
     {
         var media = new Media
@@ -33,14 +47,6 @@ public class MediaService
         await dbContext.SaveChangesAsync();
 
         return media;
-    }
-
-    public async Task<MediaFile> UploadFile(Media media, IFormFile file)
-    {
-        var ext = fileContentTypeReader.DetermineFileExtension(file) ?? "";
-        using var readStream = file.OpenReadStream();
-
-        return await UploadFile(media, readStream, ext);
     }
 
     public async Task<MediaFile> UploadFile(Media media, Stream file, string extension)

@@ -9,7 +9,7 @@ namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
 internal class WhatsAppWebhookPayloadProcessor(
     WhatsAppContactService contactService,
     WhatsAppMessageService messageService,
-    IEnumerable<IMessageContentProcessor> contentProcessors)
+    MessageContentProcessorFactory processorFactory)
 {
     public async Task HandlePayload(JsonDocument payload)
     {
@@ -159,7 +159,7 @@ internal class WhatsAppWebhookPayloadProcessor(
 
     private async Task ProcessMessageContentAsync(WhatsAppMessage message, JsonElement json)
     {
-        var processor = contentProcessors.FirstOrDefault(p => p.Supports(message));
+        var processor = processorFactory.MakeProcessor(message);
 
         if (processor != null)
         {

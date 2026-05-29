@@ -50,7 +50,8 @@ public class MediaController (
         [FromServices] IValidator<IFormFile> fileValidator, 
         [FromServices] ParticipantService participantService,
         [FromServices] UserManager<User> userManager,
-        [FromServices] MediaStorageService storageService)
+        [FromServices] MediaStorageService storageService,
+        [FromServices] FileContentTypeReader fileContentTypeReader)
     {
         await fileValidator.ValidateAndThrowAsync(file);
 
@@ -71,7 +72,11 @@ public class MediaController (
             return NotFound();
         }
 
-        await mediaService.UploadFile(media, file);
+        using var readStream = file.OpenReadStream();
+        await mediaService.UploadFile(
+            media, 
+            readStream, 
+            fileContentTypeReader.DetermineFileExtension(readStream)!);
 
         return Ok();
     }

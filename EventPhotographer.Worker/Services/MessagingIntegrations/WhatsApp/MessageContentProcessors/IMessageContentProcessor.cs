@@ -6,6 +6,4 @@ namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.Messa
 internal interface IMessageContentProcessor
 {
     public Task ProcessMessageContentAsync(WhatsAppMessage message, JsonElement json);
-
-    public bool Supports(WhatsAppMessage message);
 }

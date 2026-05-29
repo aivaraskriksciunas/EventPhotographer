@@ -35,17 +35,7 @@ public class ApiMediaService : Core.Features.Content.Services.MediaService
             throw new Exception("Attempted to create media for a participant without an event");
         }
 
-        var media = new Media
-        {
-            Event = @event,
-            Participant = participant,
-            UploadToken = Guid.NewGuid(),
-        };
-
-        await dbContext.AddAsync(media);
-        await dbContext.SaveChangesAsync();
-
-        return media;
+        return await base.CreateMedia(participant);
     }
 
     public async Task<IEnumerable<EventMediaResponseDto>> GetForEventAsync(Event @event)

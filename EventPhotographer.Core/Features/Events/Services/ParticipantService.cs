@@ -8,10 +8,17 @@ namespace EventPhotographer.App.Events.Services;
 public class ParticipantService(
     AppDbContext Db)
 {
-    public async Task<Participant> CreateOrGetParticipant(
+    public async Task<Participant?> GetById(Guid id)
+    {
+        return await Db.Participants.Where(p => p.Id == id)
+            .Include(p => p.Event)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Participant> CreateOrGetParticipantAsync(
         EventShareableLink shareableLink,
         string name,
-        User? user)
+        User? user = null)
     {
         Participant? participant = null;
         if (user != null)
