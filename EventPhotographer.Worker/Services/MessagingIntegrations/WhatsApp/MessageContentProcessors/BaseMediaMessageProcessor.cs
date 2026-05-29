@@ -24,7 +24,7 @@ abstract internal class BaseMediaMessageProcessor(
         // Log media
         var media = new WhatsAppMedia
         {
-            Caption = mediaJson.GetProperty("caption").GetString(),
+            Caption = DateTime.Now.ToString("yyyyMMdd_HHmmss"),
             MimeType = mediaJson.GetProperty("mime_type").GetString() ?? throw new KeyNotFoundException(),
             WhatsAppId = mediaJson.GetProperty("id").GetString() ?? throw new KeyNotFoundException(),
             Url = mediaJson.GetProperty("url").GetString(),
