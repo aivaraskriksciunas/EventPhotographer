@@ -13,6 +13,15 @@ public class EventShareableLinkService(
 {
     private readonly ShareableLinkOptions linkOptions = options.Value;
 
+    public async Task<EventShareableLink?> GetByIdAsync(Guid id)
+    {
+        return await Db.EventShareableLinks
+            .Where(x => x.Id == id)
+            .Include(x => x.Event)
+            .Include(x => x.WhatsAppMessageLink)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<IEnumerable<EventShareableLink>> GetShareableLinks(Event @event)
     {
         return await Db.EventShareableLinks

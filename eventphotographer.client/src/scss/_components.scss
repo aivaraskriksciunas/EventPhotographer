@@ -33,13 +33,34 @@ a {
 }
 
 .btn-secondary {
-    background-color: transparent;
-    border: var(--border-width) solid var(--color-primary);
+    background-color: var(--color-background-darkest);
+    border: 0;
+    border-bottom: var(--border-width-lg) solid var(--color-border);
     color: var(--color-primary);
 }
 
 .btn-secondary:hover {
-    background-color: var(--color-primary-lighter);
+    background-color: var(--color-primary-lightest);
+}
+
+.btn-whatsapp-outline {
+    border: 1px solid #075e54;
+    border-bottom-width: var(--border-width-lg);
+    background-color: var(--color-background);
+    color: #075e54;
+
+    .whatsapp-icon path {
+        fill: #075e54;
+    }
+}
+
+.btn-whatsapp-outline:hover {
+    background-color: #075e54;
+    color: var(--color-text-inverted);
+
+    .whatsapp-icon path {
+        fill: var(--color-text-inverted);
+    }
 }
 
 .form-control {
@@ -102,4 +123,9 @@ a {
 .progress {
     --bs-progress-bg: var(--color-background-darkest);
     --bs-progress-bar-bg: var(--color-primary);
+}
+
+.badge-secondary {
+    background-color: var(--color-background-darkest);
+    color: var(--color-text-lighter);
 }

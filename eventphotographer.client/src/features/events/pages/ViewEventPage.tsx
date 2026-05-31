@@ -51,7 +51,7 @@ function EventArchiveLink({ eventId }: { eventId: string }) {
         fetchArchiveId();
     }, [eventId]);
 
-    if (!archive) {
+    if (!archive || !archive.files.length) {
         return null;
     }
 

@@ -72,3 +72,17 @@ footer {
         object-position: center center;
     }
 }
+
+.shareablelink-code {
+    font-size: 1.1em;
+    margin-bottom: 0.25em;
+}
+
+.shareablelink-links {
+    font-size: 0.9em;
+    color: var(--color-text-lighter);
+
+    div {
+        margin-bottom: 0.25em;
+    }
+}

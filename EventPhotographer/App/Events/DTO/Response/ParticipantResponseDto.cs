@@ -3,4 +3,6 @@
 public class ParticipantResponseDto : ParticipantDto
 {
     public EventResponseDto Event { get; set; } = null!;
+
+    public EventShareableLinkResponseDto? EventShareableLink { get; set; }
 }

@@ -1,7 +1,4 @@
 ﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
 

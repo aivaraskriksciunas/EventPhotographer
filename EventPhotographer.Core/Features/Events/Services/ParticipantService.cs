@@ -64,6 +64,7 @@ public class ParticipantService(
         return await Db.Participants
             .Where(p => p.Token == token)
             .Include(p => p.Event)
+            .Include(p => p.EventShareableLink)
             .FirstOrDefaultAsync();
     }
 }

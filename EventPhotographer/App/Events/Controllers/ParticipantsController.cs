@@ -1,15 +1,16 @@
-﻿using EventPhotographer.App.Events.Authorization;
+﻿using Amazon.Auth.AccessControlPolicy;
+using EventPhotographer.App.Events.Authorization;
 using EventPhotographer.App.Events.DTO.Request;
 using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.Core.Attributes;
+using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Middleware;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.App.Events.Controllers;
 
@@ -36,6 +37,21 @@ public class ParticipantsController(
         Response.Cookies.Delete(ParticipantMiddleware.HTTP_COOKIE_NAME);
 
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("Check/{code}")]
+    public async Task<ActionResult<EventShareableLinkDetailResponseDto>> GetShareableLinkByCode(
+        string code,
+        [FromServices] EventShareableLinkService shareableLinkService)
+    {
+        var shareableLink = await shareableLinkService.GetShareableLinkByCode(code);
+        if (shareableLink == null)
+        {
+            return NotFound();
+        }
+
+        return EventShareableLinkMapper.CreateDetailResponseDto(shareableLink);
     }
 
     [HttpPost]

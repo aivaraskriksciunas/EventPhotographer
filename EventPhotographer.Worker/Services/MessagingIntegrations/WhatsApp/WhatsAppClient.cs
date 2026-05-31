@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
+using EventPhotographer.Worker.Services.MessagingIntegrations.DTO;
 using System.Net.Http.Json;
 
 namespace EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
@@ -14,9 +15,7 @@ internal class WhatsAppClient(HttpClient httpClient)
             message_id = message.WhatsAppId,
         };
 
-        using var response = await httpClient.PostAsync(
-            "messages",
-            JsonContent.Create(payload));
+        using var response = await httpClient.PostAsJsonAsync("messages", payload);
         response.EnsureSuccessStatusCode();
     }
 
@@ -32,9 +31,7 @@ internal class WhatsAppClient(HttpClient httpClient)
             text = new { body }
         };
 
-        using var response = await httpClient.PostAsync(
-            "messages",
-            JsonContent.Create(payload));
+        using var response = await httpClient.PostAsJsonAsync("messages", payload);
         response.EnsureSuccessStatusCode();
     }
 
@@ -52,9 +49,23 @@ internal class WhatsAppClient(HttpClient httpClient)
             },
         };
 
-        using var response = await httpClient.PostAsync(
+        using var response = await httpClient.PostAsJsonAsync(
             "messages",
-            JsonContent.Create(payload));
+            payload);
         response.EnsureSuccessStatusCode();
+    }
+
+    public async Task<WhatsAppMessageLinkResponseDto?> CreateMessageLink(string prefilledMessage)
+    {
+        var payload = new
+        {
+            prefilled_message = prefilledMessage,
+            generate_qr_image = "PNG"
+        };
+
+        using var response = await httpClient.PostAsJsonAsync("message_qrdls", payload);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<WhatsAppMessageLinkResponseDto>();
     }
 }

@@ -38,6 +38,8 @@ public class AppDbContext : IdentityDbContext<User>, IDataProtectionKeyContext
 
     public DbSet<WhatsAppMedia> WhatsAppMedia { get; set; }
 
+    public DbSet<WhatsAppMessageLink> WhatsAppMessageLinks { get; set; }
+
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

@@ -8,4 +8,6 @@ namespace EventPhotographer.App.Events.Mappers;
 public static partial class EventShareableLinkMapper
 {
     public static partial EventShareableLinkResponseDto CreateResponseDto(EventShareableLink entity);
+
+    public static partial EventShareableLinkDetailResponseDto CreateDetailResponseDto(EventShareableLink entity);
 }

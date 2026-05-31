@@ -45,14 +45,16 @@
     --color-background-darkest: hsl(205, 3%, 92%);
 
     --color-text: hsl(205, 1%, 8%);
-    --color-text-lighter: hsl(205, 3%, 20%);
+    --color-text-lighter: hsl(205, 3%, 25%);
     --color-text-lightest: hsl(205, 3%, 40%);
+    --color-text-inverted: hsl(0, 0%, 100%);
 
     --color-missing: #f700ff;
     --color-missing-rgb: 247, 0, 255;
 
     --border-radius: 16px;
     --border-inner-radius: 8px;
+    --color-border: var(--color-primary);
 
     /** Overwritten Boostrap variables */
     --bs-primary: var(--color-primary);
@@ -75,7 +77,7 @@
     --bs-tertiary-bg: var(--color-primary-background);
     --bs-body-color: var(--color-text);
     --bs-body-bg: var(--color-background-darkest);
-    --bs-border-color: var(--color-primary);
+    --bs-border-color: var(--color-border);
     --bs-form-invalid-color: var(--color-danger);
     --bs-form-invalid-border-color: var(--color-danger);
     --bs-link-color: var(--color-primary);

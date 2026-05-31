@@ -12,7 +12,7 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-expand px-3">
             <Link to="/" className="navbar-brand">
-                Event Photographer
+                LiveAlbum
             </Link>
             <div className="collapse navbar-collapse">
                 <div className="navbar-nav">
