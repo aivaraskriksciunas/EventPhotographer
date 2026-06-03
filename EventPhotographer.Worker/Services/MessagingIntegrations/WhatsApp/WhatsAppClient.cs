@@ -54,18 +54,4 @@ internal class WhatsAppClient(HttpClient httpClient)
             payload);
         response.EnsureSuccessStatusCode();
     }
-
-    public async Task<WhatsAppMessageLinkResponseDto?> CreateMessageLink(string prefilledMessage)
-    {
-        var payload = new
-        {
-            prefilled_message = prefilledMessage,
-            generate_qr_image = "PNG"
-        };
-
-        using var response = await httpClient.PostAsJsonAsync("message_qrdls", payload);
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync<WhatsAppMessageLinkResponseDto>();
-    }
 }

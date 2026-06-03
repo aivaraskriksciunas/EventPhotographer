@@ -1,5 +1,13 @@
 {
-    "Save": "Zapisać",
+    "Save": "Zapisz",
+    "Login": "Zaloguj się",
     "Email": "E-mail",
-    "Password": "Hasło"
+    "Password": "Hasło",
+    "Join": "Dołącz",
+    "Join event": "Dołącz do wydarzenia",
+    "Code": "Kod",
+    "Name": "Imię",
+    "Upload using WhatsApp": "Prześlij za pomocą WhatsApp",
+    "Drag files here": "Przeciągnij pliki tutaj",
+    "Privacy policy": "Polityka prywatności (EN)"
 }

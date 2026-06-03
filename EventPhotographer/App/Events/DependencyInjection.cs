@@ -16,7 +16,6 @@ public static class DependencyInjection
         services.AddScoped<IAuthorizationHandler, IsActiveParticipantRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, UploadEventMediaRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, GenerateFileArchiveRequirementHandler>();
-        services.AddScoped<IAuthorizationHandler, CreateWhatsAppMessageLinkRequirementHandler>();
 
         return services;
     }

@@ -1,5 +1,4 @@
-﻿using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
-using EventPhotographer.Core.Util;
+﻿using EventPhotographer.Core.Util;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,6 +17,4 @@ public class EventShareableLink : IEntity
 
     [Required]
     public required Event Event { get; set; }
-
-    public WhatsAppMessageLink? WhatsAppMessageLink { get; set; }
 }

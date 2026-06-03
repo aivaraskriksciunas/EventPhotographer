@@ -89,4 +89,8 @@
     <ProjectReference Include="..\EventPhotographer.Core\EventPhotographer.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App\MessagingIntegrations\Mappers\" />
+  </ItemGroup>
+
 </Project>

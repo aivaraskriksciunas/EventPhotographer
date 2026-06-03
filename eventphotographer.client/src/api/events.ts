@@ -77,11 +77,6 @@ export const eventsApi = {
             `/api/events/${eventId}/shareableLinks/`,
             'POST',
         ),
-    createWhatsAppLinkForShareableLink: async (eventId: string, shareableLinkId: string) => 
-        fetchApi<WhatsAppMessageLinkResponse>(
-            `/api/events/${eventId}/shareableLinks/${shareableLinkId}/whatsapp`,
-            'POST',
-        ),
 
     joinEvent: async (request: JoinEventRequest) =>
         fetchApi<ParticipantResponse>(

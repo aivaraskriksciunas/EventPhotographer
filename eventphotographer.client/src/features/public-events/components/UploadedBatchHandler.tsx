@@ -3,7 +3,7 @@ import { AxiosProgressEvent } from "axios";
 import clsx from "clsx"
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { TriangleAlert } from "lucide-react";
+import { CheckCircle, TriangleAlert } from "lucide-react";
 
 type FileUploadStatus = 'Pending' | 'Uploading' | 'Success' | 'Error';
 
@@ -63,7 +63,10 @@ export default function UploadedBatchHandler({ batch, onSuccess }: { batch: File
                             }}
                         />
                     ))}
-                    <div>{uploadedFileCount} / {batch.length} files uploaded.</div>
+                    <div>
+                        {isComplete && <CheckCircle className='me-2' />}
+                        {uploadedFileCount} / {batch.length} files uploaded.
+                    </div>
                 </div>
                 <div
                     className="progress"

@@ -1,5 +1,4 @@
-﻿using EventPhotographer.Core.Features.MessagingIntegrations.Enums;
-using EventPhotographer.Core.Util;
+﻿using EventPhotographer.Core.Util;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

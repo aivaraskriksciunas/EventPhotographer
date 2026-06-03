@@ -4,8 +4,10 @@ import { useParticipant } from '@/state/participant';
 import { EventResponse, eventsApi } from '@/api/events';
 import { truncate } from '@/utils/helpers';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
+    const { t } = useTranslation();
     const user = useAuth((state) => state.user);
     const participant = useParticipant((state) => state.participant);
 
@@ -16,18 +18,13 @@ export default function Navbar() {
             </Link>
             <div className="collapse navbar-collapse">
                 <div className="navbar-nav">
-                    <Link to="/events" className="nav-link">
-                        My events
-                    </Link>
-                    <Link to="/events/new" className="nav-link">
-                        New event
-                    </Link>
+                    {user ? <AuthenticatedUserMenu /> : null}
                 </div>
 
                 <div className="navbar-nav me-auto">
                     {participant !== null ? (
                         <CurrentEventIndicator event={participant.event} />
-                    ) : (
+                ) : (
                         <JoinEventButton />
                     )}
                 </div>
@@ -37,7 +34,7 @@ export default function Navbar() {
                         <AccountDropdown user={user} />
                     ) : (
                         <Link to="/login" className="nav-link">
-                            Login
+                            {t('Login')}
                         </Link>
                     )}
                 </div>
@@ -46,7 +43,23 @@ export default function Navbar() {
     );
 }
 
+function AuthenticatedUserMenu() {
+    const { t } = useTranslation();
+
+    return (
+        <>
+            <Link to="/events" className="nav-link">
+                {t('My events')}
+            </Link>
+            <Link to="/events/new" className="nav-link">
+                {t('New event')}
+            </Link>
+        </>
+    );
+}
+
 function AccountDropdown({ user }: { user: AuthenticatedUser }) {
+    const { t } = useTranslation();
     return (
         <div className="nav-item dropdown">
             <a
@@ -61,7 +74,7 @@ function AccountDropdown({ user }: { user: AuthenticatedUser }) {
             <ul className="dropdown-menu">
                 <li>
                     <Link to="/logout" className="dropdown-item">
-                        Logout
+                        {t('Logout')}
                     </Link>
                 </li>
             </ul>
@@ -70,9 +83,11 @@ function AccountDropdown({ user }: { user: AuthenticatedUser }) {
 }
 
 function JoinEventButton() {
+    const { t } = useTranslation();
+
     return (
         <Link to="/join" className="nav-link">
-            <div className="btn btn-primary">Join</div>
+            <div className="btn btn-primary">{t('Join')}</div>
         </Link>
     );
 }

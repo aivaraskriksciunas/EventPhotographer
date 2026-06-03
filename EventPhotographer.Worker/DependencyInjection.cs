@@ -12,7 +12,6 @@ internal static class DependencyInjection
     {
         services.AddScoped<CreateCompressedEventFileArchiveConsumer>();
         services.AddScoped<ProcessWhatsAppWebhookPayloadConsumer>();
-        services.AddScoped<CreateWhatsAppMessageLinkConsumer>();
     }
 
     public static void AddWorkerServices(this IServiceCollection services)

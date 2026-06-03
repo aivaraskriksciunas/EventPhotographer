@@ -18,7 +18,6 @@ public class EventShareableLinkService(
         return await Db.EventShareableLinks
             .Where(x => x.Id == id)
             .Include(x => x.Event)
-            .Include(x => x.WhatsAppMessageLink)
             .FirstOrDefaultAsync();
     }
 

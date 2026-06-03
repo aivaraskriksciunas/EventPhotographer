@@ -2,9 +2,11 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import UploadedBatchHandler from './UploadedBatchHandler';
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslation } from 'react-i18next';
 
 export default function UploadEventFilesDropzone() {
     const [batches, setBatches] = useState<{ id: string, files: File[] }[]>([]);
+    const { t } = useTranslation();
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
@@ -24,7 +26,7 @@ export default function UploadEventFilesDropzone() {
     const hideUploadedBatch = (id: string) => {
         setTimeout(() => {
             setBatches(prev => prev.filter(batch => batch.id !== id));
-        }, 3000);
+        }, 10000);
     }
 
     return (
@@ -32,9 +34,9 @@ export default function UploadEventFilesDropzone() {
             <div className="dropzone mb-3" {...getRootProps()}>
                 <input {...getInputProps()}></input>
                 {isDragActive ? (
-                    <span>Dragging...</span>
+                    <span>{t('Dragging...')}</span>
                 ) : (
-                    <span>Drag files here</span>
+                    <span>{t('Drag files here')}</span>
                 )}
             </div>
             <div className="row">

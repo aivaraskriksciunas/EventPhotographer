@@ -13,6 +13,5 @@ public static class DependencyInjection
         services.AddScoped<WhatsAppContactService>();
         services.AddScoped<WhatsAppTextService>();
         services.AddScoped<WhatsAppMediaService>();
-        services.AddScoped<WhatsAppMessageLinkService>();
     }
 }
