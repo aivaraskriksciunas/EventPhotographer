@@ -1,4 +1,6 @@
-﻿using EventPhotographer.Core;
+﻿using Amazon.S3;
+using EventPhotographer.Core;
+using EventPhotographer.Core.Startup;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Moq;
 using Npgsql;
 using Respawn;
 using System.Data.Common;
@@ -31,8 +34,14 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
     public async Task InitializeAsync()
     {
         await _db.StartAsync();
-
         _dbConnection = new NpgsqlConnection(_db.GetConnectionString());
+
+        using (var scope = Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await dbContext.Database.MigrateAsync();
+        }
+
         HttpClient = CreateClient();
 
         await _dbConnection.OpenAsync();
@@ -72,6 +81,11 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
             })
                 .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(
                     TestAuthenticationHandler.SCHEME, options => { });
+
+            // S3 service mocking
+            services.RemoveAll<IAmazonS3>();
+            services.RemoveAll<ObjectStorageStartup>();
+            services.AddSingleton<IAmazonS3>(_ => Mock.Of<IAmazonS3>());
         });
 
         builder.UseEnvironment("Development");

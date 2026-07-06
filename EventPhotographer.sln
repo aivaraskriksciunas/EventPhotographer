@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Worker", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Core", "EventPhotographer.Core\EventPhotographer.Core.csproj", "{46B7E7F8-512A-0C2F-7418-869659C957E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.UseCases", "..\EventPhotographer.UseCases\EventPhotographer.UseCases.csproj", "{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{46B7E7F8-512A-0C2F-7418-869659C957E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46B7E7F8-512A-0C2F-7418-869659C957E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46B7E7F8-512A-0C2F-7418-869659C957E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

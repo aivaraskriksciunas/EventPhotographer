@@ -1,6 +1,7 @@
 using EventPhotographer.Core;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
+using EventPhotographer.UseCases;
 using EventPhotographer.Worker;
 using EventPhotographer.Worker.Configuration;
 using EventPhotographer.Worker.Startup;
@@ -30,6 +31,7 @@ builder.Services.AddHostedService<RegisterMessageConsumers>();
 
 // Servicess
 builder.Services.AddWorkerHttpClients(builder.Configuration);
+builder.Services.AddUseCases();
 builder.Services.AddApplicationServices();
 builder.Services.AddWorkerConsumers();
 builder.Services.AddWorkerServices();

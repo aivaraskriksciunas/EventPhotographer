@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\EventPhotographer.UseCases\EventPhotographer.UseCases.csproj" />
     <ProjectReference Include="..\EventPhotographer.Core\EventPhotographer.Core.csproj" />
   </ItemGroup>
 

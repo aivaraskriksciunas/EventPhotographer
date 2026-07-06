@@ -4,19 +4,19 @@ using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Mappers;
 using EventPhotographer.App.Events.Services;
 using EventPhotographer.Core.Attributes;
+using EventPhotographer.Core.Extensions;
+using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Middleware;
-using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.UseCases.Events;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventPhotographer.App.Events.Controllers;
 
 public class ParticipantsController(
-    ParticipantService participantService,
-    UserManager<User> userManager,
-    IAuthorizationService authorizationService) 
+    UserManager<User> userManager) 
     : ApiController
 {
     [HttpGet]
@@ -57,30 +57,22 @@ public class ParticipantsController(
     [Route("Join")]
     public async Task<ActionResult<ParticipantResponseDto>> Join(
         [FromBody] JoinEventRequestDto resource,
-        [FromServices] IValidator<JoinEventRequestDto> validator,
-        [FromServices] EventShareableLinkService shareableLinkService)
+        [FromServices] ICommandHandler<JoinEvent, Participant> commandHandler)
     {
-        await validator.ValidateAndThrowAsync(resource);
-
-        var shareableLink = await shareableLinkService.GetShareableLinkByCode(resource.Code);
-        if (shareableLink == null)
-        {
-            return NotFound();
-        }
-
-        var authResult = await authorizationService.AuthorizeAsync(User, shareableLink.Event, new JoinEventRequirement());
-        if (!authResult.Succeeded)
-        {
-            return NotFound();
-        }
-
         var user = await userManager.GetUserAsync(User);
-        var participant = await participantService.CreateOrGetParticipantAsync(
-            shareableLink,
-            resource.Name,
-            user
-        );
+        var result = await commandHandler.HandleAsync(new JoinEvent
+        {
+            User = user,
+            Code = resource.Code,
+            Name = resource.Name,
+        });
 
+        if (!result.IsSuccess)
+        {
+            return result.ToProblemDetailsResult();
+        }
+
+        var participant = result.Value;
         Response.Cookies.Append(
             ParticipantMiddleware.HTTP_COOKIE_NAME,
             participant.Token.ToString(),

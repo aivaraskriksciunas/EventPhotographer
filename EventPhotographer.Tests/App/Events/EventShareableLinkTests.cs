@@ -1,6 +1,4 @@
-﻿using Bogus;
-using EventPhotographer.Core.Entities.Users;
-using EventPhotographer.Tests.Fakes.Events;
+﻿using EventPhotographer.Tests.Fakes.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Http.Json;

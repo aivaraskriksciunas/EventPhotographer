@@ -1,21 +1,20 @@
-﻿using EventPhotographer.App.Events.Authorization;
+﻿using EventPhotographer.App.Events.DTO;
+using EventPhotographer.App.Events.DTO.Response;
 using EventPhotographer.App.Events.Mappers;
-using EventPhotographer.App.Events.DTO;
-using EventPhotographer.App.Events.Services;
-using FluentValidation;
+using EventPhotographer.Core.Extensions;
+using EventPhotographer.Core.Features.Events.Entities;
+using EventPhotographer.Core.Features.Users.Entities;
+using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.UseCases.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using EventPhotographer.App.Events.DTO.Response;
-using EventPhotographer.Core.Features.Events.Entities;
-using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.App.Events.Controllers;
 
 public class EventsController(
-    ApiEventService service,
-    UserManager<User> userManager,
-    IAuthorizationService authorizationService) 
+    EventQueryService queryService,
+    UserManager<User> userManager) 
     : ApiController
 {
     [HttpGet]
@@ -23,48 +22,57 @@ public class EventsController(
     [Authorize]
     public async Task<ActionResult<EventResponseDto>> Get(Guid id)
     {
-        var entity = await service.GetByIdAsync(id);
-        if (entity == null)
+        var user = await userManager.GetUserAsync(User);
+        var result = await queryService.GetEventAsync(id, user!);
+        if (!result.IsSuccess)
         {
-            return NotFound();
+            return result.ToProblemDetailsResult();
         }
 
-        var result = await authorizationService.AuthorizeAsync(User, entity, new ManageEventRequirement());
-        if (!result.Succeeded)
-        {
-            return NotFound();
-        }
-
-        return Ok(EventMapper.CreateResponseDto(entity));
+        return Ok(EventMapper.CreateResponseDto(result.Value));
     }
 
     [HttpGet]
     [Route("")]
     [Authorize]
-    public async Task<IEnumerable<EventResponseDto>> GetAll()
+    public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetAll()
     {
         var user = await userManager.GetUserAsync(User);
-        var entities = await service.GetAllForUser(user!);
+        var result = await queryService.GetAllForUserAsync(user!);
 
-        return entities.CreateResponseDtos();
+        if (!result.IsSuccess)
+        {
+            return result.ToProblemDetailsResult();
+        }
+
+        return Ok(EventMapper.CreateResponseDtos(result.Value));
     }
 
     [HttpPost]
     [Route("")]
     [Authorize]
     public async Task<ActionResult<EventResponseDto>> Create(
-        [FromBody]EventDto resource,
-        [FromServices] IValidator<EventDto> validator)
+        [FromBody] EventDto resource,
+        [FromServices] ICommandHandler<CreateEvent, Event> commandHandler)
     {
-        await validator.ValidateAndThrowAsync(resource);
         var user = await userManager.GetUserAsync(User);
+        var result = await commandHandler.HandleAsync(new CreateEvent
+        {
+            Name = resource.Name,
+            StartDate = resource.StartDate,
+            EventDuration = resource.EventDuration,
+            User = user!
+        });
 
-        var entity = await service.CreateEvent(resource, user!);
+        if (!result.IsSuccess)
+        {
+            return result.ToProblemDetailsResult();
+        }
 
         return CreatedAtAction(
-            nameof(Get), 
-            new { id = entity.Id }, 
-            EventMapper.CreateResponseDto(entity)
+            nameof(Get),
+            new { id = result.Value.Id },
+            EventMapper.CreateResponseDto(result.Value)
         );
     }
 
@@ -74,25 +82,30 @@ public class EventsController(
     public async Task<ActionResult<EventResponseDto>> Update(
         Guid id,
         [FromBody] EventDto resource,
-        [FromServices] IValidator<EventDto> validator)
+        [FromServices] ICommandHandler<UpdateEvent, Event> commandHandler)
     {
-        await validator.ValidateAndThrowAsync(resource);
-
-        var entity = await service.GetByIdAsync(id);
-        if (entity == null)
+        var user = await userManager.GetUserAsync(User);
+        var entityResult = await queryService.GetEventAsync(id, user!);
+        if (!entityResult.IsSuccess)
         {
-            return NotFound();
+            return entityResult.ToProblemDetailsResult();
         }
 
-        var result = await authorizationService.AuthorizeAsync(User, entity, new ManageEventRequirement());
-        if (!result.Succeeded)
+        var result = await commandHandler.HandleAsync(new UpdateEvent
         {
-            return NotFound();
+            Event = entityResult.Value,
+            Name = resource.Name,
+            StartDate = resource.StartDate,
+            EventDuration = resource.EventDuration,
+            User = user!
+        });
+
+        if (!result.IsSuccess)
+        {
+            return result.ToProblemDetailsResult();
         }
 
-        await service.UpdateEvent(entity, resource);
-
-        return Ok(EventMapper.CreateResponseDto(entity));
+        return Ok(EventMapper.CreateResponseDto(result.Value));
     }
 
     [HttpGet]

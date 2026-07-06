@@ -12,7 +12,6 @@ public static class DependencyInjection
         // Authorization
         services.AddSingleton<IAuthorizationHandler, ManageEventRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, CreateShareableLinkRequirementHandler>();
-        services.AddScoped<IAuthorizationHandler, JoinEventRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, IsActiveParticipantRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, UploadEventMediaRequirementHandler>();
         services.AddScoped<IAuthorizationHandler, GenerateFileArchiveRequirementHandler>();

@@ -1,6 +1,7 @@
 using EventPhotographer.Core;
 using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Startup;
+using EventPhotographer.UseCases;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,7 @@ builder.Services.AddAppAuth();
 
 // Setup application modules
 builder.Services.AddConfiguration(builder.Configuration);
+builder.Services.AddUseCases();
 builder.Services.AddApplicationServices();
 builder.Services.AddAppModules();
 builder.Services.AddAppExceptionHandlers();

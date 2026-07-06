@@ -19,15 +19,7 @@ public class EventService
         return await db.Events.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Event>> GetAllForUser(User user)
-    {
-        return await db.Events
-            .Where(e => e.UserId == user.Id)
-            .OrderByDescending(e => e.CreatedAt)
-            .ToListAsync();
-    }
-
-    protected DateTime CalculateEventEndDate(DateTime startDate, EventDuration eventDuration)
+    public DateTime CalculateEventEndDate(DateTime startDate, EventDuration eventDuration)
     {
         return eventDuration switch
         {

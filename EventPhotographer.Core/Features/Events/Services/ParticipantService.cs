@@ -56,6 +56,8 @@ public class ParticipantService(
         return await Db.Participants
             .Where(p => p.User == user)
             .Where(p => p.Event == @event)
+            .Include(p => p.Event)
+            .Include(p => p.EventShareableLink)
             .FirstOrDefaultAsync();
     }
 
