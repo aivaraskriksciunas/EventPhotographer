@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer", "EventPhotographer\EventPhotographer.csproj", "{B1632730-CBEF-4465-9F94-2D20F9B21760}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{C0B02FB0-930A-46A2-8F00-AEDB8304AB20}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Tests", "EventPhotographer.Tests\EventPhotographer.Tests.csproj", "{C92F37EA-4CC0-4990-AD7D-4B9ED44F1A1F}"
 EndProject
@@ -36,12 +39,6 @@ Global
 		{C92F37EA-4CC0-4990-AD7D-4B9ED44F1A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C92F37EA-4CC0-4990-AD7D-4B9ED44F1A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C92F37EA-4CC0-4990-AD7D-4B9ED44F1A1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
