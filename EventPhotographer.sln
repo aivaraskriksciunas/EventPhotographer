@@ -14,15 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "EventPhotographer.Client", "EventPhotographer.Client\EventPhotographer.Client.esproj", "{B77D4B93-AA6C-3624-1866-AC564C3B4AA5}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Worker", "EventPhotographer.Worker\EventPhotographer.Worker.csproj", "{9892EE70-63C5-4C75-B86E-936F4BB0A12C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.Core", "EventPhotographer.Core\EventPhotographer.Core.csproj", "{46B7E7F8-512A-0C2F-7418-869659C957E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.UseCases", "..\EventPhotographer.UseCases\EventPhotographer.UseCases.csproj", "{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPhotographer.UseCases", "EventPhotographer.UseCases\EventPhotographer.UseCases.csproj", "{8CCA3C72-F725-4787-B4F1-8491E91BE4CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

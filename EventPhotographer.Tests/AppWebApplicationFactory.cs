@@ -3,10 +3,9 @@ using EventPhotographer.Core;
 using EventPhotographer.Core.Startup;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
@@ -58,6 +57,14 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration((context, configBuilder) =>
+        {
+            configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Sentry:Dsn"] = ""
+            });
+        });
+
         builder.ConfigureServices(services =>
         {
             services.RemoveAll(typeof(DbContextOptions<AppDbContext>));

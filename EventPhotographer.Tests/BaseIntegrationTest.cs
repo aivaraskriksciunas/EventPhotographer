@@ -1,8 +1,6 @@
 ﻿using Bogus;
 using EventPhotographer.Core;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using EventPhotographer.Core.Features.Users.Entities;
