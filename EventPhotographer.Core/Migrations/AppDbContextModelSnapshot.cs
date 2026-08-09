@@ -64,6 +64,10 @@ namespace EventPhotographer.Core.Migrations
                     b.Property<Guid?>("ParticipantId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Status")
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .ValueGeneratedOnAdd()

@@ -1,9 +1,14 @@
 ﻿using EventPhotographer.App.Events.Services;
+using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Content.Services;
 using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Events.Services;
 using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
+using EventPhotographer.UseCases.Common.Authorization;
+using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.UseCases.Content.Commands;
+using EventPhotographer.UseCases.Events.Authorization;
 using System.Security.Cryptography;
 using System.Text.Json;
 
@@ -13,9 +18,9 @@ abstract internal class BaseMediaMessageProcessor(
     WhatsAppMediaService whatsAppMediaService,
     WhatsAppClient whatsAppClient,
     WhatsAppMediaClient whatsAppMediaClient,
-    EventPermissionsService eventPermissionsService,
+    AuthorizationService authorizationService,
     ParticipantService participantService,
-    MediaService mediaService) 
+    ICommandHandler<UploadFileCommand, MediaFile> uploadFileHandler)
     : IMessageContentProcessor
 {
     public abstract Task ProcessMessageContentAsync(WhatsAppMessage message, JsonElement json);
@@ -54,18 +59,26 @@ abstract internal class BaseMediaMessageProcessor(
             return;
         }
 
-        if (!eventPermissionsService.CanUploadEventMedia(participant.Event))
+        var authResult = await authorizationService.AuthorizeAsync(participant.User, participant.Event, new UploadEventMediaRequirement());
+        if (!authResult.IsAuthorized)
         {
             await whatsAppClient.ReplyToMessage(message, $"Sadly '{participant.Event.Name}' does not accept pictures any more. Enter the code of the new event or create your own at livealbum.eu!");
             return;
         }
 
-        var mediaEntity = await mediaService.CreateMedia(participant);
-
-        await mediaService.UploadFile(
-            mediaEntity,
-            await whatsAppMediaClient.DownloadMediaAsync(media),
-            FileContentTypeReader.GetExtensionFromMimeType(media.MimeType)!);
+        var uploadResult = await uploadFileHandler.HandleAsync(new UploadFileCommand
+        {
+            Event = participant.Event,
+            Participant = participant,
+            MediaType = MediaType.UserUpload,
+            Stream = await whatsAppMediaClient.DownloadMediaAsync(media),
+            FileContentTypeInfo = FileContentTypeReader.GetFileTypeFromMimeType(media.MimeType)!,
+        });
+        if (!uploadResult.IsSuccess)
+        {
+            await whatsAppClient.ReplyToMessage(message, "Sorry, but I couldn't save your picture. Please resend it one more time.");
+            return;
+        }
 
         await whatsAppClient.ReactToMessage(message, "\u2764\uFE0F");
         await ReplyWithCompliment(message);
@@ -75,7 +88,7 @@ abstract internal class BaseMediaMessageProcessor(
     {
         // 5% chance of replying with a compliment
         var chance = RandomNumberGenerator.GetInt32(100);
-        if (chance >= 5) return;
+        if (chance >= 15) return;
 
         string[] compliments = 
         {

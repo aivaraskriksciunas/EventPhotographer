@@ -1,5 +1,6 @@
-import { AxiosProgressEvent } from 'axios';
-import { api, fetchApi } from './client';
+import axios, { AxiosProgressEvent } from 'axios';
+import { fetchApi } from './client';
+import { EventMediaUploadHandler } from './utils/EventMediaUploadHandler';
 
 export interface MediaFileResponse {
     id: string;
@@ -8,27 +9,47 @@ export interface MediaFileResponse {
 }
 
 export interface MediaResponse {
-    uploadToken: string;
+    id: string;
     createdAt: Date;
+    status: string;
     files: MediaFileResponse[];
 }
 
+export interface CreateMediaResponse {
+    uploadUrl: string;
+    media: MediaResponse;
+    fields: Record<string, string>;
+}
+
 export const mediaApi = {
-    createMedia: () => fetchApi<MediaResponse>('/api/media', 'POST', {}),
+    createMedia: (fileType: string, fileSize: number) =>
+        fetchApi<CreateMediaResponse>('/api/media', 'POST', {
+            fileType,
+            fileSize,
+        }),
+    getStatus: (id: string) =>
+        fetchApi<MediaResponse>(`/api/media/${id}/status`, 'GET'),
     uploadFile: async (
-        uploadKey: string,
+        uploadUrl: string,
+        fields: Record<string, string>,
         file: File,
         onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
     ) => {
-        {
-            const form = new FormData();
-            form.append('file', file);
+        const formData = new FormData();
+        Object.entries(fields).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+        formData.append('file', file);
 
-            return await api.postForm(
-                `/api/media/${uploadKey}/upload`,
-                { file },
-                { onUploadProgress },
-            );
+        if (import.meta.env.DEV) {
+            uploadUrl = uploadUrl.replace('minio', 'localhost');
         }
+
+        return await axios.postForm(uploadUrl, formData, {
+            onUploadProgress,
+        });
     },
+    createMediaUploadHandler: (file: File) => new EventMediaUploadHandler(file),
+    getFileUrl: (fileId: string) =>
+        `${import.meta.env.VITE_API_BASE_URL}/api/media/file/${fileId}`,
 };

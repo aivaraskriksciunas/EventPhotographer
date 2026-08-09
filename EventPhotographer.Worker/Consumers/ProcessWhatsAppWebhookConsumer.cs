@@ -3,7 +3,6 @@ using EventPhotographer.Core;
 using EventPhotographer.Core.Features.MessagingIntegrations.Messages;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
 using EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
-using System.Text;
 using System.Text.Json;
 
 namespace EventPhotographer.Worker.Consumers;

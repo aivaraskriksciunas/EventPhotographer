@@ -6,12 +6,15 @@ import { router } from './router.jsx';
 import './scss/index.scss';
 import 'bootstrap';
 import './i18n.js';
-import ServicesWrapper from './ServicesWrapper.js';
+import ServicesWrapper from './components/ServicesWrapper.js';
+import FileUploaderWrapper from './components/FileUploaderWrapper.js';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ServicesWrapper>
-            <RouterProvider router={router} />
+            <FileUploaderWrapper>
+                <RouterProvider router={router} />
+            </FileUploaderWrapper>
         </ServicesWrapper>
     </StrictMode>,
 );

@@ -22,8 +22,10 @@ export const publicEventsRoutes: RouteObject[] = [
             if (params.code != null) {
                 let link = null;
                 try {
-                    link = await eventsApi.getShareableLinkByCode(params.code)
-                } catch { link = null; }
+                    link = await eventsApi.getShareableLinkByCode(params.code);
+                } catch {
+                    link = null;
+                }
 
                 return link;
             }

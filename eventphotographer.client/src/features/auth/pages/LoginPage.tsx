@@ -41,11 +41,14 @@ export default function LoginPage() {
                         {t('Password')}
                     </TextField>
                     <CheckboxField name="rememberMe">
-                        {t('Remember me?')}
+                        {t('Remember me')}?
                     </CheckboxField>
                     <SubmitField>{t('Save')}</SubmitField>
                 </AjaxForm>
-                <small>{t('Don\'t have an account yet?')} <a href="/register">{t('Register')}</a></small>
+                <small>
+                    {t("Don't have an account yet?")}{' '}
+                    <a href="/register">{t('Register')}</a>
+                </small>
             </div>
         </div>
     );

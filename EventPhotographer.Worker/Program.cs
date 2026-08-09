@@ -5,7 +5,6 @@ using EventPhotographer.UseCases;
 using EventPhotographer.Worker;
 using EventPhotographer.Worker.Configuration;
 using EventPhotographer.Worker.Startup;
-using Quartz;
 using Sentry.Extensions.Logging;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -17,8 +16,9 @@ builder.Services.Configure<ObjectStorageConfiguration>(builder.Configuration.Get
 builder.Logging.AddSentry();
 
 // Database
-builder.Services.AddDataServices(
-    builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new ApplicationException("Database DefaultConnection is not provided"));
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new ApplicationException("Database DefaultConnection is not provided");
+builder.Services.AddDataServices(connectionString);
 
 // Object Storage
 builder.Services.AddObjectStorage(
@@ -29,18 +29,14 @@ builder.Services.AddApplicationMessageQueues(
     builder.Configuration.GetConnectionString("RabbitMq") ?? throw new ApplicationException("RabbitMq connection string is not provided"));
 builder.Services.AddHostedService<RegisterMessageConsumers>();
 
-// Servicess
+// Services
 builder.Services.AddWorkerHttpClients(builder.Configuration);
 builder.Services.AddUseCases();
 builder.Services.AddApplicationServices();
 builder.Services.AddWorkerConsumers();
 builder.Services.AddWorkerServices();
-builder.Services.AddScheduler();
-
-builder.Services.AddQuartzHostedService(opt =>
-{
-    opt.WaitForJobsToComplete = true;
-});
+builder.Services.AddScheduler(connectionString);
+builder.Services.AddHostedService<ScheduleRecurringJobs>();
 
 var host = builder.Build();
 host.Run();

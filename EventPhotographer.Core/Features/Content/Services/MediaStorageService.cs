@@ -19,7 +19,7 @@ public class MediaStorageService(
             Key = key,
             InputStream = fileStream,
             ContentType = contentType,
-            DisablePayloadSigning = true,
+            DisablePayloadSigning = false,
             DisableDefaultChecksumValidation = true,
         });
 
@@ -32,6 +32,21 @@ public class MediaStorageService(
         {
             BucketName = options.BucketName,
             Key = key,
+        });
+    }
+
+    public async Task<CreatePresignedPostResponse> CreatePresignedUrl(
+        string identifier, 
+        long fileSize)
+    {
+        return await s3Client.CreatePresignedPostAsync(new CreatePresignedPostRequest
+        {
+            BucketName = options.BucketName,
+            Key = identifier,
+            Expires = DateTime.UtcNow.AddMinutes(10),
+            Conditions = [
+                S3PostCondition.ContentLengthRange(1, fileSize),
+            ],
         });
     }
 }

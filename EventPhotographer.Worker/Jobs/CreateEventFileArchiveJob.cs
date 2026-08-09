@@ -1,34 +1,35 @@
-﻿using Amazon.S3.Model;
-using EventPhotographer.Core;
+﻿using EventPhotographer.Core;
 using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Content.Services;
 using EventPhotographer.Core.Features.Events.Entities;
+using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.UseCases.Content.Commands;
 using Microsoft.EntityFrameworkCore;
-using Quartz;
 using System.IO.Compression;
 
 namespace EventPhotographer.Worker.Workers;
 
-[DisallowConcurrentExecution]
-internal class EventCompressedFileGenerator : IJob
+internal class CreateEventFileArchiveJob
 {
     private readonly AppDbContext _dbContext;
     private readonly MediaStorageService _mediaStorageService;
-    private readonly MediaService _mediaService;
+    private readonly ICommandHandler<UploadFileCommand, MediaFile> _uploadHandler;
 
-    public EventCompressedFileGenerator(
+    public CreateEventFileArchiveJob(
         AppDbContext dbContext,
         MediaStorageService mediaStorageService,
-        MediaService mediaService)
+        ICommandHandler<UploadFileCommand, MediaFile> uploadHandler)
     {
         _dbContext = dbContext;
         _mediaStorageService = mediaStorageService;
-        _mediaService = mediaService;
+        _uploadHandler = uploadHandler;
     }
 
-    public async Task Execute(IJobExecutionContext context)
+    public async Task Execute(Guid eventId)
     {
-        var endedEvent = await FindEndedEventWithoutArchive();
+        var endedEvent = await _dbContext.Events
+            .Where(e => e.Id == eventId)
+            .FirstOrDefaultAsync();
 
         if (endedEvent == null)
         {
@@ -54,17 +55,6 @@ internal class EventCompressedFileGenerator : IJob
         {
             File.Delete(path);
         }
-    }
-
-    private async Task<Event?> FindEndedEventWithoutArchive()
-    {
-        var cutoffDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(14));
-        return await _dbContext.Events
-            .Where(e => e.EndDate <= DateTime.UtcNow)
-            .Where(e => e.EndDate >= cutoffDate) // Only consider events that ended recently
-            .Where(e => !e.Media.Any(m => m.Type == MediaType.Archive))
-            .Where(e => e.Media.Any(m => m.Type == MediaType.UserUpload))
-            .FirstOrDefaultAsync();
     }
 
     private async Task<string?> CreateZipFile(IAsyncEnumerable<MediaFile> files)
@@ -103,7 +93,17 @@ internal class EventCompressedFileGenerator : IJob
     {
         using var uploadStream = File.OpenRead(zipFile);
 
-        var media = await _mediaService.CreateArchive(@event);
-        await _mediaService.UploadFile(media, uploadStream, ".zip");
+        var uploadResult = await _uploadHandler.HandleAsync(new UploadFileCommand
+        {
+            Event = @event,
+            MediaType = MediaType.Archive,
+            Stream = uploadStream,
+            FileContentTypeInfo = FileContentTypeReader.GetFileTypeFromExtension(".zip")!,
+        });
+
+        if (!uploadResult.IsSuccess)
+        {
+            throw new Exception($"Failed to upload compressed file for event {@event.Id}: {uploadResult.Error.Code}");
+        }
     }
 }

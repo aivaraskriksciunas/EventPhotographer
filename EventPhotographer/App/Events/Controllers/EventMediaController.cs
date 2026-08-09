@@ -1,57 +1,68 @@
-﻿using EventPhotographer.App.Content.Services;
-using EventPhotographer.App.Events.Services;
-using EventPhotographer.App.Events.Authorization;
+﻿using EventPhotographer.App.Events.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EventPhotographer.App.Events.DTO.Response;
+using EventPhotographer.UseCases.Common.Queries;
+using EventPhotographer.UseCases.Content.Queries;
+using Microsoft.AspNetCore.Identity;
+using EventPhotographer.Core.Features.Users.Entities;
+using EventPhotographer.Core.Extensions;
 
 namespace EventPhotographer.App.Events.Controllers;
 
 [Route("api/Events/{eventId:guid}/Media")]
 public class EventMediaController(
     ApiEventService eventService,
-    ApiMediaService mediaService,
-    IAuthorizationService authorizationService) : ApiController
+    UserManager<User> userManager) : ApiController
 {
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<EventMediaResponseDto>>> List(
-        Guid eventId)
+    public async Task<ActionResult<IEnumerable<MediaModel>>> List(
+        Guid eventId,
+        [FromServices] IQueryHandler<GetMediaListForEventQuery, IEnumerable<MediaModel>> queryHandler)
     {
         var @event = await eventService.GetByIdAsync(eventId);
+        var user = await userManager.GetUserAsync(User);
         if (@event == null)
         {
             return NotFound();
         }
 
-        var result = await authorizationService.AuthorizeAsync(
-            User, @event, new ManageEventRequirement());
-        if (!result.Succeeded)
+        var result = await queryHandler.QueryAsync(new GetMediaListForEventQuery 
+        { 
+            Event = @event, 
+            User = user! 
+        });
+        if (!result.IsSuccess) 
         {
-            return NotFound();
+            return result.ToProblemDetailsResult();
         }
 
-        return Ok(await mediaService.GetForEventAsync(@event));
+        return Ok(result.Value);
     }
 
     [HttpGet("Archives")]
     [Authorize]
-    public async Task<ActionResult<EventMediaResponseDto?>> ListArchives(
-        Guid eventId)
+    public async Task<ActionResult<MediaModel?>> ListArchives(
+        Guid eventId,
+        [FromServices] IQueryHandler<GetArchiveForEventQuery, MediaModel?> queryHandler)
     {
         var @event = await eventService.GetByIdAsync(eventId);
+        var user = await userManager.GetUserAsync(User);
         if (@event == null)
         {
             return NotFound();
         }
 
-        var result = await authorizationService.AuthorizeAsync(
-            User, @event, new ManageEventRequirement());
-        if (!result.Succeeded)
+        var result = await queryHandler.QueryAsync(new GetArchiveForEventQuery
         {
-            return NotFound();
+            Event = @event,
+            User = user!
+        });
+        if (!result.IsSuccess)
+        {
+            return result.ToProblemDetailsResult();
         }
 
-        return Ok(await mediaService.GetArchiveForEventAsync(@event));
+        return Ok(result.Value);
     }
 }

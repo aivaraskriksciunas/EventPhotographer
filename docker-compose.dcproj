@@ -9,6 +9,9 @@
     <DockerServiceName>eventphotographer</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="EventPhotographer.Worker\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>

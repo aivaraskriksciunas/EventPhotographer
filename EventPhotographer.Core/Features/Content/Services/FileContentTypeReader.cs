@@ -1,24 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿namespace EventPhotographer.Core.Features.Content.Services;
 
-namespace EventPhotographer.Core.Features.Content.Services;
+public record FileContentTypeInfo(
+    string MimeType, 
+    string Extension,
+    bool IsAllowed = true
+) {}
 
 public class FileContentTypeReader
 {
-    private static readonly Dictionary<string, string> _mimeTypes = new Dictionary<string, string>
+    private static readonly List<FileContentTypeInfo> _fileTypes = new List<FileContentTypeInfo>
     {
-        { ".jpeg", "image/jpeg" },
-        { ".png", "image/png" },
-        { ".gif", "image/gif" },
-        { ".crw", "image/x-canon-crw" },
-        { ".mp4", "video/mp4" },
-        { ".m4a", "audio/m4a" },
-        { ".m4v", "video/x-m4v" },
-        { ".wmv", "video/x-ms-wmv" },
-        { ".avi", "video/x-msvideo" },
-        { ".wav", "audio/wav" },
-        { ".webp", "image/webp" },
-        { ".mov", "video/quicktime" },
-        { ".zip", "application/zip" },
+        new ("image/jpeg", ".jpeg"),
+        new ("image/png", ".png"),
+        new ("image/gif", ".gif"),
+        new ("image/x-canon-crw", ".crw"),
+        new ("video/mp4", ".mp4"),
+        new ("audio/m4a", ".m4a"),
+        new ("video/x-m4v", ".m4v"),
+        new ("video/x-ms-wmv", ".wmv"),
+        new ("video/x-msvideo", ".avi"),
+        new ("audio/wav", ".wav"),
+        new ("image/webp", ".webp"),
+        new ("video/quicktime", ".mov"),
+        new ("application/zip", ".zip", false),
     };
 
     private static readonly Dictionary<string, List<byte[]>> _fileSignature = new Dictionary<string, List<byte[]>>
@@ -98,7 +102,7 @@ public class FileContentTypeReader
 
     private static readonly int _maxSignatureLength = _fileSignature.Values.SelectMany(v => v).Max(m => m.Length);
 
-    public string? DetermineFileExtension(Stream stream)
+    public FileContentTypeInfo? DetermineFileExtension(Stream stream)
     {
         using (var reader = new BinaryReader(stream, System.Text.Encoding.Default, true))
         {
@@ -111,7 +115,7 @@ public class FileContentTypeReader
                 if (signatures.Any(signature =>
                     headerBytes.Take(signature.Length).SequenceEqual(signature)))
                 {
-                    return ext;
+                    return _fileTypes.FirstOrDefault(ft => ft.Extension == ext);
                 }
             }
         }
@@ -120,26 +124,21 @@ public class FileContentTypeReader
         return null;
     }
 
-    public static string? GetMimeTypeFromExtension(string extension)
+    public static FileContentTypeInfo? GetFileTypeFromExtension(string extension)
     {
-        return _mimeTypes.TryGetValue(extension, out var mimeType) ? mimeType : null;
+        extension = extension.ToLower();
+        return _fileTypes.FirstOrDefault(ft => ft.Extension == extension);
+    }
+
+    public static FileContentTypeInfo? GetFileTypeFromMimeType(string mimeType)
+    {
+        mimeType = mimeType.ToLower();
+        return _fileTypes.FirstOrDefault(ft => ft.MimeType == mimeType);
     }
 
     public static bool IsAllowedMimeType(string mimeType)
     {
-        // TODO: refactor this mess
-        return mimeType != "application/zip" && _mimeTypes.ContainsValue(mimeType);
-    }
-
-    public static string? GetExtensionFromMimeType(string mimeType)
-    {
         mimeType = mimeType.ToLower();
-
-        if (!_mimeTypes.ContainsValue(mimeType))
-        {
-            return null;
-        }
-
-        return _mimeTypes.First(k => k.Value == mimeType).Key;
+        return _fileTypes.Any(ft => ft.MimeType == mimeType && ft.IsAllowed);
     }
 }

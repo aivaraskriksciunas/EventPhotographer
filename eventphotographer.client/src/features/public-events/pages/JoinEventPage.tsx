@@ -15,7 +15,7 @@ export default function JoinEventPage() {
     const { user } = useAuth();
     const link = useLoaderData();
     const navigate = useNavigate();
-    console.log(link)
+    console.log(link);
 
     const initialValues = { code: link?.code || '', name: user?.name ?? '' };
     const validationSchema = Yup.object({
@@ -33,18 +33,30 @@ export default function JoinEventPage() {
             <div className="col-lg-8 col-md-10">
                 <div className="card">
                     <div className="card-body">
-                        {link?.event ? <h2>{t('Join')} '{link.event.name}'</h2> : <h2>{t('Join event')}</h2>}
+                        {link?.event ? (
+                            <h2>
+                                {t('Join')} '{link.event.name}'
+                            </h2>
+                        ) : (
+                            <h2>{t('Join event')}</h2>
+                        )}
                         <AjaxForm<ParticipantResponse>
                             handler={eventsApi.joinEvent}
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSuccess={joinEvent}
                         >
-                            <TextField name="code" disabled={link != null}>{t('Code')}:</TextField>
+                            <TextField name="code" disabled={link != null}>
+                                {t('Code')}:
+                            </TextField>
                             <TextField name="name">{t('Name')}:</TextField>
-                            <div className='d-flex gap-2'>
+                            <div className="d-flex gap-2">
                                 <SubmitField>{t('Join')}</SubmitField>
-                                {link != null ? <WhatsAppLinkButton shareableLink={link}/> : <></>}
+                                {link != null ? (
+                                    <WhatsAppLinkButton shareableLink={link} />
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         </AjaxForm>
                     </div>

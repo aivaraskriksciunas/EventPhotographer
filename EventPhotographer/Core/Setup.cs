@@ -26,7 +26,7 @@ public static class Setup
         services.AddMessagingIntegrationsModule();
 
         // Load FluentValidation validators from this assembly
-        services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped);
+        services.AddValidatorsFromAssemblyContaining<Program>(ServiceLifetime.Scoped, includeInternalTypes: true);
 
         services.AddScoped<ParticipantMiddleware>();
 

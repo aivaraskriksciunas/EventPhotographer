@@ -14,6 +14,8 @@ public class Media : IEntity
 
     public MediaType Type { get; set; } = MediaType.UserUpload;
 
+    public MediaStatus? Status { get; set; } = null;
+
     public Guid EventId { get; set; }
     public required Event Event { get; set; }
 
@@ -39,6 +41,10 @@ internal class MediaEntityConfiguration : UUIDEntityConfiguration<Media>
         builder.Property(e => e.Type)
             .HasConversion<string>()
             .HasDefaultValue(MediaType.UserUpload)
+            .HasMaxLength(25);
+
+        builder.Property(e => e.Status)
+            .HasConversion<string>()
             .HasMaxLength(25);
     }
 }

@@ -7,16 +7,16 @@ export default function Footer() {
 
     return (
         <footer>
-            <div className='container text-muted'>
-                <div className='d-flex justify-content-between py-3 my-2'>
-                    <div className='col-md-4 d-flex align-items-center'>
+            <div className="container text-muted">
+                <div className="d-flex justify-content-between py-3 my-2">
+                    <div className="col-md-4 d-flex align-items-center">
                         © {year} Event Photographer
                     </div>
-                    <div className='col-md-4 d-flex justify-content-end align-items-center'>
-                        <Link to='/privacy-policy'>{t('Privacy policy')}</Link>
+                    <div className="col-md-4 d-flex justify-content-end align-items-center">
+                        <Link to="/privacy-policy">{t('Privacy policy')}</Link>
                     </div>
                 </div>
             </div>
         </footer>
-    )
+    );
 }

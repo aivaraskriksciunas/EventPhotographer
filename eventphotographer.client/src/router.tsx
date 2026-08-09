@@ -63,12 +63,12 @@ export const router = createBrowserRouter([
     },
     {
         element: <AuthLayout />,
-        errorElement: <Navigate to="/404" replace/>,
+        errorElement: <Navigate to="/404" replace />,
         children: [{ path: '/' }, ...authRoutes],
     },
     {
         path: '/404',
-        
+
         lazy: {
             Component: async () =>
                 (await import('./pages/NotFoundErrorPage')).default,

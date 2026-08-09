@@ -1,6 +1,8 @@
 ﻿using EventPhotographer.Core.Features.Content;
 using EventPhotographer.Core.Features.Events;
 using EventPhotographer.Core.Features.MessagingIntegrations;
+using Medallion.Threading;
+using Medallion.Threading.Postgres;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +15,8 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(
             options => options.UseNpgsql(connectionString)
         );
+
+        services.AddSingleton<IDistributedLockProvider>(_ => new PostgresDistributedSynchronizationProvider(connectionString));
     }
 
     public static void AddApplicationServices(this IServiceCollection services)

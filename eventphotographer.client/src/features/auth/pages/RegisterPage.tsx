@@ -56,7 +56,10 @@ export default function RegisterPage() {
                     </TextField>
                     <SubmitField>{t('Save')}</SubmitField>
                 </AjaxForm>
-                <small>{t('Already have an account?')} <a href="/login">{t('Login')}</a></small>
+                <small>
+                    {t('Already have an account?')}{' '}
+                    <a href="/login">{t('Login')}</a>
+                </small>
             </div>
         </div>
     );

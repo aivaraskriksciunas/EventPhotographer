@@ -1,23 +1,19 @@
-﻿using EventPhotographer.Worker.Workers;
-using Quartz;
+﻿using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace EventPhotographer.Worker.Startup;
 
 internal static class SchedulerSetup
 {
-    public static void AddScheduler(this IServiceCollection services)
+    public static void AddScheduler(this IServiceCollection services, string connectionString)
     {
-        services.AddQuartz(options =>
-        {
-            var fileCompressorJob = JobKey.Create(nameof(EventCompressedFileGenerator));
-            options
-                .AddJob<EventCompressedFileGenerator>(fileCompressorJob)
-                .AddTrigger(trigger =>
-                {
-                    trigger
-                        .ForJob(fileCompressorJob)
-                        .WithSimpleSchedule(action => action.WithIntervalInSeconds(60).RepeatForever());
-                });
-        });
+        services.AddHangfire(options => options
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UsePostgreSqlStorage(c => c.UseNpgsqlConnection(connectionString))
+        );
+
+        services.AddHangfireServer();
     }
 }

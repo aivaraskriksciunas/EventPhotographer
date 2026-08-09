@@ -1,4 +1,4 @@
-import { EventResponse, eventsApi, EventShareableLinkResponse } from '@/api/events';
+import { eventsApi, EventShareableLinkResponse } from '@/api/events';
 import { useState } from 'react';
 import {
     useLoaderData,
@@ -6,12 +6,11 @@ import {
     useRouteLoaderData,
     generatePath,
 } from 'react-router-dom';
-import { Link as LinkIcon } from 'lucide-react'
+import { Link as LinkIcon } from 'lucide-react';
 
 export default function ShareEventPage() {
     const { event } = useRouteLoaderData('view-event');
     const shareableLinks = useLoaderData();
-    console.log(shareableLinks);
 
     return (
         <>
@@ -19,7 +18,7 @@ export default function ShareEventPage() {
             <div>
                 {shareableLinks && shareableLinks.length > 0 ? (
                     shareableLinks.map((link: EventShareableLinkResponse) => (
-                        <ShareableLinkItem key={link.id} event={event} link={link} />
+                        <ShareableLinkItem key={link.id} link={link} />
                     ))
                 ) : (
                     <CreateShareableLinkAction event={event} />
@@ -29,8 +28,10 @@ export default function ShareEventPage() {
     );
 }
 
-function ShareableLinkItem({ event, link }: { event: EventResponse, link: EventShareableLinkResponse }) {
-    const linkPath = `https://${window.location.host}` + generatePath('/join/:code', { code: link.code });
+function ShareableLinkItem({ link }: { link: EventShareableLinkResponse }) {
+    const linkPath =
+        `https://${window.location.host}` +
+        generatePath('/join/:code', { code: link.code });
 
     return (
         <div className="card">
@@ -38,10 +39,16 @@ function ShareableLinkItem({ event, link }: { event: EventResponse, link: EventS
                 <div className="d-flex shareablelink-item">
                     <div className="flex-grow-1">
                         <div className="shareablelink-code">
-                            Code: <span className='badge badge-secondary'>{link.code}</span>
+                            Code:{' '}
+                            <span className="badge badge-secondary">
+                                {link.code}
+                            </span>
                         </div>
-                        <div className='shareablelink-links'>
-                            <div><LinkIcon className='me-1'/>{linkPath}</div>
+                        <div className="shareablelink-links">
+                            <div>
+                                <LinkIcon className="me-1" />
+                                {linkPath}
+                            </div>
                         </div>
                     </div>
                 </div>

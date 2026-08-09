@@ -21,8 +21,8 @@ export interface EventResponse {
 export interface EventShareableLinkResponse {
     id: string;
     code: string;
-    event?: EventResponse,
-    whatsAppMessageLink: WhatsAppMessageLinkResponse|null,
+    event?: EventResponse;
+    whatsAppMessageLink: WhatsAppMessageLinkResponse | null;
 }
 
 export interface WhatsAppMessageLinkResponse {
@@ -36,7 +36,7 @@ export interface ParticipantResponse {
     event: EventResponse;
     name: string;
     createdAt: string;
-    eventShareableLink: EventShareableLinkResponse|null,
+    eventShareableLink: EventShareableLinkResponse | null;
 }
 
 export interface EventMediaFileResponse {
@@ -68,10 +68,8 @@ export const eventsApi = {
         fetchApi<EventShareableLinkResponse[]>(
             `/api/events/${eventId}/shareableLinks/`,
         ),
-    getShareableLinkByCode: async (code: string) => 
-        fetchApi<EventShareableLinkResponse>(
-            `/api/participants/check/${code}`,
-        ),
+    getShareableLinkByCode: async (code: string) =>
+        fetchApi<EventShareableLinkResponse>(`/api/participants/check/${code}`),
     createShareableLink: async (eventId: string) =>
         fetchApi<EventShareableLinkResponse>(
             `/api/events/${eventId}/shareableLinks/`,

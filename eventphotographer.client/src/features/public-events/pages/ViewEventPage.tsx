@@ -7,13 +7,18 @@ export default function ViewEventPage() {
 
     return (
         <>
-            <h1>{participant!.event.name}</h1>
+            <div className="header">
+                <h1>{participant!.event.name}</h1>
+                <div className="header-action">
+                    {participant?.eventShareableLink != null ? (
+                        <WhatsAppLinkButton
+                            shareableLink={participant.eventShareableLink}
+                            className="w-100"
+                        ></WhatsAppLinkButton>
+                    ) : null}
+                </div>
+            </div>
 
-            {participant?.eventShareableLink != null ? 
-                <div className='mb-3'>
-                    <WhatsAppLinkButton shareableLink={participant.eventShareableLink} className='w-100'></WhatsAppLinkButton>
-                </div> 
-                : null}
             <UploadEventFilesDropzone />
         </>
     );

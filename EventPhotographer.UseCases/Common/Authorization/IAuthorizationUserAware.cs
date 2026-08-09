@@ -4,5 +4,5 @@ namespace EventPhotographer.UseCases.Common.Authorization;
 
 internal interface IAuthorizationUserAware
 {
-    public User User { get; }
+    public User? User { get; }
 }

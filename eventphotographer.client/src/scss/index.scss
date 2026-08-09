@@ -10,24 +10,16 @@ body {
     min-height: 100vh;
 }
 
+#root {
+    width: 100%;
+}
+
 @import './components';
+@import './file-upload';
 
 .lucide {
     width: 1em;
     height: 1em;
-}
-
-.dropzone {
-    width: 100%;
-    min-height: 80px;
-    background-color: #fafafa;
-    color: #444;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 3px dashed #aaa;
-    border-radius: 8px;
-    cursor: pointer;
 }
 
 .sidebar {
@@ -53,7 +45,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    
+
     #main-content {
         flex: 1;
     }

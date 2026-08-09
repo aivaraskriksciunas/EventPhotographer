@@ -4,6 +4,8 @@ using EventPhotographer.UseCases.Common.CommandFilters;
 using EventPhotographer.UseCases.Common.Commands;
 using EventPhotographer.UseCases.Common.Decorators;
 using EventPhotographer.UseCases.Common.PipelineBehaviours;
+using EventPhotographer.UseCases.Common.Queries;
+using EventPhotographer.UseCases.Content;
 using EventPhotographer.UseCases.Events;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +33,14 @@ public static class DependencyInjection
         services.Scan(scan => scan 
             .FromAssemblyOf<AuthorizationService>()
             .AddClasses(classes => classes.AssignableTo(typeof(IAuthorizationHandler<>)), publicOnly: false)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+        );
+
+        // Register query handlers
+        services.Scan(scan => scan
+            .FromAssemblyOf<EventQueryService>()
+            .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)), publicOnly: false)
             .AsImplementedInterfaces()
             .WithScopedLifetime()
         );

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useAuth } from './state/auth';
-import { useParticipant } from './state/participant';
-import { eventsApi } from './api/events';
-import { authApi } from './api/auth';
+import { useAuth } from '../state/auth';
+import { useParticipant } from '../state/participant';
+import { eventsApi } from '../api/events';
+import { authApi } from '../api/auth';
 
 export default function ServicesWrapper({
     children,

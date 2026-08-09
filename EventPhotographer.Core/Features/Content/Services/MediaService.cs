@@ -1,5 +1,4 @@
-﻿using EventPhotographer.Core.Features.Events.Entities;
-using EventPhotographer.Core.Features.Content.Entities;
+﻿using EventPhotographer.Core.Features.Content.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.Core.Features.Content.Services;
@@ -8,7 +7,6 @@ public class MediaService
 {
     protected readonly AppDbContext dbContext;
     protected readonly FileContentTypeReader fileContentTypeReader;
-    private readonly MediaStorageService mediaStorageService;
 
     public MediaService(
         AppDbContext dbContext,
@@ -17,60 +15,6 @@ public class MediaService
     {
         this.dbContext = dbContext;
         this.fileContentTypeReader = fileContentTypeReader;
-        this.mediaStorageService = mediaStorageService;
-    }
-
-    public async Task<Media> CreateMedia(Participant participant)
-    {
-        var media = new Media
-        {
-            Event = participant.Event,
-            Participant = participant,
-            UploadToken = Guid.NewGuid(),
-        };
-
-        await dbContext.AddAsync(media);
-        await dbContext.SaveChangesAsync();
-
-        return media;
-    }
-
-    public async Task<Media> CreateArchive(Event @event)
-    {
-        var media = new Media
-        {
-            Event = @event,
-            Type = MediaType.Archive,
-        };
-
-        await dbContext.AddAsync(media);
-        await dbContext.SaveChangesAsync();
-
-        return media;
-    }
-
-    public async Task<MediaFile> UploadFile(Media media, Stream file, string extension)
-    {
-        var mimeType = FileContentTypeReader.GetMimeTypeFromExtension(extension) ?? throw new ArgumentException("Unsupported Mime Type");
-        var fileLength = (ulong)file.Length;
-        var path = await mediaStorageService.UploadFile(
-            file,
-            mimeType,
-            Guid.NewGuid().ToString() + extension
-        );
-
-        var mediaFile = new MediaFile
-        {
-            Media = media,
-            MimeType = mimeType,
-            Path = path,
-            FileSize = fileLength,
-        };
-
-        await dbContext.AddAsync(mediaFile);
-        await dbContext.SaveChangesAsync();
-
-        return mediaFile;
     }
 
     public async Task<MediaFile?> GetFileByIdAsync(Guid id)

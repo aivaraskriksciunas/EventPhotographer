@@ -4,10 +4,10 @@ import Footer from '@/components/base/Footer';
 
 export default function PageLayout() {
     return (
-        <div id='page-layout'>
+        <div id="page-layout">
             <Navbar />
 
-            <main id='main-content' className="container mt-4">
+            <main id="main-content" className="container mt-4">
                 <Outlet />
             </main>
 

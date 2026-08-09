@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useRouteLoaderData } from 'react-router-dom';
 import { eventsApi } from '@/api/events';
+import { mediaApi } from '@/api/media';
 
 export default function ViewEventPage() {
     const { t } = useTranslation();
@@ -51,7 +52,7 @@ function EventArchiveLink({ eventId }: { eventId: string }) {
         fetchArchiveId();
     }, [eventId]);
 
-    if (!archive || !archive.files.length) {
+    if (!archive || !archive?.files?.length) {
         return null;
     }
 
@@ -72,14 +73,13 @@ function EventArchiveLink({ eventId }: { eventId: string }) {
 }
 
 function SingleEventFile({ media }: { media: EventMediaResponse }) {
-    const url = import.meta.env.VITE_API_BASE_URL;
     return (
         <div className="col-sm-2 col-md-4 col-lg-3 mb-4">
             <div className="card eventImageCard">
                 <img
                     className="card-img-top"
                     loading="lazy"
-                    src={`${url}/api/media/file/${media.files[0].id}`}
+                    src={mediaApi.getFileUrl(media.files[0].id)}
                 />
                 <div className="card-body">
                     <div className="card-text">

@@ -1,84 +1,70 @@
-﻿using EventPhotographer.App.Events.Authorization;
-using EventPhotographer.App.Events.Services;
+﻿using EventPhotographer.App.Events.Services;
 using EventPhotographer.App.Content.DTO;
-using EventPhotographer.App.Content.Services;
 using EventPhotographer.Core.Attributes;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EventPhotographer.App.Content.Mappers;
-using EventPhotographer.App.Content.Authorization;
 using FluentValidation;
 using EventPhotographer.Core.Features.Content.Services;
-using EventPhotographer.Core.Features.Users.Entities;
+using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.Core.Extensions;
+using EventPhotographer.UseCases.Content.Commands;
+using EventPhotographer.Core.Features.Content.Entities;
 
 namespace EventPhotographer.App.Content.Controllers;
 
 public class MediaController (
-    ApiMediaService mediaService,
-    IAuthorizationService authorizationService) : ApiController
+    MediaService mediaService) 
+    : ApiController
 {
     [HttpPost]
     [ActiveParticipantRequired]
-    public async Task<ActionResult<MediaResponseDto>> Create(
+    public async Task<ActionResult<CreateMediaResponseDto>> Create(
         [FromBody] MediaUploadRequestDto uploadRequest,
-        [FromServices] ParticipantService participantService)
+        [FromServices] ICommandHandler<CreateMediaCommand, CreateMediaResult> handler,
+        [FromServices] IValidator<MediaUploadRequestDto> validator)
     {
+        await validator.ValidateAndThrowAsync(uploadRequest);
+
         var participant = HttpContext.GetParticipant();
         if (participant?.Event == null)
         {
             return Forbid();
         }
 
-        var authResult = await authorizationService.AuthorizeAsync(User, participant.Event, new UploadEventMediaRequirement());
-        if (!authResult.Succeeded)
+        var result = await handler.HandleAsync(new CreateMediaCommand
         {
-            return Forbid();
+            Participant = participant,
+            Event = participant.Event,
+            FileType = uploadRequest.FileType!,
+            FileSize = uploadRequest.FileSize
+        });
+
+        if (!result.IsSuccess)
+        {
+            return result.ToProblemDetailsResult();
         }
 
-        var media = await mediaService.CreateMedia(uploadRequest, participant);
-
-        return MediaMapper.ToResponse(media);
+        return MediaMapper.ToResponse(result.Value);
     }
 
-    [HttpPost("{uploadToken:guid}/Upload")]
-    [RequestSizeLimit(50_000_000)] // 50 MB
-    [ActiveParticipantRequired]
-    public async Task<IActionResult> UploadFile(
-        Guid uploadToken,
-        IFormFile file,
-        [FromServices] IValidator<IFormFile> fileValidator, 
-        [FromServices] ParticipantService participantService,
-        [FromServices] UserManager<User> userManager,
-        [FromServices] MediaStorageService storageService,
-        [FromServices] FileContentTypeReader fileContentTypeReader)
+    [HttpGet("{mediaId:guid}/status")]
+    public async Task<ActionResult<MediaResponseDto>> GetMedia(
+        Guid mediaId,
+        [FromServices] ICommandHandler<ValidateMediaCommand, Media> handler)
     {
-        await fileValidator.ValidateAndThrowAsync(file);
-
         var participant = HttpContext.GetParticipant();
-        var media = await mediaService.GetByUploadTokenAsync(uploadToken);
-        if (media == null)
+        var result = await handler.HandleAsync(new ValidateMediaCommand
+        {
+            Participant = participant,
+            Id = mediaId,
+        });
+
+        if (!result.IsSuccess)
         {
             return NotFound();
         }
 
-        var result = await authorizationService.AuthorizeAsync(
-            User,
-            media,
-            [new ManageMediaRequirement(), new UploadFileRequirement()]);
-
-        if (!result.Succeeded)
-        {
-            return NotFound();
-        }
-
-        using var readStream = file.OpenReadStream();
-        await mediaService.UploadFile(
-            media, 
-            readStream, 
-            fileContentTypeReader.DetermineFileExtension(readStream)!);
-
-        return Ok();
+        return MediaMapper.ToResponse(result.Value);
     }
 
     [HttpGet("file/{fileId:guid}")]

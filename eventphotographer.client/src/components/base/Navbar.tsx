@@ -24,7 +24,7 @@ export default function Navbar() {
                 <div className="navbar-nav me-auto">
                     {participant !== null ? (
                         <CurrentEventIndicator event={participant.event} />
-                ) : (
+                    ) : (
                         <JoinEventButton />
                     )}
                 </div>
