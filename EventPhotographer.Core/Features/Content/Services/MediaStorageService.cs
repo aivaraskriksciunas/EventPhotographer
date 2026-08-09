@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon.Runtime;
+using Amazon.S3;
 using Amazon.S3.Model;
 using EventPhotographer.Core.Configuration;
 using Microsoft.Extensions.Options;
@@ -35,18 +36,16 @@ public class MediaStorageService(
         });
     }
 
-    public async Task<CreatePresignedPostResponse> CreatePresignedUrl(
+    public async Task<string> CreatePresignedUrl(
         string identifier, 
         long fileSize)
     {
-        return await s3Client.CreatePresignedPostAsync(new CreatePresignedPostRequest
+        return await s3Client.GetPreSignedURLAsync(new GetPreSignedUrlRequest
         {
             BucketName = options.BucketName,
             Key = identifier,
             Expires = DateTime.UtcNow.AddMinutes(10),
-            Conditions = [
-                S3PostCondition.ContentLengthRange(1, fileSize),
-            ],
+            Verb = HttpVerb.PUT,
         });
     }
 }

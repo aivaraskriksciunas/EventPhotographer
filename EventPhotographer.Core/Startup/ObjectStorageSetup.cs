@@ -14,6 +14,7 @@ public static class ObjectStorageSetup
         {
             ServiceURL = config.ServiceURL,
             ForcePathStyle = config.ForcePathStyle,
+            AuthenticationRegion = "auto",
         };
 
         AmazonS3Client s3Client = new AmazonS3Client(credentials, s3config);

@@ -4,11 +4,11 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: 8080
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=eventphotographer_db;Username=admin;Password=admin"
-      ObjectStorage__ServiceURL: "http://minio:9000"
-      ObjectStorage__ForcePathStyle: true
-      ObjectStorage__AccessKey: admin
-      ObjectStorage__Password: minioadmin123
-      ObjectStorage__BucketName: event-photographer
+      # ObjectStorage__ServiceURL: "http://minio:9000"
+      # ObjectStorage__ForcePathStyle: true
+      # ObjectStorage__AccessKey: admin
+      # ObjectStorage__Password: minioadmin123
+      # ObjectStorage__BucketName: event-photographer
       Sentry__Dsn: 
     ports:
       - "8000:8080"

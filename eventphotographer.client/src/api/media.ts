@@ -18,7 +18,6 @@ export interface MediaResponse {
 export interface CreateMediaResponse {
     uploadUrl: string;
     media: MediaResponse;
-    fields: Record<string, string>;
 }
 
 export const mediaApi = {
@@ -31,22 +30,18 @@ export const mediaApi = {
         fetchApi<MediaResponse>(`/api/media/${id}/status`, 'GET'),
     uploadFile: async (
         uploadUrl: string,
-        fields: Record<string, string>,
         file: File,
         onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
     ) => {
-        const formData = new FormData();
-        Object.entries(fields).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-        formData.append('file', file);
+        let fullUrl = `${uploadUrl}`;
 
         if (import.meta.env.DEV) {
-            uploadUrl = uploadUrl.replace('minio', 'localhost');
+            fullUrl = fullUrl.replace('minio', 'localhost');
         }
 
-        return await axios.postForm(uploadUrl, formData, {
+        return await axios.put(fullUrl, file, {
             onUploadProgress,
+            headers: {},
         });
     },
     createMediaUploadHandler: (file: File) => new EventMediaUploadHandler(file),

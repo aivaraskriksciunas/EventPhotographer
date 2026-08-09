@@ -40,8 +40,6 @@ public record CreateMediaResult
     public required Media Media;
 
     public required string UploadUrl;
-
-    public required Dictionary<string, string> Fields;
 }
 
 internal class CreateMediaValidator : AbstractValidator<CreateMediaCommand>
@@ -107,8 +105,7 @@ internal class CreateMediaHandler(
         return new CreateMediaResult
         {
             Media = media,
-            UploadUrl = uploadUrl.Url,
-            Fields = uploadUrl.Fields,
+            UploadUrl = uploadUrl,
         };
     }
 }
