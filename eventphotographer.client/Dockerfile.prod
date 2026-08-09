@@ -1,0 +1,16 @@
+# Install dependencies
+FROM node:26-alpine AS deps
+
+WORKDIR /app
+COPY package*.json ./
+
+RUN npm install
+
+# Build app
+FROM deps AS build
+
+WORKDIR /app
+COPY . .
+COPY --from=deps /app/node_modules /app/node_modules
+
+CMD ["npm", "run", "build"] 

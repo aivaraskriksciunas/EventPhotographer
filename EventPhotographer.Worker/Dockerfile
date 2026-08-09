@@ -12,6 +12,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["EventPhotographer.Worker/EventPhotographer.Worker.csproj", "EventPhotographer.Worker/"]
 COPY ["EventPhotographer.Core/EventPhotographer.Core.csproj", "EventPhotographer.Core/"]
+COPY ["EventPhotographer.UseCases/EventPhotographer.UseCases.csproj", "EventPhotographer.UseCases/"]
 RUN dotnet restore "./EventPhotographer.Worker/EventPhotographer.Worker.csproj"
 COPY . .
 WORKDIR "/src/EventPhotographer.Worker"
