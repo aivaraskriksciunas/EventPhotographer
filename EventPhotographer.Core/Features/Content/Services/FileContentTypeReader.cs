@@ -120,7 +120,6 @@ public class FileContentTypeReader
             }
         }
 
-        stream.Position = 0;
         return null;
     }
 

@@ -27,7 +27,6 @@ export class EventMediaUploadHandler extends FileUploadHandler {
         try {
             await mediaApi.uploadFile(
                 createMediaResponse.uploadUrl,
-                createMediaResponse.fields,
                 this.file,
                 (ev: AxiosProgressEvent) =>
                     this.emitProgressEvent(ev.progress ?? 0),

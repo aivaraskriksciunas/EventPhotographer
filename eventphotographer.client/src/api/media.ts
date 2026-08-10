@@ -41,7 +41,6 @@ export const mediaApi = {
 
         return await axios.put(fullUrl, file, {
             onUploadProgress,
-            headers: {},
         });
     },
     createMediaUploadHandler: (file: File) => new EventMediaUploadHandler(file),
