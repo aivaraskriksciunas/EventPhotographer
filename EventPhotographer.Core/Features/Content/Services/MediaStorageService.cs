@@ -20,7 +20,7 @@ public class MediaStorageService(
             Key = key,
             InputStream = fileStream,
             ContentType = contentType,
-            DisablePayloadSigning = false,
+            DisablePayloadSigning = true,
             DisableDefaultChecksumValidation = true,
         });
 
