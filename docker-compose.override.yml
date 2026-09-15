@@ -4,11 +4,12 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: 8080
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=eventphotographer_db;Username=admin;Password=admin"
-      # ObjectStorage__ServiceURL: "http://minio:9000"
-      # ObjectStorage__ForcePathStyle: true
-      # ObjectStorage__AccessKey: admin
-      # ObjectStorage__Password: minioadmin123
-      # ObjectStorage__BucketName: event-photographer
+      ObjectStorage__ServiceURL: ${ObjectStorage__ServiceURL:-http://minio:9000}
+      ObjectStorage__ForcePathStyle: ${ObjectStorage__ForcePathStyle:-true}
+      ObjectStorage__AccessKey: ${ObjectStorage__AccessKey:-admin}
+      ObjectStorage__Password: ${ObjectStorage__Password:-minioadmin123}
+      ObjectStorage__BucketName: ${ObjectStorage__BucketName:-event-photographer}
+      ObjectStorage__UsePresignedUploadUrls: ${ObjectStorage__UsePresignedUploadUrls:-false}
       Sentry__Dsn: 
     ports:
       - "8000:8080"
@@ -21,11 +22,11 @@ services:
   eventphotographer-worker:
     environment:
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=eventphotographer_db;Username=admin;Password=admin"
-      ObjectStorage__ServiceURL: "http://minio:9000"
-      ObjectStorage__ForcePathStyle: true
-      ObjectStorage__AccessKey: admin
-      ObjectStorage__Password: minioadmin123
-      ObjectStorage__BucketName: event-photographer
+      ObjectStorage__ServiceURL: ${ObjectStorage__ServiceURL:-http://minio:9000}
+      ObjectStorage__ForcePathStyle: ${ObjectStorage__ForcePathStyle:-true}
+      ObjectStorage__AccessKey: ${ObjectStorage__AccessKey:-admin}
+      ObjectStorage__Password: ${ObjectStorage__Password:-minioadmin123}
+      ObjectStorage__BucketName: ${ObjectStorage__BucketName:-event-photographer}
       Sentry__Dsn: 
     profiles: 
       - worker
@@ -70,6 +71,7 @@ services:
       - web
       - worker
 
+  # Note for dev: presigned URLs do not work locally - use the API server as a proxy
   minio: 
     image: minio/minio:latest
     command: server /data --console-address ":9001"

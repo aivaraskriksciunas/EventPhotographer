@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { FileImage, Upload } from 'lucide-react';
 
 export default function UploadEventFilesDropzone() {
+    const { t } = useTranslation();
     const addFilesToQueue = useFileUploadState((state) => state.addFiles);
     const uploadedFiles = useFileUploadState(
         useShallow((state) =>
@@ -37,8 +38,6 @@ export default function UploadEventFilesDropzone() {
         ),
     );
     const progress = useFileUploadState((state) => state.progress);
-
-    const { t } = useTranslation();
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
@@ -126,16 +125,21 @@ export default function UploadEventFilesDropzone() {
 }
 
 function SingleUploadedFile({ file }: { file: UserUploadedFile }) {
-    const imageId = file.mediaResponse?.files[0]?.id;
     const { t } = useTranslation();
 
     const displayImage = () => {
-        if (file.state === 'complete' && imageId) {
+        if (file.state === 'complete' && file.thumbnailFileId) {
             return (
                 <img
                     className="card-image uploaded-file__image"
-                    src={mediaApi.getFileUrl(imageId)}
+                    src={mediaApi.getFileUrl(file.thumbnailFileId)}
                 ></img>
+            );
+        } else if (file.state === 'complete') {
+            return (
+                <div className="card-image uploaded-file__image">
+                    {t('Creating thumbnail')}...
+                </div>
             );
         }
 

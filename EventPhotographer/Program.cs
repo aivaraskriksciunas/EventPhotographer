@@ -23,11 +23,15 @@ builder.Services.AddHostedService<ObjectStorageStartup>();
 
 // RabbitMQ + MassTransit
 builder.Services.AddApplicationMessageQueues(builder.Configuration.GetConnectionString("RabbitMq") ?? throw new ApplicationException("RabbitMq connection string is not provided"));
+builder.Services.AddHostedService<RegisterMessageConsumers>();
 
 builder.Services.AddControllers().AddJsonOptions(
     options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// SignalR
+builder.Services.AddSignalR();
 
 // Identity
 builder.Services.AddAppAuth();
@@ -37,6 +41,7 @@ builder.Services.AddConfiguration(builder.Configuration);
 builder.Services.AddUseCases();
 builder.Services.AddApplicationServices();
 builder.Services.AddAppModules();
+builder.Services.AddWorkerConsumers();
 builder.Services.AddAppExceptionHandlers();
 builder.Services.ConfigureApplicationCors(builder.Configuration.GetValue<string>("ClientUrl") ?? throw new ArgumentException("ClientUrl is not configured"));
 
@@ -59,6 +64,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapStaticAssets();
+app.MapAppSignalRHubs();
 
 app.Run();
 

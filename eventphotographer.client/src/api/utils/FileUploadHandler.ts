@@ -1,5 +1,3 @@
-import { MediaResponse } from '../media';
-
 export abstract class FileUploadHandler extends EventTarget {
     protected file: File;
 
@@ -24,13 +22,7 @@ export abstract class FileUploadHandler extends EventTarget {
         this.addEventListener('uploaded', () => callback());
     }
 
-    public onValidated(callback: (media: MediaResponse) => void) {
-        this.addEventListener('validated', (ev: Event) =>
-            callback((ev as CustomEvent<MediaResponse>).detail),
-        );
-    }
-
-    public abstract uploadFile(): Promise<void>;
+    public abstract uploadFile(): Promise<string | null>;
 
     protected emitProgressEvent(progress: number) {
         this.dispatchEvent(new CustomEvent('progress', { detail: progress }));
@@ -38,10 +30,6 @@ export abstract class FileUploadHandler extends EventTarget {
 
     protected emitUploadedEvent() {
         this.dispatchEvent(new CustomEvent('uploaded'));
-    }
-
-    protected emitValidatedEvent(data: MediaResponse) {
-        this.dispatchEvent(new CustomEvent('validated', { detail: data }));
     }
 
     protected emitErrorEvent(error: Error) {

@@ -1,5 +1,5 @@
 import axios, { AxiosProgressEvent } from 'axios';
-import { fetchApi } from './client';
+import { api, fetchApi } from './client';
 import { EventMediaUploadHandler } from './utils/EventMediaUploadHandler';
 
 export interface MediaFileResponse {
@@ -33,13 +33,18 @@ export const mediaApi = {
         file: File,
         onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
     ) => {
-        let fullUrl = `${uploadUrl}`;
+        if (!uploadUrl.startsWith('http')) {
+            const formData = new FormData();
+            formData.append('file', file);
 
-        if (import.meta.env.DEV) {
-            fullUrl = fullUrl.replace('minio', 'localhost');
+            // URL is to the API server
+            return await api.put(uploadUrl, formData, {
+                onUploadProgress,
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
         }
 
-        return await axios.put(fullUrl, file, {
+        return await axios.put(uploadUrl, file, {
             onUploadProgress,
         });
     },

@@ -43,6 +43,7 @@ export interface EventMediaFileResponse {
     id: string;
     mimeType: string;
     fileSize: number;
+    fileType: 'Original' | 'Thumbnail';
 }
 
 export interface EventMediaResponse {

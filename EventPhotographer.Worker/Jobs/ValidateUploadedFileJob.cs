@@ -1,6 +1,8 @@
 ﻿using Amazon.S3.Model;
+using EasyNetQ;
 using EventPhotographer.Core;
 using EventPhotographer.Core.Features.Content.Entities;
+using EventPhotographer.Core.Features.Content.Messages;
 using EventPhotographer.Core.Features.Content.Services;
 using Hangfire;
 using Medallion.Threading;
@@ -13,7 +15,8 @@ internal class ValidateUploadedFileJob(
     IDistributedLockProvider lockProvider,
     MediaStorageService storageService,
     FileContentTypeReader fileContentTypeReader,
-    IBackgroundJobClient backgroundJobs)
+    IBackgroundJobClient backgroundJobs,
+    IBus bus)
 {
     public async Task ExecuteAsync(Guid mediaFileId, int attempt = 1)
     {
@@ -43,7 +46,7 @@ internal class ValidateUploadedFileJob(
             // Increase delay on each attempt
             int delay = 1;
             if (attempt > 3 && attempt <= 5) delay = 2;
-            else if (attempt > 5) delay = 5;
+            else if (attempt > 5) delay = 8;
 
             backgroundJobs.Schedule<ValidateUploadedFileJob>(
                 m => m.ExecuteAsync(mediaFileId, attempt + 1), 
@@ -61,6 +64,12 @@ internal class ValidateUploadedFileJob(
         }
 
         await db.SaveChangesAsync();
+        await bus.PubSub.PublishAsync(new UploadedFileValidatedMessage { MediaFileId = mediaFile.Id });
+
+        if (mediaFile.Media.Status == MediaStatus.Validated)
+        {
+            backgroundJobs.Enqueue<GenerateThumbnailJob>(m => m.ExecuteAsync(mediaFile.Id));
+        }
     }
 
     private async Task<MediaFile?> GetMediaFileForProcessingAsync(Guid mediaFileId)

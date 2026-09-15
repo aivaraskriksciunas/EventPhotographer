@@ -86,9 +86,24 @@ public static class Setup
         return services;
     }
 
+    public static IServiceCollection AddWorkerConsumers(this IServiceCollection services)
+    {
+        services.AddScoped<Consumers.UploadedFileNotificationConsumer>();
+    
+        return services;
+    }
+
+
     public static WebApplication UseApplicationMiddleware(this WebApplication app)
     {
         app.UseMiddleware<ParticipantMiddleware>();
+
+        return app;
+    }
+
+    public static WebApplication MapAppSignalRHubs(this WebApplication app)
+    {
+        app.MapHub<Hubs.UploadNotificationHub>("/hubs/upload-notifications");
 
         return app;
     }

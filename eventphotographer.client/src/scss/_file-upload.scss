@@ -63,7 +63,9 @@
 
 .uploaded-file {
     .uploaded-file__image {
-        min-height: 100px;
+        height: 150px;
+        object-fit: cover;
+        object-position: center center;
         display: flex;
         align-items: center;
         justify-content: center;

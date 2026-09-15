@@ -3,6 +3,7 @@ import { useAuth } from '../state/auth';
 import { useParticipant } from '../state/participant';
 import { eventsApi } from '../api/events';
 import { authApi } from '../api/auth';
+import { uploadNotificationsApi } from '@/api/upload-notifications';
 
 export default function ServicesWrapper({
     children,
@@ -10,7 +11,15 @@ export default function ServicesWrapper({
     children: React.ReactNode;
 }) {
     const { setUser, logout } = useAuth();
-    const { setParticipant } = useParticipant();
+    const { setParticipant, participant } = useParticipant();
+
+    useEffect(() => {
+        if (participant) {
+            uploadNotificationsApi.subscribeToNotifications();
+        } else {
+            uploadNotificationsApi.unsubscribeFromNotifications();
+        }
+    }, [participant]);
 
     useEffect(() => {
         const initialize = async () => {

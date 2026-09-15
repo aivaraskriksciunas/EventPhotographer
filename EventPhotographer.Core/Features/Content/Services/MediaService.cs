@@ -21,20 +21,7 @@ public class MediaService
     {
         return await dbContext.MediaFiles
             .Where(m => m.Id == id)
-            .FirstOrDefaultAsync();
-    }
-
-    public async Task<bool> HasFileAsync(Media media)
-    {
-        return await dbContext.MediaFiles
-            .Where(m => m.Id == media.Id)
-            .AnyAsync();
-    }
-
-    public async Task<Media?> GetByUploadTokenAsync(Guid uploadToken)
-    {
-        return await dbContext.Media
-            .Where(m => m.UploadToken == uploadToken)
+            .Include(m => m.Media)
             .FirstOrDefaultAsync();
     }
 }

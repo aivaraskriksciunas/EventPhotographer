@@ -1,6 +1,7 @@
 ﻿using Amazon.S3;
 using EasyNetQ;
 using EventPhotographer.Core;
+using EventPhotographer.Core.Configuration;
 using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Content.Messages;
 using EventPhotographer.Core.Features.Content.Services;
@@ -12,6 +13,7 @@ using EventPhotographer.UseCases.Common.Commands;
 using EventPhotographer.UseCases.Events.Authorization;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace EventPhotographer.UseCases.Content.Commands;
 
@@ -39,7 +41,9 @@ public record CreateMediaResult
 {
     public required Media Media;
 
-    public required string UploadUrl;
+    public required MediaFile MediaFile;
+
+    public required string? UploadUrl;
 }
 
 internal class CreateMediaValidator : AbstractValidator<CreateMediaCommand>
@@ -64,7 +68,8 @@ internal class CreateMediaValidator : AbstractValidator<CreateMediaCommand>
 internal class CreateMediaHandler(
     AppDbContext db,
     MediaStorageService mediaStorageService,
-    IBus bus) : 
+    IBus bus,
+    IOptions<ObjectStorageConfiguration> options) : 
     ICommandHandler<CreateMediaCommand, CreateMediaResult>
 {
     public async Task<Result<CreateMediaResult>> HandleAsync(CreateMediaCommand command, CancellationToken cancellationToken = default)
@@ -76,9 +81,14 @@ internal class CreateMediaHandler(
         }
 
         var key = Guid.NewGuid().ToString() + fileTypeInfo.Extension;
-        var uploadUrl = await mediaStorageService.CreatePresignedUrl(
-            key,
-            command.FileSize);
+
+        string? uploadUrl = null;
+        if (options.Value.UsePresignedUploadUrls == true)
+        {
+            uploadUrl = await mediaStorageService.CreatePresignedUrl(
+                key,
+                command.FileSize);
+        }
 
         var media = new Media
         {
@@ -105,6 +115,7 @@ internal class CreateMediaHandler(
         return new CreateMediaResult
         {
             Media = media,
+            MediaFile = mediaFile,
             UploadUrl = uploadUrl,
         };
     }

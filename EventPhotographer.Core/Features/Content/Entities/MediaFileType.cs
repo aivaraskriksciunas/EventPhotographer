@@ -3,10 +3,8 @@
 namespace EventPhotographer.Core.Features.Content.Entities;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum MediaStatus
+public enum MediaFileType
 {
-    NeedsValidation,
-    Validating,
-    Validated,
-    Invalid,
+    Original,
+    Thumbnail,
 }

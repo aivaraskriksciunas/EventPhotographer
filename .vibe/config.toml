@@ -1,0 +1,16 @@
+[tools.read_file]
+permission = "always"
+
+[tools.grep]
+permission = "always"
+
+[tools.edit]
+permission = "ask"
+
+[tools.write_file]
+permission = "ask"
+
+[tools.bash]
+permission = "always"
+allow = ["dir", "cd", "type", "findstr", "dotnet"]
+

@@ -11,4 +11,6 @@ public class ObjectStorageConfiguration
     public required string Password { get; set; }
 
     public bool ForcePathStyle { get; set; } = false;
+
+    public bool? UsePresignedUploadUrls { get; set; } = null;
 }

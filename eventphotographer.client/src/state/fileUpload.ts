@@ -1,4 +1,3 @@
-import { MediaResponse } from '@/api/media';
 import { FileUploadHandler } from '@/api/utils/FileUploadHandler';
 import { create } from 'zustand';
 
@@ -20,12 +19,13 @@ export const PENDING_STATES: UserUploadedFileState[] = ['pending', 'uploading'];
 export interface UserUploadedFile {
     _id: number;
     _batchId: number;
+    externalId?: string;
     file: File;
     state: UserUploadedFileState;
     progress: number;
     uploadHandler: FileUploadHandler;
     message?: string;
-    mediaResponse?: MediaResponse;
+    thumbnailFileId?: string;
 }
 
 export interface FileUploadState {
@@ -41,10 +41,11 @@ export interface FileUploadState {
     setFileState: (
         file: UserUploadedFile,
         fileState: UserUploadedFileState,
-        additionalData?: { message?: string; mediaResponse?: MediaResponse },
+        additionalData?: { message?: string; thumbnailFileId?: string },
     ) => void;
     setFileProgress: (file: UserUploadedFile, progress: number) => void;
     getAndUpdateBatchId: () => number;
+    setExternalId: (file: UserUploadedFile, externalId: string) => void;
 }
 
 export const useFileUploadState = create<FileUploadState>((set, get) => ({
@@ -90,7 +91,7 @@ export const useFileUploadState = create<FileUploadState>((set, get) => ({
     setFileState: (
         file: UserUploadedFile,
         fileState: UserUploadedFileState,
-        additionalData?: { message?: string; mediaResponse?: MediaResponse },
+        additionalData?: { message?: string; thumbnailFileId?: string },
     ) =>
         set((state) => ({
             fileQueue: state.fileQueue.map<UserUploadedFile>((f) => {
@@ -133,5 +134,16 @@ export const useFileUploadState = create<FileUploadState>((set, get) => ({
         }
 
         return batchId;
+    },
+    setExternalId: (file: UserUploadedFile, externalId: string) => {
+        set((state) => ({
+            fileQueue: state.fileQueue.map<UserUploadedFile>((f) => {
+                if (f._id === file._id) {
+                    return { ...f, externalId };
+                }
+
+                return f;
+            }),
+        }));
     },
 }));

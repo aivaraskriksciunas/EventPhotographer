@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Moq;
 using Npgsql;
 using Respawn;
@@ -93,6 +94,12 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
             services.RemoveAll<IAmazonS3>();
             services.RemoveAll<ObjectStorageStartup>();
             services.AddSingleton<IAmazonS3>(_ => Mock.Of<IAmazonS3>());
+
+            services.RemoveAll<RegisterMessageConsumers>();
+            services.Where(d => d.ServiceType == typeof(IHostedService) && d.ImplementationType == typeof(RegisterMessageConsumers))
+                .ToList()
+                .ForEach(d => services.Remove(d))
+            ;
         });
 
         builder.UseEnvironment("Development");

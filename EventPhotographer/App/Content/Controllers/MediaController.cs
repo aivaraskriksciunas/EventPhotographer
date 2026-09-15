@@ -9,11 +9,13 @@ using EventPhotographer.UseCases.Common.Commands;
 using EventPhotographer.Core.Extensions;
 using EventPhotographer.UseCases.Content.Commands;
 using EventPhotographer.Core.Features.Content.Entities;
+using Microsoft.Extensions.Options;
+using EventPhotographer.Core.Configuration;
 
 namespace EventPhotographer.App.Content.Controllers;
 
-public class MediaController (
-    MediaService mediaService) 
+public class MediaController(
+    MediaService mediaService)
     : ApiController
 {
     [HttpPost]
@@ -44,10 +46,43 @@ public class MediaController (
             return result.ToProblemDetailsResult();
         }
 
+        var resultObject = result.Value;
+        if (resultObject.UploadUrl == null)
+        {
+            resultObject.UploadUrl = Url.Action(nameof(UploadFile), "Media", new { mediaFileId = resultObject.MediaFile.Id });
+        }
+
         return MediaMapper.ToResponse(result.Value);
     }
 
-    [HttpGet("{mediaId:guid}/status")]
+    [HttpPut("File/{mediaFileId:guid}/Upload")]
+    [RequestSizeLimit(50_000_000)] // 50 MB
+    [ActiveParticipantRequired]
+    public async Task<IActionResult> UploadFile(
+        Guid mediaFileId,
+        IFormFile file,
+        [FromServices] MediaStorageService storageService,
+        [FromServices] IOptions<ObjectStorageConfiguration> options)
+    {
+        if (options.Value.UsePresignedUploadUrls != false)
+        {
+            return NotFound();
+        }
+
+        var participant = HttpContext.GetParticipant();
+        var mediaFile = await mediaService.GetFileByIdAsync(mediaFileId);
+        if (mediaFile == null || mediaFile.Media.ParticipantId != participant?.Id)
+        {
+            return NotFound();
+        }
+
+        await using var stream = file.OpenReadStream();
+        await storageService.UploadFile(stream, file.ContentType, mediaFile.Path);
+
+        return Ok();
+    }
+
+    [HttpGet("{mediaId:guid}/Status")]
     public async Task<ActionResult<MediaResponseDto>> GetMedia(
         Guid mediaId,
         [FromServices] ICommandHandler<ValidateMediaCommand, Media> handler)
@@ -67,7 +102,7 @@ public class MediaController (
         return MediaMapper.ToResponse(result.Value);
     }
 
-    [HttpGet("file/{fileId:guid}")]
+    [HttpGet("File/{fileId:guid}")]
     [Produces("application/octet-stream")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileStreamResult))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

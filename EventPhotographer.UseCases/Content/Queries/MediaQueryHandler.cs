@@ -43,6 +43,7 @@ public record MediaFileModel
     public Guid Id { get; set; }
     public required string MimeType { get; set; }
     public ulong FileSize { get; set; }
+    public MediaFileType FileType { get; set; }
 }
 
 public class MediaQueryHandler(
@@ -102,6 +103,7 @@ public class MediaQueryHandler(
                     Id = f.Id,
                     MimeType = f.MimeType,
                     FileSize = f.FileSize,
+                    FileType = f.FileType,
                 }),
             });
     }

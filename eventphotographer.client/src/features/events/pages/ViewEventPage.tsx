@@ -73,14 +73,24 @@ function EventArchiveLink({ eventId }: { eventId: string }) {
 }
 
 function SingleEventFile({ media }: { media: EventMediaResponse }) {
+    const [thumbnail] = useState<string | null>(() => {
+        return (
+            media.files?.find((file) => file.fileType === 'Thumbnail')?.id ??
+            media.files?.find((file) => file.fileType === 'Original')?.id ??
+            null
+        );
+    });
+
     return (
         <div className="col-sm-2 col-md-4 col-lg-3 mb-4">
             <div className="card eventImageCard">
-                <img
-                    className="card-img-top"
-                    loading="lazy"
-                    src={mediaApi.getFileUrl(media.files[0].id)}
-                />
+                {null !== thumbnail ? (
+                    <img
+                        className="card-img-top"
+                        loading="lazy"
+                        src={mediaApi.getFileUrl(thumbnail)}
+                    />
+                ) : null}
                 <div className="card-body">
                     <div className="card-text">
                         <User className="me-1" />

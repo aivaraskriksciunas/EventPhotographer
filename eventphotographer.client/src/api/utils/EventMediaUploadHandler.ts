@@ -7,7 +7,7 @@ export class EventMediaUploadHandler extends FileUploadHandler {
         super(file);
     }
 
-    public async uploadFile(): Promise<void> {
+    public async uploadFile(): Promise<string | null> {
         let createMediaResponse = null;
         try {
             createMediaResponse = await mediaApi.createMedia(
@@ -21,7 +21,7 @@ export class EventMediaUploadHandler extends FileUploadHandler {
                 ),
             );
 
-            return;
+            return null;
         }
 
         try {
@@ -33,7 +33,6 @@ export class EventMediaUploadHandler extends FileUploadHandler {
             );
 
             this.emitUploadedEvent();
-            this.pollMediaStatus(createMediaResponse.media.id);
         } catch (e) {
             if (axios.isAxiosError(e)) {
                 if (e.response?.status === 405) {
@@ -44,7 +43,7 @@ export class EventMediaUploadHandler extends FileUploadHandler {
                     );
                 }
 
-                return;
+                return null;
             }
 
             this.emitErrorEvent(
@@ -53,38 +52,9 @@ export class EventMediaUploadHandler extends FileUploadHandler {
                 ),
             );
 
-            return;
-        }
-    }
-
-    private async pollMediaStatus(
-        id: string,
-        tryCounter: number = 0,
-        failureCounter = 0,
-    ) {
-        ++tryCounter;
-        if (tryCounter >= 100 || failureCounter >= 3) {
-            this.emitErrorEvent(
-                new Error(
-                    'Could not verify if the file was uploaded. Please try again later',
-                ),
-            );
+            return null;
         }
 
-        try {
-            const response = await mediaApi.getStatus(id);
-            if (response.status === 'Validated') {
-                this.emitValidatedEvent(response);
-
-                return;
-            }
-        } catch {
-            failureCounter++;
-        }
-
-        setTimeout(
-            () => this.pollMediaStatus(id, tryCounter, failureCounter),
-            5000,
-        );
+        return createMediaResponse.media?.id ?? null;
     }
 }
