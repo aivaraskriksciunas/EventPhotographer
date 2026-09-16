@@ -92,7 +92,6 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
 
             // S3 service mocking
             services.RemoveAll<IAmazonS3>();
-            services.RemoveAll<ObjectStorageStartup>();
             services.AddSingleton<IAmazonS3>(_ => Mock.Of<IAmazonS3>());
 
             services.RemoveAll<RegisterMessageConsumers>();

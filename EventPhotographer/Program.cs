@@ -19,7 +19,6 @@ builder.Services.AddDataServices(builder.Configuration.GetConnectionString("Defa
 builder.Services.AddObjectStorage(
     builder.Configuration.GetSection("ObjectStorage").Get<ObjectStorageConfiguration>() ?? throw new ApplicationException("Object storage settings are not configured")
 );
-builder.Services.AddHostedService<ObjectStorageStartup>();
 
 // RabbitMQ + MassTransit
 builder.Services.AddApplicationMessageQueues(builder.Configuration.GetConnectionString("RabbitMq") ?? throw new ApplicationException("RabbitMq connection string is not provided"));
