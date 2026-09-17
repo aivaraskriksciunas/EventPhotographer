@@ -37,6 +37,7 @@ internal class CreateEventFileArchiveJob
         }
 
         var media = _dbContext.MediaFiles
+            .Where(f => f.FileType == MediaFileType.Original)
             .Where(f => f.Media.Type == MediaType.UserUpload)
             .Where(f => f.Media.EventId == endedEvent.Id)
             .ToAsyncEnumerable();
