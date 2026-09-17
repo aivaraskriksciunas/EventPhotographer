@@ -72,20 +72,20 @@ services:
       - worker
 
   # Note for dev: presigned URLs do not work locally - use the API server as a proxy
-  minio: 
-    image: minio/minio:latest
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: minioadmin123
-    ports:
-      - "9000:9000"      # API port
-      - "8009:9001"      # Console/Web UI port
-    volumes:
-      - ./storage_data:/data
-    profiles: 
-      - web
-      - worker
+  # minio: 
+  #   image: minio/minio:latest
+  #   command: server /data --console-address ":9001"
+  #   environment:
+  #     MINIO_ROOT_USER: admin
+  #     MINIO_ROOT_PASSWORD: minioadmin123
+  #   ports:
+  #     - "9000:9000"      API port
+  #     - "8009:9001"      Console/Web UI port
+  #   volumes:
+  #     - ./storage_data:/data
+  #   profiles: 
+  #     - web
+  #     - worker
 
   # bugsink:
   #   container_name: eventphotographer_bugsink

@@ -33,7 +33,7 @@ export const mediaApi = {
         file: File,
         onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
     ) => {
-        if (!uploadUrl.startsWith('http')) {
+        if (uploadUrl.startsWith('http://')) {
             const formData = new FormData();
             formData.append('file', file);
 
@@ -46,6 +46,7 @@ export const mediaApi = {
 
         return await axios.put(uploadUrl, file, {
             onUploadProgress,
+            headers: { 'Content-Type': file.type }
         });
     },
     createMediaUploadHandler: (file: File) => new EventMediaUploadHandler(file),
