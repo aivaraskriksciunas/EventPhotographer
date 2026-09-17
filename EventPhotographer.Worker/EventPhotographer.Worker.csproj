@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-EventPhotographer.Worker-368f792b-346f-4156-bdb2-b9f5dbc05a1b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	<SixLaborsLicenseKey>$(SIXLABORS_LICENSE_KEY)</SixLaborsLicenseKey>
   </PropertyGroup>
 
   <ItemGroup>
