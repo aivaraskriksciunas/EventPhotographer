@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
 using EventPhotographer.Core.Configuration;
 using Microsoft.Extensions.Options;
@@ -20,7 +19,7 @@ public class MediaStorageService(
             Key = key,
             InputStream = fileStream,
             ContentType = contentType,
-            DisablePayloadSigning = options.ServiceURL.StartsWith("https://"),
+            DisablePayloadSigning = true,
             DisableDefaultChecksumValidation = true,
         });
 
@@ -38,7 +37,8 @@ public class MediaStorageService(
 
     public async Task<string> CreatePresignedUrl(
         string identifier, 
-        long fileSize)
+        long fileSize,
+        string fileType)
     {
         return await s3Client.GetPreSignedURLAsync(new GetPreSignedUrlRequest
         {
@@ -46,6 +46,7 @@ public class MediaStorageService(
             Key = identifier,
             Expires = DateTime.UtcNow.AddMinutes(10),
             Verb = HttpVerb.PUT,
+            ContentType = fileType,
         });
     }
 }

@@ -87,7 +87,8 @@ internal class CreateMediaHandler(
         {
             uploadUrl = await mediaStorageService.CreatePresignedUrl(
                 key,
-                command.FileSize);
+                command.FileSize,
+                command.FileType);
         }
 
         var media = new Media
