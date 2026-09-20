@@ -1,12 +1,12 @@
 import { EventResponse } from '@/api/events';
 import { formatLongDateTime } from '@/utils/date';
-import { Calendar } from 'lucide-react';
+import { Calendar, UserIcon } from 'lucide-react';
 import { Link, useLoaderData } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
 export default function ListEventsPage() {
-    const events = useLoaderData();
+    const events = useLoaderData<EventResponse[]>();
 
     if (!events) {
         return (
@@ -36,6 +36,12 @@ export default function ListEventsPage() {
                                 {formatLongDateTime(event.startDate)} -{' '}
                                 {formatLongDateTime(event.endDate)}
                             </div>
+                            {event.participantCount ? (
+                                <span className="d-flex align-items-center">
+                                    <UserIcon className="me-1" />{' '}
+                                    {event.participantCount}
+                                </span>
+                            ) : null}
                         </div>
                     </div>
                 </div>

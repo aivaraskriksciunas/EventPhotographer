@@ -5,7 +5,9 @@ using EventPhotographer.Core.Extensions;
 using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.UseCases.Common.Queries;
 using EventPhotographer.UseCases.Events;
+using EventPhotographer.UseCases.Events.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,17 +37,28 @@ public class EventsController(
     [HttpGet]
     [Route("")]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<EventResponseDto>>> GetAll(
+        [FromServices] IQueryHandler<GetUserEventsQuery, IEnumerable<EventListModel>> queryHandler)
     {
         var user = await userManager.GetUserAsync(User);
-        var result = await queryService.GetAllForUserAsync(user!);
+        var result = await queryHandler.QueryAsync(new GetUserEventsQuery
+        {
+            User = user!,
+        });
 
         if (!result.IsSuccess)
         {
             return result.ToProblemDetailsResult();
         }
 
-        return Ok(EventMapper.CreateResponseDtos(result.Value));
+        return Ok(result.Value.Select(e => new EventResponseDto
+        {
+            Id = e.Id,
+            Name = e.Name,
+            StartDate = e.StartDate,
+            EndDate = e.EndDate,
+            ParticipantCount = e.ParticipantCount,
+        }));
     }
 
     [HttpPost]

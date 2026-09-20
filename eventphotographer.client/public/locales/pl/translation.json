@@ -1,6 +1,7 @@
 {
     "Save": "Zapisz",
     "Login": "Zaloguj się",
+    "Logout": "Wyloguj się",
     "Register": "Zarejestruj się",
     "Remember me": "Zapamiętaj mnie",
     "Email": "E-mail",
@@ -16,6 +17,8 @@
     "Upload or drag your files here": "Prześlij lub przeciągnij tutaj swoje pliki",
     "Don't have an account yet?": "Jeszcze nie masz konta?",
     "Validating": "Weryfikacja",
+    "Load more": "Pobierz więcej",
+    "Quick links": "Szybki wybór",
 
     "My events": "Moje wydarzenia",
     "New event": "Nowe wydarzenie",

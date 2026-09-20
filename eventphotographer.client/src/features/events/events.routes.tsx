@@ -26,7 +26,10 @@ export const eventsRoutes: RouteObject[] = [
                 loader: async ({ params }) => {
                     const [event, media] = await Promise.all([
                         eventsApi.getEvent(params.eventId!),
-                        eventsApi.getEventMedia(params.eventId!),
+                        eventsApi.getEventMedia(params.eventId!, {
+                            page: 1,
+                            pageSize: 16,
+                        }),
                     ]);
 
                     return { event, media };

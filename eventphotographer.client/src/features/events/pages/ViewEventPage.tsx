@@ -5,12 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { Link, useRouteLoaderData } from 'react-router-dom';
 import { eventsApi } from '@/api/events';
 import { mediaApi } from '@/api/media';
+import { makePaginatedHandler, PagedResponse } from '@/api/client';
+import { PaginatedView } from '@/components/pagination/PaginatedView';
+import { LoadMorePaginator } from '@/components/pagination/LoadMorePagination';
 
 export default function ViewEventPage() {
     const { t } = useTranslation();
-    const { event, media } = useRouteLoaderData<{
+    const { event, media: preloadedMedia } = useRouteLoaderData<{
         event: EventResponse;
-        media: EventMediaResponse[];
+        media: PagedResponse<EventMediaResponse>;
     }>('view-event')!;
 
     return (
@@ -24,11 +27,27 @@ export default function ViewEventPage() {
             <div className="mb-3">
                 <EventArchiveLink eventId={event.id} />
             </div>
-            <div className="row">
-                {media.map((m) => (
-                    <SingleEventFile key={m.id} media={m} />
-                ))}
-            </div>
+            <PaginatedView
+                initialData={preloadedMedia}
+                requestHandler={makePaginatedHandler(
+                    eventsApi.getEventMedia,
+                    event.id,
+                )}
+            >
+                {(items) => (
+                    <>
+                        <div className="row">
+                            {items.map((m) => (
+                                <SingleEventFile key={m.id} media={m} />
+                            ))}
+                        </div>
+
+                        <div className="d-flex justify-content-center">
+                            <LoadMorePaginator />
+                        </div>
+                    </>
+                )}
+            </PaginatedView>
         </>
     );
 }

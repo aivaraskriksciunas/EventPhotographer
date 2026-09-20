@@ -1,5 +1,27 @@
 {
     "Save": "Sauvegarder",
+    "Login": "Se connecter",
+    "Logout": "Se déconnecter",
+    "Register": "S'inscrire",
+    "Remember me": "Se souvenir de moi",
     "Email": "E-mail",
-    "Password": "Mot de passe"
+    "Password": "Mot de passe",
+    "Repeat password": "Répéter le mot de passe",
+    "Join": "Rejoindre",
+    "Join event": "Rejoindre l'événement",
+    "Code": "Code",
+    "Name": "Nom",
+    "Upload using WhatsApp": "Téléverser avec WhatsApp",
+    "Privacy policy": "Politique de confidentialité (EN)",
+    "Accepted file types": "Types de fichiers acceptés",
+    "Upload or drag your files here": "Téléversez ou glissez vos fichiers ici",
+    "Don't have an account yet?": "Vous n'avez pas encore de compte ?",
+    "Validating": "Validation en cours",
+    "Load more": "Charger plus",
+    "Quick links": "Liens rapides",
+
+    "My events": "Mes événements",
+    "New event": "Nouvel événement",
+    "Account": "Compte",
+    "Past events": "Événements passés"
 }

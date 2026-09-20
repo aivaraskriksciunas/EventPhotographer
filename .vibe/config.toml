@@ -14,3 +14,7 @@ permission = "ask"
 permission = "always"
 allow = ["dir", "cd", "type", "findstr", "dotnet"]
 
+[[mcp_servers]]
+name = "learn.microsoft.com"
+transport = "streamable-http"
+url = "https://learn.microsoft.com/api/mcp"

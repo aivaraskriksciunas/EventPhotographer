@@ -28,14 +28,4 @@ public class EventQueryService(
 
         return @event;
     }
-
-    public async Task<Result<IEnumerable<Event>>> GetAllForUserAsync(User user)
-    {
-        var events = await dbContext.Events
-            .Where(e => e.UserId == user.Id)
-            .OrderByDescending(e => e.StartDate)
-            .ToListAsync();
-
-        return events;
-    }
 }

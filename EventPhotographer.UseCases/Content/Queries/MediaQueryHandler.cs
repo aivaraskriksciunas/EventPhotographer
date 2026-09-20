@@ -7,12 +7,10 @@ using EventPhotographer.UseCases.Common.Queries;
 using EventPhotographer.UseCases.Events.Authorization;
 using EventPhotographer.Core.Features.Content.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
-using EventPhotographer.UseCases.Content.Authorization;
 
 namespace EventPhotographer.UseCases.Content.Queries;
 
-public record GetMediaListForEventQuery : IQuery<IEnumerable<MediaModel>>
+public record GetMediaListForEventQuery : PagedQuery, IQuery<PagedResult<MediaModel>>
 {
     public required Event Event;
     public required User User;
@@ -49,10 +47,10 @@ public record MediaFileModel
 public class MediaQueryHandler(
     AppDbContext db,
     AuthorizationService authorizationService)
-    : IQueryHandler<GetMediaListForEventQuery, IEnumerable<MediaModel>>,
+    : IQueryHandler<GetMediaListForEventQuery, PagedResult<MediaModel>>,
     IQueryHandler<GetArchiveForEventQuery, MediaModel?>
 {
-    public async Task<Result<IEnumerable<MediaModel>>> QueryAsync(GetMediaListForEventQuery query, CancellationToken cancellationToken = default)
+    public async Task<Result<PagedResult<MediaModel>>> QueryAsync(GetMediaListForEventQuery query, CancellationToken cancellationToken = default)
     {
         var authResult = await authorizationService.AuthorizeAsync(query.User, query.Event, new ManageEventRequirement());
         if (!authResult.IsAuthorized)
@@ -64,9 +62,10 @@ public class MediaQueryHandler(
             .Where(m => m.EventId == query.Event.Id)
             .Where(m => m.Type == MediaType.UserUpload)
             .Where(m => m.Status == MediaStatus.Validated || m.Status == null)
-            .Where(m => m.Files.Any());
+            .Where(m => m.Files.Any())
+            .OrderByDescending(m => m.Id);
 
-        return await SelectMediaModel(queryable).ToListAsync();
+        return await SelectMediaModel(queryable).ToPagedResultAsync(query, cancellationToken);
     }
 
     public async Task<Result<MediaModel?>> QueryAsync(GetArchiveForEventQuery query, CancellationToken cancellationToken = default)

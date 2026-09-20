@@ -1,4 +1,8 @@
-import { fetchApi } from '@/api/client';
+import {
+    fetchApi,
+    PagedResponse,
+    PaginationQueryParameters,
+} from '@/api/client';
 
 interface CreateEventRequest {
     name: string;
@@ -16,6 +20,7 @@ export interface EventResponse {
     name: string;
     startDate: string;
     endDate: string;
+    participantCount?: number;
 }
 
 export interface EventShareableLinkResponse {
@@ -56,6 +61,8 @@ export interface EventMediaResponse {
     files: EventMediaFileResponse[];
 }
 
+export type MediaSortOrder = 'NewestFirst' | 'OldestFirst';
+
 export const eventsApi = {
     createEvent: async (request: CreateEventRequest) =>
         fetchApi<EventResponse>('/api/events', 'POST', request),
@@ -87,8 +94,17 @@ export const eventsApi = {
         fetchApi<ParticipantResponse>(`/api/participants/current`),
     leaveCurrentEvent: async () => fetchApi<null>(`/api/participants/leave`),
 
-    getEventMedia: async (eventId: string) =>
-        fetchApi<EventMediaResponse[]>(`/api/events/${eventId}/media`),
+    getEventMedia: async (
+        eventId: string,
+        pagination: PaginationQueryParameters,
+    ) => {
+        return fetchApi<PagedResponse<EventMediaResponse>>(
+            `/api/events/${eventId}/media`,
+            'GET',
+            null,
+            { params: pagination },
+        );
+    },
     getEventArchive: async (eventId: string) =>
         fetchApi<EventMediaResponse | null>(
             `/api/events/${eventId}/media/archives`,

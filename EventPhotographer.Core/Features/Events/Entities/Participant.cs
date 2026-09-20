@@ -16,6 +16,8 @@ public class Participant : IEntity
     [StringLength(100)]
     public required string Name { get; set; }
 
+    public bool HasUploaded { get; set; } = false;
+
     public Guid EventId { get; set; }
     public required Event Event { get; set; }
 

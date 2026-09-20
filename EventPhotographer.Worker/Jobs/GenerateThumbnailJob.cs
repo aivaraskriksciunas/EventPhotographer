@@ -23,7 +23,7 @@ internal class GenerateThumbnailJob(
             .Where(f => f.Id == mediaFileId)
             .Include(f => f.Media)
             .FirstOrDefaultAsync();
-        if (mediaFile == null)
+        if (mediaFile == null || !FileContentTypeReader.IsImage(mediaFile.MimeType))
         {
             return;
         }

@@ -82,3 +82,20 @@ React + TypeScript + Vite:
 - Controllers use `result.ToProblemDetailsResult()` to convert failures to HTTP problem details
 - Success: `return Ok(result.Value)`
 - Entity not found: `return NotFound()`
+
+### CQRS Queries
+- Query records, response models, and their handler live together in one file under `UseCases/[Feature]/Queries`
+- Handlers implement `IQueryHandler<TQuery, TResult>`; controllers resolve them per-endpoint via `[FromServices]`, not constructor injection
+
+### Pagination
+- Paginated queries inherit `PagedQuery` and return `PagedResult<T>` (`Items`, `Page`, `PageSize`, `TotalCount`, `TotalPages`, `HasPreviousPage`, `HasNextPage`)
+- Handlers call `queryable.ToPagedResultAsync(query, ct)` from `UseCases/Common/Queries/PaginationExtensions`, which clamps `Page >= 1` and `PageSize` to 1..50
+- Order the queryable deterministically before paginating (tie-break by `Id`), otherwise pages can skip or duplicate rows
+- Controllers bind `[FromQuery] PaginationQueryParameters` (`App/Common/DTO/QueryParams`) and map it onto the query — the DTO duplication with `PagedQuery` is intentional layering
+- Frontend: `PagedResponse<T>` and `PaginationQueryParameters` in `src/api/client.ts`; reuse `PaginatedView` + `LoadMorePaginator` from `src/components/pagination` (render prop + context). Keep the page size identical between the route loader's initial fetch and subsequent fetches
+
+### Testing
+- xUnit integration tests in `EventPhotographer.Tests`, inheriting `BaseIntegrationTest` (provides `Client`, `Db`, `CreateUserAsync`, `GetClientWithAuthAsync`)
+- Tests run against a real PostgreSQL via Testcontainers — Docker must be running
+- Run all: `dotnet test EventPhotographer.Tests -v q`; filter: `dotnet test --filter "FullyQualifiedName~EventPhotographer.Tests.App.Events.EventMediaTests"`
+- Test data is built with Bogus fakers from `EventPhotographer.Tests/Fakes`

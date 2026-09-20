@@ -107,6 +107,12 @@ internal class CreateMediaHandler(
             FileSize = (ulong)command.FileSize,
         };
 
+        if (command.Participant.HasUploaded == false)
+        {
+            command.Participant.HasUploaded = true;
+            db.Update(command.Participant);
+        }
+
         await db.AddAsync(media, cancellationToken);
         await db.AddAsync(mediaFile, cancellationToken);
         await db.SaveChangesAsync(cancellationToken);

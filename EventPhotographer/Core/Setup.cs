@@ -63,7 +63,7 @@ public static class Setup
         {
             options.Cookie.HttpOnly = true;
             options.SlidingExpiration = true;
-            options.ExpireTimeSpan = new TimeSpan(1, 0, 0); // 1 Hour
+            options.ExpireTimeSpan = TimeSpan.FromDays(30);
             options.Cookie.Name = "AuthenticationCookie";
         });
 

@@ -6,6 +6,7 @@ using EventPhotographer.UseCases.Content.Queries;
 using Microsoft.AspNetCore.Identity;
 using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Extensions;
+using EventPhotographer.App.Common.DTO.QueryParams;
 
 namespace EventPhotographer.App.Events.Controllers;
 
@@ -16,9 +17,10 @@ public class EventMediaController(
 {
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<MediaModel>>> List(
+    public async Task<ActionResult<PagedResult<MediaModel>>> List(
         Guid eventId,
-        [FromServices] IQueryHandler<GetMediaListForEventQuery, IEnumerable<MediaModel>> queryHandler)
+        [FromQuery] PaginationQueryParameters parameters,
+        [FromServices] IQueryHandler<GetMediaListForEventQuery, PagedResult<MediaModel>> queryHandler)
     {
         var @event = await eventService.GetByIdAsync(eventId);
         var user = await userManager.GetUserAsync(User);
@@ -27,12 +29,14 @@ public class EventMediaController(
             return NotFound();
         }
 
-        var result = await queryHandler.QueryAsync(new GetMediaListForEventQuery 
-        { 
-            Event = @event, 
-            User = user! 
+        var result = await queryHandler.QueryAsync(new GetMediaListForEventQuery
+        {
+            Event = @event,
+            User = user!,
+            Page = parameters.Page,
+            PageSize = parameters.PageSize,
         });
-        if (!result.IsSuccess) 
+        if (!result.IsSuccess)
         {
             return result.ToProblemDetailsResult();
         }

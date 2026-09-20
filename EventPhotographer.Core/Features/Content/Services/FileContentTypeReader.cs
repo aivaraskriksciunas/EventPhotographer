@@ -140,4 +140,19 @@ public class FileContentTypeReader
         mimeType = mimeType.ToLower();
         return _fileTypes.Any(ft => ft.MimeType == mimeType && ft.IsAllowed);
     }
+
+    public static bool IsImage(string mimeType)
+    {
+        return IsAllowedMimeType(mimeType) && mimeType.StartsWith("image/");
+    }
+
+    public static bool IsVideo(string mimeType)
+    {
+        return IsAllowedMimeType(mimeType) && mimeType.StartsWith("video/");
+    }
+
+    public static bool IsAudio(string mimeType)
+    {
+        return IsAllowedMimeType(mimeType) && mimeType.StartsWith("audio/");
+    }
 }

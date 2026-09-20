@@ -3,6 +3,7 @@ using EventPhotographer.Core.Features.Content.Entities;
 using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Tests.Fakes.Events;
+using EventPhotographer.UseCases.Common.Queries;
 using EventPhotographer.UseCases.Content.Queries;
 using System.Net;
 using System.Net.Http.Json;
@@ -97,9 +98,11 @@ public class EventMediaTests : BaseIntegrationTest
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var mediaList = await response.Content.ReadFromJsonAsync<List<MediaModel>>();
-        Assert.NotNull(mediaList);
-        Assert.Empty(mediaList);
+        var paged = await response.Content.ReadFromJsonAsync<PagedResult<MediaModel>>();
+        Assert.NotNull(paged);
+        Assert.Empty(paged.Items);
+        Assert.Equal(0, paged.TotalCount);
+        Assert.Equal(1, paged.Page);
     }
 
     [Fact]
@@ -111,7 +114,7 @@ public class EventMediaTests : BaseIntegrationTest
             .Rules((f, e) => e.User = user)
             .Generate();
         await Db.Events.AddAsync(@event);
-        
+
         var media = CreateMediaWithFile(@event);
         await Db.Media.AddAsync(media);
         await Db.SaveChangesAsync();
@@ -122,10 +125,10 @@ public class EventMediaTests : BaseIntegrationTest
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var mediaList = await response.Content.ReadFromJsonAsync<List<MediaModel>>();
-        Assert.NotNull(mediaList);
-        Assert.Single(mediaList);
-        Assert.Equal(media.Id, mediaList[0].Id);
+        var paged = await response.Content.ReadFromJsonAsync<PagedResult<MediaModel>>();
+        Assert.NotNull(paged);
+        Assert.Single(paged.Items);
+        Assert.Equal(media.Id, paged.Items[0].Id);
     }
 
     [Fact]
@@ -151,9 +154,10 @@ public class EventMediaTests : BaseIntegrationTest
 
         // Assert - Only Validated and null status should be returned
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var mediaList = await response.Content.ReadFromJsonAsync<List<MediaModel>>();
-        Assert.NotNull(mediaList);
-        Assert.Equal(2, mediaList.Count);
+        var paged = await response.Content.ReadFromJsonAsync<PagedResult<MediaModel>>();
+        Assert.NotNull(paged);
+        Assert.Equal(2, paged.Items.Count);
+        Assert.Equal(2, paged.TotalCount);
     }
 
     [Fact]
@@ -178,10 +182,10 @@ public class EventMediaTests : BaseIntegrationTest
 
         // Assert - Only UserUpload should be returned
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var mediaList = await response.Content.ReadFromJsonAsync<List<MediaModel>>();
-        Assert.NotNull(mediaList);
-        Assert.Single(mediaList);
-        Assert.Equal(userUploadMedia.Id, mediaList[0].Id);
+        var paged = await response.Content.ReadFromJsonAsync<PagedResult<MediaModel>>();
+        Assert.NotNull(paged);
+        Assert.Single(paged.Items);
+        Assert.Equal(userUploadMedia.Id, paged.Items[0].Id);
     }
 
     // ========== ListArchives Specific Tests ==========
