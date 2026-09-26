@@ -1,6 +1,5 @@
 import { MiddlewareFunction, redirect, RouteObject } from 'react-router-dom';
 import JoinEventPage from './pages/JoinEventPage';
-import ViewEventPage from './pages/ViewEventPage';
 import { useParticipant } from '@/state/participant';
 import { eventsApi } from '@/api/events';
 
@@ -35,7 +34,10 @@ export const publicEventsRoutes: RouteObject[] = [
     },
     {
         path: '/events/current',
-        element: <ViewEventPage />,
+        lazy: {
+            Component: async () =>
+                (await import('./pages/ViewEventPage')).default,
+        },
         middleware: [hasActiveEventMiddleware],
     },
 ];

@@ -32,6 +32,7 @@ public static class ResultExtensions
             },
             _ => new ProblemDetails
             {
+                Detail = result.Error.Code,
                 Status = StatusCodes.Status400BadRequest
             }
         };
@@ -48,6 +49,11 @@ public static class ResultExtensions
             validationProblemDetails.Errors = errors;
 
             new ObjectResult(problemDetails);
+        }
+
+        if (result.Error is IErrorWithPayload payloadError)
+        {
+            problemDetails.Extensions["payload"] = payloadError.Payload;
         }
 
         return new ObjectResult(problemDetails);

@@ -1,4 +1,5 @@
 ﻿using Amazon.S3;
+using EasyNetQ;
 using EventPhotographer.Core;
 using EventPhotographer.Core.Startup;
 using Microsoft.AspNetCore.Authentication;
@@ -93,6 +94,10 @@ public sealed class AppWebApplicationFactory : WebApplicationFactory<Program>, I
             // S3 service mocking
             services.RemoveAll<IAmazonS3>();
             services.AddSingleton<IAmazonS3>(_ => Mock.Of<IAmazonS3>());
+
+            // Message bus mocking
+            services.RemoveAll<IBus>();
+            services.AddSingleton<IBus>(_ => new Mock<IBus> { DefaultValue = DefaultValue.Mock }.Object);
 
             services.RemoveAll<RegisterMessageConsumers>();
             services.Where(d => d.ServiceType == typeof(IHostedService) && d.ImplementationType == typeof(RegisterMessageConsumers))

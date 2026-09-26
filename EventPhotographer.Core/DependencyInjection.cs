@@ -1,6 +1,8 @@
 ﻿using EventPhotographer.Core.Features.Content;
+using EventPhotographer.Core.Features.Emails;
 using EventPhotographer.Core.Features.Events;
 using EventPhotographer.Core.Features.MessagingIntegrations;
+using EventPhotographer.Core.Features.Users;
 using Medallion.Threading;
 using Medallion.Threading.Postgres;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,8 @@ public static class DependencyInjection
     {
         services.AddEventServices();
         services.AddContentServices();
+        services.AddEmailServices();
         services.AddMessagingIntegrationServices();
+        services.AddUserServices();
     }
 }

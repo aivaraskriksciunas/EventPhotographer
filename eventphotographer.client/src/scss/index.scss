@@ -16,6 +16,7 @@ body {
 
 @import './components';
 @import './file-upload';
+@import './spinners';
 
 .lucide {
     width: 1em;
@@ -51,6 +52,13 @@ body {
     }
 }
 
+.navbar {
+    background-color: var(--color-background);
+    border-bottom: var(--border-width-lg) solid var(--color-primary);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: var(--bs-box-shadow);
+}
+
 footer {
     border-top: 1px solid var(--color-border);
     background-color: var(--color-background-darkest);
@@ -77,4 +85,18 @@ footer {
     div {
         margin-bottom: 0.25em;
     }
+}
+
+.userEmailNotConfirmedWarning {
+    background-color: var(--color-danger);
+    border-radius: var(--border-inner-radius) var(--border-inner-radius) 0 0;
+    text-align: center;
+    font-size: 0.75em;
+    color: var(--color-text-inverted);
+    box-shadow: var(--bs-box-shadow-sm);
+    position: fixed;
+    bottom: 0;
+    z-index: 1000;
+    width: 100%;
+    padding: var(--spacing-1);
 }

@@ -12,34 +12,36 @@ export default function Navbar() {
     const participant = useParticipant((state) => state.participant);
 
     return (
-        <nav className="navbar navbar-expand px-3">
-            <Link to="/" className="navbar-brand">
-                LiveAlbum
-            </Link>
-            <div className="collapse navbar-collapse">
-                <div className="navbar-nav">
-                    {user ? <AuthenticatedUserMenu /> : null}
-                </div>
+        <>
+            <nav className="navbar navbar-expand px-3">
+                <Link to="/" className="navbar-brand">
+                    LiveAlbum
+                </Link>
+                <div className="collapse navbar-collapse">
+                    <div className="navbar-nav">
+                        {user ? <AuthenticatedUserMenu /> : null}
+                    </div>
 
-                <div className="navbar-nav me-auto">
-                    {participant !== null ? (
-                        <CurrentEventIndicator event={participant.event} />
-                    ) : (
-                        <JoinEventButton />
-                    )}
-                </div>
+                    <div className="navbar-nav me-auto">
+                        {participant !== null ? (
+                            <CurrentEventIndicator event={participant.event} />
+                        ) : (
+                            <JoinEventButton />
+                        )}
+                    </div>
 
-                <div className="navbar-nav">
-                    {user ? (
-                        <AccountDropdown user={user} />
-                    ) : (
-                        <Link to="/login" className="nav-link">
-                            {t('Login')}
-                        </Link>
-                    )}
+                    <div className="navbar-nav">
+                        {user ? (
+                            <AccountDropdown user={user} />
+                        ) : (
+                            <Link to="/login" className="nav-link">
+                                {t('Login')}
+                            </Link>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </>
     );
 }
 

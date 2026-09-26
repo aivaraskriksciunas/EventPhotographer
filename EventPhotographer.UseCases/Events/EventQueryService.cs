@@ -4,7 +4,6 @@ using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.UseCases.Common;
 using EventPhotographer.UseCases.Common.Authorization;
 using EventPhotographer.UseCases.Events.Authorization;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventPhotographer.UseCases.Events;
 

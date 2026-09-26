@@ -1,5 +1,7 @@
 ﻿using EventPhotographer.Worker.Configuration;
 using EventPhotographer.Worker.Consumers;
+using EventPhotographer.Worker.Services.Emails;
+using EventPhotographer.Worker.Services.Emails.Providers;
 using EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
 using EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.MessageContentProcessors;
 using System.Net.Http.Headers;
@@ -13,6 +15,7 @@ internal static class DependencyInjection
         services.AddScoped<CreateCompressedEventFileArchiveConsumer>();
         services.AddScoped<ProcessWhatsAppWebhookPayloadConsumer>();
         services.AddScoped<ValidateUploadedFileMessageConsumer>();
+        services.AddScoped<SendEmailMessageConsumer>();
     }
 
     public static void AddWorkerServices(this IServiceCollection services)
@@ -23,6 +26,8 @@ internal static class DependencyInjection
         services.AddKeyedTransient<IMessageContentProcessor, TextMessageProcessor>(TextMessageProcessor.MessageType);
         services.AddKeyedTransient<IMessageContentProcessor, VideoMessageProcessor>(VideoMessageProcessor.MessageType);
         services.AddKeyedTransient<IMessageContentProcessor, ImageMessageProcessor>(ImageMessageProcessor.MessageType);
+
+        services.AddScoped<IEmailSender, SmtpEmailProvider>();
     }
 
     public static void AddWorkerHttpClients(this IServiceCollection services, IConfiguration configuration)

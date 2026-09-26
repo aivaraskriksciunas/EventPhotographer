@@ -1,11 +1,14 @@
-﻿using EventPhotographer.App.Users.Dto;
+﻿using EventPhotographer.App.Users.Dto.Request;
+using EventPhotographer.App.Users.Dto.Response;
 using EventPhotographer.App.Users.Mappers;
 using EventPhotographer.Core;
+using EventPhotographer.Core.Features.Users.Entities;
+using EventPhotographer.UseCases.Common.Commands;
+using EventPhotographer.UseCases.Users.Commands;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using EventPhotographer.Core.Features.Users.Entities;
 
 namespace EventPhotographer.App.Users.Controllers;
 
@@ -59,7 +62,8 @@ public class AuthController : ApiController
     [HttpPost]
     public async Task<ActionResult<UserLoginResponseDto>> Register(
         [FromBody]RegisterRequestDto request,
-        [FromServices]IValidator<RegisterRequestDto> validator)
+        [FromServices]IValidator<RegisterRequestDto> validator,
+        [FromServices]ICommandHandler<StartAccountVerification, StartAccountVerificationResult> verifyCommandHandler)
     {
         await validator.ValidateAndThrowAsync(request);
 
@@ -68,6 +72,7 @@ public class AuthController : ApiController
             Email = request.Email,
             UserName = request.Email,
             Name = request.Name,
+            EmailConfirmed = false,
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -77,6 +82,7 @@ public class AuthController : ApiController
         }
 
         await _signInManager.SignInAsync(user, false);
+        await verifyCommandHandler.HandleAsync(new StartAccountVerification { User = user });
 
         return Ok(UserMapper.ToLoginResponseDto(user));
     }

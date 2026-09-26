@@ -14,6 +14,11 @@ internal class ScheduleRecurringJobs(
             m => m.ExecuteAsync(), 
             Cron.MinuteInterval(15));
 
+        backgroundJobs.AddOrUpdate<SendScheduledEmailsJob>(
+            "send-scheduled-emails",
+            m => m.ExecuteAsync(),
+            Cron.Minutely());
+
         return Task.CompletedTask;
     }
 

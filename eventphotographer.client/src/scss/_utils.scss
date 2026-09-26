@@ -10,12 +10,25 @@
     color: var(--color-danger) !important;
 }
 
+.text-success {
+    color: var(--color-success) !important;
+}
+
 .bg-success {
     background-color: var(--color-success) !important;
 }
 
 .bg-danger {
     background-color: var(--color-danger) !important;
+
+    a {
+        color: white;
+    }
+}
+
+.link {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .bg-secondary {

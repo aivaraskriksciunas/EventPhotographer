@@ -1,4 +1,5 @@
 ﻿using EventPhotographer.Core.Entities.AccountPolicies;
+using EventPhotographer.Core.Features.Emails.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,5 +21,9 @@ public class User : IdentityUser
         }
     }
 
-    public ICollection<AccountTier> TierRecords = new Collection<AccountTier>();
+    public ICollection<AccountTier> TierRecords = new List<AccountTier>();
+
+    public ICollection<Email> SentEmails = new List<Email>();
+
+    public ICollection<AccountVerification> AccountVerifications = new List<AccountVerification>();
 }

@@ -3,7 +3,7 @@ using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Services;
 using EventPhotographer.UseCases.Common.Commands;
-using EventPhotographer.UseCases.Events;
+using EventPhotographer.UseCases.Events.Commands;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 

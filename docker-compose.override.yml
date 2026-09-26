@@ -27,6 +27,13 @@ services:
       ObjectStorage__AccessKey: ${ObjectStorage__AccessKey:-admin}
       ObjectStorage__Password: ${ObjectStorage__Password:-minioadmin123}
       ObjectStorage__BucketName: ${ObjectStorage__BucketName:-event-photographer}
+      Smtp__Host: ${Smtp__Host:-mailpit}
+      Smtp__Port: ${Smtp__Port:-1025}
+      Smtp__Tls: ${Smtp__Tls:-false}
+      Smtp__FromEmail: ${Smtp__FromEmail:-info@livealbum.eu}
+      Smtp__FromName: ${Smtp__FromName:-LiveAlbum.eu}
+      Smtp__Username: ${Smtp__Username:-}
+      Smtp__Password: ${Smtp__Password:-}
       Sentry__Dsn: 
     profiles: 
       - worker
@@ -120,6 +127,24 @@ services:
       RABBITMQ_DEFAULT_PASS: rabbit-admin
     volumes:
       - ./rabbitmq_data:/var/lib/rabbitmq
+    profiles:
+      - web 
+      - worker
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: eventphotographer_mailpit
+    restart: 'no'
+    volumes:
+      - ./mailpit_data:/data
+    ports:
+      - 8025:8025
+      # - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     profiles:
       - web 
       - worker

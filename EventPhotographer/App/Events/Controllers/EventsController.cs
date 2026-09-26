@@ -7,6 +7,7 @@ using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.UseCases.Common.Commands;
 using EventPhotographer.UseCases.Common.Queries;
 using EventPhotographer.UseCases.Events;
+using EventPhotographer.UseCases.Events.Commands;
 using EventPhotographer.UseCases.Events.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

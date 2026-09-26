@@ -8,7 +8,7 @@ using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
 using EventPhotographer.Core.Middleware;
 using EventPhotographer.UseCases.Common.Commands;
-using EventPhotographer.UseCases.Events;
+using EventPhotographer.UseCases.Events.Commands;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

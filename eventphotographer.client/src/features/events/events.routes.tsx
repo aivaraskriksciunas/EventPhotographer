@@ -1,9 +1,7 @@
 import { RouteObject } from 'react-router-dom';
-import NewEventPage from './pages/NewEventPage';
 import ListEventsPage from './pages/ListEventsPage';
 import { eventsApi } from '@/api/events';
 import ViewEventPage from './pages/ViewEventPage';
-import ShareEventPage from './pages/ShareEventPage';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
 export const eventsRoutes: RouteObject[] = [
@@ -18,7 +16,10 @@ export const eventsRoutes: RouteObject[] = [
             },
             {
                 path: 'new',
-                element: <NewEventPage />,
+                lazy: {
+                    Component: async () =>
+                        (await import('./pages/NewEventPage')).default,
+                },
             },
             {
                 id: 'view-event',
@@ -41,7 +42,11 @@ export const eventsRoutes: RouteObject[] = [
                     },
                     {
                         path: 'share',
-                        element: <ShareEventPage />,
+                        lazy: {
+                            Component: async () =>
+                                (await import('./pages/ShareEventPage'))
+                                    .default,
+                        },
                         loader: async ({ params }) => {
                             return await eventsApi.getShareableLinks(
                                 params.eventId!,

@@ -1,18 +1,20 @@
 import clsx from 'clsx';
-import { LoaderCircle } from 'lucide-react';
 import { JSX } from 'react';
+import { InlineSpinner } from './Spinner';
 
 interface ButtonProps {
-    children: JSX.Element | string;
+    children: JSX.Element | string | string[];
     loading?: boolean;
     disabled?: boolean;
     style?: 'primary' | 'secondary' | 'danger';
+    onClick?: () => void;
 }
 
 export default function Button({
     style = 'primary',
     loading = false,
     disabled = false,
+    onClick = () => {},
     children,
 }: ButtonProps) {
     return (
@@ -20,10 +22,11 @@ export default function Button({
             className={clsx('btn', `btn-${style}`, {
                 disabled: loading || disabled,
             })}
+            onClick={onClick}
         >
             {loading ? (
                 <span className="me-1">
-                    <LoaderCircle aria-label="Loading" className="spinner" />
+                    <InlineSpinner />
                 </span>
             ) : null}
             {children}

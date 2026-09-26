@@ -1,4 +1,4 @@
-﻿using EventPhotographer.App.Users.Dto;
+﻿using EventPhotographer.App.Users.Dto.Response;
 using EventPhotographer.Core.Features.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Net;

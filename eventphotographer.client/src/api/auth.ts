@@ -16,6 +16,12 @@ export interface CurrentUserResponse {
     id: string;
     name: string;
     email: string;
+    emailConfirmed: boolean;
+}
+
+export interface SendAccountVerificationResponse {
+    createdAt: string;
+    nextResendDate: string;
 }
 
 export const authApi = {
@@ -30,4 +36,12 @@ export const authApi = {
             registerRequest,
         ),
     logout: async () => fetchApi('/api/auth/logout'),
+    sendVerification: async () =>
+        fetchApi<SendAccountVerificationResponse>(
+            '/api/account/verification/send',
+        ),
+    verify: async (token: string) =>
+        fetchApi('/api/account/verification/verify', 'GET', null, {
+            params: { token },
+        }),
 };

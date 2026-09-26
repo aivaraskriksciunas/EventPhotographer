@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace EventPhotographer.App.Users.Dto;
+namespace EventPhotographer.App.Users.Dto.Request;
 
 public class LoginRequestDtoValidator : AbstractValidator<LoginRequestDto>
 {

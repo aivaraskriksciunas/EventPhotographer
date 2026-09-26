@@ -12,6 +12,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<SentryLoggingOptions>(builder.Configuration.GetSection("Sentry"));
 builder.Services.Configure<WhatsAppConfiguration>(builder.Configuration.GetSection("WhatsApp"));
 builder.Services.Configure<ObjectStorageConfiguration>(builder.Configuration.GetSection("ObjectStorage"));
+builder.Services.Configure<SmtpConfiguration>(builder.Configuration.GetSection("Smtp"));
 
 builder.Logging.AddSentry();
 

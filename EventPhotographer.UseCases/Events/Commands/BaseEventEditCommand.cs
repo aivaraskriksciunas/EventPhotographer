@@ -2,7 +2,7 @@
 using EventPhotographer.UseCases.Common.Commands;
 using FluentValidation;
 
-namespace EventPhotographer.UseCases.Events;
+namespace EventPhotographer.UseCases.Events.Commands;
 
 public record BaseEventEditCommand : ICommand<Event>
 {

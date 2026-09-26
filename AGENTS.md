@@ -37,7 +37,7 @@ eventphotographer.client/   - React/Vite frontend
 ## Infrastructure
 
 - **Database**: PostgreSQL via Entity Framework Core
-- **Message Queue**: RabbitMQ with EasyNetQ/MassTransit
+- **Message Queue**: RabbitMQ with EasyNetQ
 - **Object Storage**: Configurable storage for media files
 - **Containerization**: Docker with docker-compose
 - **Monitoring**: Sentry integration
@@ -49,7 +49,15 @@ Background processing for:
 - File validation and compression
 - Scheduled recurring jobs
  
-Communicates with the main entry point via RabbitMQ. Runs on a separate machine and must not contain any direct connection with the other parts.
+Communicates with the main entry point via RabbitMQ. Runs on a separate machine and must not contain any direct connection with the other runtimes — never reference the API project (`EventPhotographer/`) or make HTTP calls to it. `Core` and `UseCases` are shared libraries and may be referenced freely.
+
+### API → Worker Messages
+
+- Message records live in `Core/Features/[Feature]/Messages` as minimal DTOs (entity id only — the Worker re-reads the entity from the DB)
+- API publishes via `IBus.PubSub.PublishAsync` after `SaveChangesAsync`
+- Worker consumers implement `IConsumeAsync<T>` in `Worker/Consumers` and must be registered in `AddWorkerConsumers` (`Worker/DependencyInjection.cs`); subscription itself is automatic via the `RegisterMessageConsumers` hosted service (subscription id `"worker"` vs the API's `"api"`)
+- Keep consumer logic short — heavier work goes into a Hangfire job (`IBackgroundJobClient.Enqueue`/`Schedule`), because long consumption ack-times out in RabbitMQ and the message gets requeued and re-executed
+- See the `add-worker-message` skill for the full recipe
 
 ## Frontend
 
@@ -72,6 +80,8 @@ React + TypeScript + Vite:
 - Enums are stored as strings using `.HasConversion<string>()` with optional max length
 - Entity mappings use `EntityTypeConfiguration<T>` classes, typically inheriting from `UUIDEntityConfiguration<T>` for GUID primary keys
 - Bidirectional relationships require setting both navigation property and foreign key (e.g., `MediaFile.Media` and `MediaFile.MediaId`)
+- Always use `DateTime.UtcNow`. Never `new DateTime()` (that is `DateTime.MinValue`, not "now") or `DateTime.Now`. `AppDbContext` normalizes DateTimes to UTC via `UtcDateTimeConverter`
+- `User` inherits `IdentityUser`, so `User.Id` is a `string`. Foreign keys referencing users must be `string` (see `Event.UserId`), never `Guid`
 
 ### Authorization
 - `ManageEventRequirement` - Only the event owner can access (used by EventMediaController)
@@ -86,6 +96,17 @@ React + TypeScript + Vite:
 ### CQRS Queries
 - Query records, response models, and their handler live together in one file under `UseCases/[Feature]/Queries`
 - Handlers implement `IQueryHandler<TQuery, TResult>`; controllers resolve them per-endpoint via `[FromServices]`, not constructor injection
+
+### CQRS Commands
+- Command record, error records, and handler live together in one file under `UseCases/[Feature]/Commands`; feature errors are records extending `Error("Code")`, grouped in `Errors.cs` when shared
+- Handlers implement `ICommandHandler<TCommand, TResult>` and are auto-registered by the Scrutor scan in `UseCases/DependencyInjection.cs` (internal classes included) — no manual registration needed
+- Commands needing authorization implement `IRequiresAuthorization` (+ `IAuthorizationUserAware` to pass the user); the filter pipeline (`AuthorizationFilter`, `ValidationFilter`) runs before the handler
+- The current user is resolved in the controller via `userManager.GetUserAsync(User)` and passed as a command property
+- Controllers resolve `ICommandHandler<TCommand, TResult>` per-endpoint via `[FromServices]`; failures return `result.ToProblemDetailsResult()`
+
+### Dependency Injection
+- Each Core feature registers its services in `Core/Features/[Feature]/DependencyInjection.cs` (`Add[Feature]Services`), wired into Core root `AddApplicationServices`
+- A service missing from DI still compiles — it fails only at resolution time, so check the feature's registration when adding a new service
 
 ### Pagination
 - Paginated queries inherit `PagedQuery` and return `PagedResult<T>` (`Items`, `Page`, `PageSize`, `TotalCount`, `TotalPages`, `HasPreviousPage`, `HasNextPage`)

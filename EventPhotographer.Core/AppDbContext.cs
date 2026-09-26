@@ -1,5 +1,6 @@
 ﻿using EventPhotographer.Core.Entities.AccountPolicies;
 using EventPhotographer.Core.Features.Content.Entities;
+using EventPhotographer.Core.Features.Emails.Entities;
 using EventPhotographer.Core.Features.Events.Entities;
 using EventPhotographer.Core.Features.MessagingIntegrations.Entities;
 using EventPhotographer.Core.Features.Users.Entities;
@@ -39,6 +40,10 @@ public class AppDbContext : IdentityDbContext<User>, IDataProtectionKeyContext
     public DbSet<WhatsAppMedia> WhatsAppMedia { get; set; }
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+
+    public DbSet<Email> Emails { get; set; }
+
+    public DbSet<AccountVerification> AccountVerifications { get; set; }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

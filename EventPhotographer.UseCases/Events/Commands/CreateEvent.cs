@@ -8,7 +8,7 @@ using EventPhotographer.UseCases.Common.Commands;
 using EventPhotographer.UseCases.Events.Authorization;
 using FluentValidation;
 
-namespace EventPhotographer.UseCases.Events;
+namespace EventPhotographer.UseCases.Events.Commands;
 
 public record CreateEvent : BaseEventEditCommand,
     IAuthorizationUserAware,

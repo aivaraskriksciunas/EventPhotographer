@@ -28,3 +28,18 @@ public record ValidationError(ValidationResult ValidationResult)
 public record AccessDeniedError(AuthorizationResult AuthorizationResult)
     : Error("AccessDenied", ErrorType.AccessDenied)
 { }
+
+/// <summary>
+/// An error carrying a typed payload that is serialized to the client
+/// as an additional member of the problem details response.
+/// </summary>
+public interface IErrorWithPayload
+{
+    object Payload { get; }
+}
+
+public record ErrorWithPayload<TPayload>(string Code, TPayload Payload)
+    : Error(Code), IErrorWithPayload
+{
+    object IErrorWithPayload.Payload => Payload;
+}

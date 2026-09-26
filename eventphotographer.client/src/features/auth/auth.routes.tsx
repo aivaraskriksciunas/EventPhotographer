@@ -28,4 +28,11 @@ export const authRoutes: RouteObject[] = [
             throw redirect('/login');
         },
     },
+    {
+        path: '/account/verify/:token',
+        lazy: {
+            Component: async () =>
+                (await import('./pages/VerifyAccountPage')).default,
+        },
+    },
 ];

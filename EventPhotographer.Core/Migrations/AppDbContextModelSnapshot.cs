@@ -128,6 +128,58 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("MediaFiles");
                 });
 
+            modelBuilder.Entity("EventPhotographer.Core.Features.Emails.Entities.Email", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuidv7()");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EmailStatus")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .HasDefaultValue("SCHEDULED");
+
+                    b.Property<string>("EmailType")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Recipient")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecipientName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmailStatus");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Emails");
+                });
+
             modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Event", b =>
                 {
                     b.Property<Guid>("Id")
@@ -406,6 +458,38 @@ namespace EventPhotographer.Core.Migrations
                     b.ToTable("WhatsAppWebhookPayloads");
                 });
 
+            modelBuilder.Entity("EventPhotographer.Core.Features.Users.Entities.AccountVerification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuidv7()");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ValidatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AccountVerifications");
+                });
+
             modelBuilder.Entity("EventPhotographer.Core.Features.Users.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -663,6 +747,15 @@ namespace EventPhotographer.Core.Migrations
                     b.Navigation("Media");
                 });
 
+            modelBuilder.Entity("EventPhotographer.Core.Features.Emails.Entities.Email", b =>
+                {
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EventPhotographer.Core.Features.Events.Entities.Event", b =>
                 {
                     b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", "User")
@@ -748,6 +841,17 @@ namespace EventPhotographer.Core.Migrations
                         .IsRequired();
 
                     b.Navigation("WhatsAppMessage");
+                });
+
+            modelBuilder.Entity("EventPhotographer.Core.Features.Users.Entities.AccountVerification", b =>
+                {
+                    b.HasOne("EventPhotographer.Core.Features.Users.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

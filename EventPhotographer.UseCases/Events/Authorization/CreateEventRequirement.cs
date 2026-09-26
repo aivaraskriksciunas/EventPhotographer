@@ -9,6 +9,11 @@ internal class CreateEventRequirementHandler : AuthorizationHandler<CreateEventR
 {
     public override async Task<AuthorizationResult> HandleAsync(User user, CreateEventRequirement requirement)
     {
+        if (!user.EmailConfirmed)
+        {
+            return AuthorizationResult.Failure();
+        }
+
         return AuthorizationResult.Success();
     }
 }

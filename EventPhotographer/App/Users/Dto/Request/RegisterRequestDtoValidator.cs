@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 
-namespace EventPhotographer.App.Users.Dto;
+namespace EventPhotographer.App.Users.Dto.Request;
 
 public class RegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
 {
