@@ -2,7 +2,6 @@
 using EventPhotographer.Core.Features.Emails.Entities;
 using EventPhotographer.Core.Features.Emails.Messages;
 using EventPhotographer.Core.Features.Users.Entities;
-using Org.BouncyCastle.Cms;
 
 namespace EventPhotographer.Core.Features.Emails.Services;
 
@@ -14,7 +13,7 @@ public class TemplateEmailService(
         User user, AccountVerification accountVerification)
     {
         // To be improved in the future with email editor
-        string verificationUrl = $"https://livealbum/account/verify/{accountVerification.Code}";
+        string verificationUrl = $"https://livealbum.eu/account/verify/{accountVerification.Code}";
 
         await ScheduleEmail(
             user,
