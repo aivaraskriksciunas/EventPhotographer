@@ -61,7 +61,7 @@ function UserEmailNotConfirmedWarning() {
                 return (
                     <>
                         <OctagonX /> {t('An error ocurred')}.{' '}
-                        {t('Please try again lager')}
+                        {t('Please try again later')}
                     </>
                 );
             case 'loading':

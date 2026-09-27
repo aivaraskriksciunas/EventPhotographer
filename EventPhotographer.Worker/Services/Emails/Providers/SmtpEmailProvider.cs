@@ -16,22 +16,23 @@ internal class SmtpEmailProvider(
     public async Task SendAsync(Email email)
     {
         using var smtp = new SmtpClient();
-        await smtp.ConnectAsync(
-            options.Host,
-            options.Port,
-            options.Tls ? MailKit.Security.SecureSocketOptions.StartTls : MailKit.Security.SecureSocketOptions.None
-            );
-
+        
         try
         {
+            await smtp.ConnectAsync(
+                options.Host,
+                options.Port,
+                options.Tls ? MailKit.Security.SecureSocketOptions.SslOnConnect : MailKit.Security.SecureSocketOptions.None
+            );
+
             if (options.Username != null && options.Password != null)
             {
                 await smtp.AuthenticateAsync(options.Username, options.Password);
             }
 
             var msg = new MimeMessage();
-            msg.From.Add(new MailboxAddress(email.RecipientName, email.Recipient));
-            msg.To.Add(new MailboxAddress(options.FromName, options.FromEmail));
+            msg.To.Add(new MailboxAddress(email.RecipientName, email.Recipient));
+            msg.From.Add(new MailboxAddress(options.FromName, options.FromEmail));
             msg.Subject = email.Subject;
 
             var bb = new BodyBuilder();
@@ -43,7 +44,10 @@ internal class SmtpEmailProvider(
         }
         finally
         {
-            await smtp.DisconnectAsync(true);
+            if (smtp.IsConnected)
+            {
+                await smtp.DisconnectAsync(true);
+            }
         }
     }
 }

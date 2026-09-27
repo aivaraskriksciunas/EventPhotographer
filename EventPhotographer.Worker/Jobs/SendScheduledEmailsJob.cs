@@ -11,21 +11,9 @@ internal class SendScheduledEmailsJob(
     IDistributedLockProvider lockProvider,
     IEmailSender emailSender)
 {
-    public async Task ExecuteAsync()
+    public async Task ExecuteAsync(Guid? emailId = null)
     {
         var emails = await ReserveEmailsAsync();
-
-        foreach (var email in emails)
-        {
-            await SendEmailAsync(email);
-        }
-
-        await db.SaveChangesAsync();
-    }
-
-    public async Task ExecuteAsync(Guid emailId)
-    {
-        var emails = await ReserveEmailsAsync(emailId);
 
         foreach (var email in emails)
         {
