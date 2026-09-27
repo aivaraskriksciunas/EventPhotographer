@@ -4,6 +4,7 @@ using EventPhotographer.Worker.Services.Emails;
 using EventPhotographer.Worker.Services.Emails.Providers;
 using EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp;
 using EventPhotographer.Worker.Services.MessagingIntegrations.WhatsApp.MessageContentProcessors;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 
 namespace EventPhotographer.Worker;
@@ -18,7 +19,7 @@ internal static class DependencyInjection
         services.AddScoped<SendEmailMessageConsumer>();
     }
 
-    public static void AddWorkerServices(this IServiceCollection services)
+    public static void AddWorkerServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<WhatsAppWebhookPayloadProcessor>();
 
@@ -27,7 +28,31 @@ internal static class DependencyInjection
         services.AddKeyedTransient<IMessageContentProcessor, VideoMessageProcessor>(VideoMessageProcessor.MessageType);
         services.AddKeyedTransient<IMessageContentProcessor, ImageMessageProcessor>(ImageMessageProcessor.MessageType);
 
-        services.AddScoped<IEmailSender, SmtpEmailProvider>();
+        // Inject Email sender
+        var emailProvider = configuration["Email:Provider"];
+        switch (emailProvider)
+        {
+            case "Hostinger":
+                var config = configuration.GetSection("HostingerEmail");
+                services.AddOptions<HostingerEmailConfiguration>()
+                    .Bind(configuration.GetSection("HostingerEmail"))
+                    .ValidateDataAnnotations()
+                    .ValidateOnStart();
+
+                services.AddHttpClient<IEmailSender, HostingerEmailProvider>((sp, client) =>
+                {
+                    var hostingerConfig = sp.GetRequiredService<IOptions<HostingerEmailConfiguration>>().Value;
+
+                    client.BaseAddress = new Uri("https://api.mail.hostinger.com/api/v1/");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", hostingerConfig.Token);
+                });
+                break;
+            case "Smtp":
+                services.AddScoped<IEmailSender, SmtpEmailProvider>();
+                break;
+            default:
+                throw new InvalidOperationException($"Unknown email provider: '{emailProvider}'. Expected 'Smtp' or 'Hostinger'.");
+        }
     }
 
     public static void AddWorkerHttpClients(this IServiceCollection services, IConfiguration configuration)

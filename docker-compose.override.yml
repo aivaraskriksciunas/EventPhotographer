@@ -27,6 +27,7 @@ services:
       ObjectStorage__AccessKey: ${ObjectStorage__AccessKey:-admin}
       ObjectStorage__Password: ${ObjectStorage__Password:-minioadmin123}
       ObjectStorage__BucketName: ${ObjectStorage__BucketName:-event-photographer}
+      Email__Provider: ${Email__Provider:-Smtp}
       Smtp__Host: ${Smtp__Host:-mailpit}
       Smtp__Port: ${Smtp__Port:-1025}
       Smtp__Tls: ${Smtp__Tls:-false}
@@ -35,6 +36,9 @@ services:
       Smtp__Username: ${Smtp__Username:-}
       Smtp__Password: ${Smtp__Password:-}
       Sentry__Dsn: 
+      HostingerEmail__Token: ${HostingerEmail__Token}
+      HostingerEmail__MailboxResourceId: ${HostingerEmail__MailboxResourceId}
+      HostingerEmail__SenderDisplayName: ${HostingerEmail__SenderDisplayName}
     profiles: 
       - worker
     depends_on:

@@ -35,7 +35,7 @@ builder.Services.AddWorkerHttpClients(builder.Configuration);
 builder.Services.AddUseCases();
 builder.Services.AddApplicationServices();
 builder.Services.AddWorkerConsumers();
-builder.Services.AddWorkerServices();
+builder.Services.AddWorkerServices(builder.Configuration);
 builder.Services.AddScheduler(connectionString);
 builder.Services.AddHostedService<ScheduleRecurringJobs>();
 
